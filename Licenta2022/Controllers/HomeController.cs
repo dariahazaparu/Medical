@@ -8,6 +8,8 @@ namespace Licenta2022.Controllers
 {
     public class HomeController : Controller
     {
+        private Models.ApplicationDbContext db = new Models.ApplicationDbContext();
+
         public ActionResult Index()
         {
             return View();

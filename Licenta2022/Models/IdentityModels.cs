@@ -23,7 +23,14 @@ namespace Licenta2022.Models
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)
         {
+
+            Database.SetInitializer(new
+            MigrateDatabaseToLatestVersion<ApplicationDbContext,
+            Licenta2022.Migrations.Configuration>("DefaultConnection"));
         }
+
+        public DbSet<Specialitate> Specialitati { get; set; }
+        public DbSet<Doctor> Doctori { get; set; }
 
         public static ApplicationDbContext Create()
         {
