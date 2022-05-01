@@ -1,0 +1,27 @@
+﻿@{
+    ViewBag.Title = "Doctori";
+}
+
+<div class="page-header text-center" style="border-bottom:none; color: #303952;">
+    <h1 style="font-size:45px;">pls mergi</h1>
+</div>
+
+
+
+<hr style="border:2px #e15f41 solid;" />
+
+@if (ViewBag.Message != null)
+{
+    <div class="text-center">
+        <h3>@ViewBag.Message</h3>
+    </div>
+    <hr style="border:2px #e15f41 solid;" />
+}
+
+
+@foreach (var doctor in ViewBag.Doctori)
+{
+    <h1><large><strong>@doctor.Nume</strong></large></h1> <h2>@doctor.Prenume</h2>
+    <strong>@doctor.Specialitate.Denumire</strong>
+    <br /><br />
+}

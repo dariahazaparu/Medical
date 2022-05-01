@@ -15,7 +15,8 @@ namespace Licenta2022.Models
         [Required]
         public string Prenume { get; set; }
         public DateTime DataAngajarii { get; set; }
+        public int IdSpecialitate { get; set; }
 
-        public virtual Specialitate specialitate { get; set; }
+        public virtual Specialitate Specialitate { get; set; }
     }
 }
