@@ -31,6 +31,7 @@ namespace Licenta2022.Models
 
         public DbSet<Specialitate> Specialitati { get; set; }
         public DbSet<Doctor> Doctori { get; set; }
+        public DbSet<Clinica> Clinici { get; set; }
 
         public static ApplicationDbContext Create()
         {
