@@ -168,9 +168,11 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\AdresaController.cs" />
     <Compile Include="Controllers\ClinicaController.cs" />
     <Compile Include="Controllers\DoctorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\LocalitateController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -181,9 +183,11 @@
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\Adresa.cs" />
     <Compile Include="Models\Clinica.cs" />
     <Compile Include="Models\Doctor.cs" />
     <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\Localitate.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Specialitate.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -262,6 +266,16 @@
     <Content Include="Views\Clinica\Details.cshtml" />
     <Content Include="Views\Clinica\Edit.cshtml" />
     <Content Include="Views\Clinica\Index.cshtml" />
+    <Content Include="Views\Adresa\Create.cshtml" />
+    <Content Include="Views\Adresa\Delete.cshtml" />
+    <Content Include="Views\Adresa\Details.cshtml" />
+    <Content Include="Views\Adresa\Edit.cshtml" />
+    <Content Include="Views\Adresa\Index.cshtml" />
+    <Content Include="Views\Localitate\Create.cshtml" />
+    <Content Include="Views\Localitate\Delete.cshtml" />
+    <Content Include="Views\Localitate\Details.cshtml" />
+    <Content Include="Views\Localitate\Edit.cshtml" />
+    <Content Include="Views\Localitate\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Migrations\202204182055585_Initial.resx">

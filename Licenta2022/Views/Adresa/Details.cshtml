@@ -1,0 +1,42 @@
+﻿@model Licenta2022.Models.Adresa
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Adresa</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Strada)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Strada)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Numar)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Numar)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.IdLocalitate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.IdLocalitate)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
