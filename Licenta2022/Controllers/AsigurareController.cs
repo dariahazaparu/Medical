@@ -10,130 +10,107 @@ using Licenta2022.Models;
 
 namespace Licenta2022.Controllers
 {
-    public class ClinicaController : Controller
+    public class AsigurareController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
-        // GET: Clinica
+        // GET: Asigurare
         public ActionResult Index()
         {
-            return View(db.Clinici.Include("Adresa").ToList());
+            return View(db.Asigurari.ToList());
         }
 
-        // GET: Clinica/Details/5
+        // GET: Asigurare/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Clinica clinica = db.Clinici.Find(id);
-            if (clinica == null)
+            Asigurare asigurare = db.Asigurari.Find(id);
+            if (asigurare == null)
             {
                 return HttpNotFound();
             }
-            return View(clinica);
+            return View(asigurare);
         }
 
-        // GET: Clinica/Create
+        // GET: Asigurare/Create
         public ActionResult Create()
         {
-            ViewBag.Adrese = GetAllAddresses(); 
             return View();
         }
 
-        [NonAction]
-        private IEnumerable<SelectListItem> GetAllAddresses()
-        {
-            var selectList = new List<SelectListItem>();
-
-            var adrese = db.Adrese.Select(x => x);
-
-            foreach (var adresa in adrese)
-            {
-                selectList.Add(new SelectListItem
-                {
-                    Value = adresa.Id.ToString(),
-                    Text = adresa.Strada.ToString()
-                });
-            }
-
-            return selectList;
-        }
-
-        // POST: Clinica/Create
+        // POST: Asigurare/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Nume")] Clinica clinica)
+        public ActionResult Create([Bind(Include = "Id,Denumire")] Asigurare asigurare)
         {
             if (ModelState.IsValid)
             {
-                var adresa = db.Adrese.Where(x => x.Id == clinica.IdAdresa).Select(x => x).ToList();
-                clinica.Adresa = adresa.FirstOrDefault();
-
-                db.Clinici.Add(clinica);
+                db.Asigurari.Add(asigurare);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            return View(clinica);
+            return View(asigurare);
         }
 
-        // GET: Clinica/Edit/5
+        // GET: Asigurare/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Clinica clinica = db.Clinici.Find(id);
-            if (clinica == null)
+            Asigurare asigurare = db.Asigurari.Find(id);
+            if (asigurare == null)
             {
                 return HttpNotFound();
             }
-            return View(clinica);
+            return View(asigurare);
         }
 
-        // POST: Clinica/Edit/5
+        // POST: Asigurare/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Nume")] Clinica clinica)
+        public ActionResult Edit([Bind(Include = "Id,Denumire")] Asigurare asigurare)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(clinica).State = EntityState.Modified;
+                db.Entry(asigurare).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(clinica);
+            return View(asigurare);
         }
 
-        // GET: Clinica/Delete/5
+        // GET: Asigurare/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Clinica clinica = db.Clinici.Find(id);
-            if (clinica == null)
+            Asigurare asigurare = db.Asigurari.Find(id);
+            if (asigurare == null)
             {
                 return HttpNotFound();
             }
-            return View(clinica);
+            return View(asigurare);
         }
 
-        // POST: Clinica/Delete/5
+        // POST: Asigurare/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Clinica clinica = db.Clinici.Find(id);
-            db.Clinici.Remove(clinica);
+            Asigurare asigurare = db.Asigurari.Find(id);
+            db.Asigurari.Remove(asigurare);
             db.SaveChanges();
             return RedirectToAction("Index");
         }

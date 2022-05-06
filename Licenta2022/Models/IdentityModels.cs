@@ -34,10 +34,13 @@ namespace Licenta2022.Models
         public DbSet<Clinica> Clinici { get; set; }
         public DbSet<Adresa> Adrese { get; set; }
         public DbSet<Localitate> Localitati { get; set; }
+        public DbSet<Asigurare> Asigurari { get; set; }
+        public DbSet<Pacient> Pacienti { get; set; }
 
         public static ApplicationDbContext Create()
         {
             return new ApplicationDbContext();
         }
+
     }
 }
