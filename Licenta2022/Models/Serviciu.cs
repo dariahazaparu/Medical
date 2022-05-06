@@ -6,14 +6,14 @@ using System.Web;
 
 namespace Licenta2022.Models
 {
-    public class Specialitate
+    public class Serviciu
     {
         [Key]
         public int Id { get; set; }
         [Required]
         public string Denumire { get; set; }
+        public int IdSpecialitate { get; set; }
 
-        public ICollection<Doctor> Doctori { get; set; }
-        public ICollection<Serviciu> Servicii { get; set; }
+        public virtual Specialitate Specialitate { get; set; }
     }
 }
