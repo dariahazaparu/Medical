@@ -1,6 +1,5 @@
-﻿namespace Licenta2022.Migrations
+namespace Licenta2022.Migrations
 {
-    using Licenta2022.Models;
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Migrations;
@@ -11,16 +10,22 @@
         public Configuration()
         {
             AutomaticMigrationsEnabled = true;
-            AutomaticMigrationDataLossAllowed = true;
-            ContextKey = "Licenta2022.Models.ApplicationDbContext";
         }
 
         protected override void Seed(Licenta2022.Models.ApplicationDbContext context)
         {
             //  This method will be called after migrating to the latest version.
 
-            //  You can use the DbSet<T>.AddOrUpdate() helper extension method
-            //  to avoid creating duplicate seed data.
+            //  You can use the DbSet<T>.AddOrUpdate() helper extension method 
+            //  to avoid creating duplicate seed data. E.g.
+            //
+            //    context.People.AddOrUpdate(
+            //      p => p.FullName,
+            //      new Person { FullName = "Andrew Peters" },
+            //      new Person { FullName = "Brice Lambson" },
+            //      new Person { FullName = "Rowan Miller" }
+            //    );
+            //
         }
     }
 }

@@ -175,14 +175,16 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LocalitateController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\MedicamentController.cs" />
     <Compile Include="Controllers\PacientController.cs" />
+    <Compile Include="Controllers\RetetaController.cs" />
     <Compile Include="Controllers\ServiciuController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202204182055585_Initial.cs" />
-    <Compile Include="Migrations\202204182055585_Initial.designer.cs">
-      <DependentUpon>202204182055585_Initial.cs</DependentUpon>
+    <Compile Include="Migrations\202205090047071_Initial.cs" />
+    <Compile Include="Migrations\202205090047071_Initial.Designer.cs">
+      <DependentUpon>202205090047071_Initial.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -193,7 +195,10 @@
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\Localitate.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\Medicament.cs" />
     <Compile Include="Models\Pacient.cs" />
+    <Compile Include="Models\Reteta.cs" />
+    <Compile Include="Models\RetetaXMedicament.cs" />
     <Compile Include="Models\Serviciu.cs" />
     <Compile Include="Models\Specialitate.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -297,11 +302,16 @@
     <Content Include="Views\Serviciu\Details.cshtml" />
     <Content Include="Views\Serviciu\Edit.cshtml" />
     <Content Include="Views\Serviciu\Index.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Migrations\202204182055585_Initial.resx">
-      <DependentUpon>202204182055585_Initial.cs</DependentUpon>
-    </EmbeddedResource>
+    <Content Include="Views\Reteta\Create.cshtml" />
+    <Content Include="Views\Reteta\Delete.cshtml" />
+    <Content Include="Views\Reteta\Details.cshtml" />
+    <Content Include="Views\Reteta\Edit.cshtml" />
+    <Content Include="Views\Reteta\Index.cshtml" />
+    <Content Include="Views\Medicament\Create.cshtml" />
+    <Content Include="Views\Medicament\Delete.cshtml" />
+    <Content Include="Views\Medicament\Details.cshtml" />
+    <Content Include="Views\Medicament\Edit.cshtml" />
+    <Content Include="Views\Medicament\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
@@ -316,7 +326,11 @@
     <Content Include="Scripts\jquery-3.3.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.3.1.min.map" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\202205090047071_Initial.resx">
+      <DependentUpon>202205090047071_Initial.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
