@@ -11,7 +11,8 @@ namespace Licenta2022.Models
         [Key]
         public int Id { get; set; }
         public DateTime DataEmiterii { get; set; }
-        public ICollection<int> IdMedicamente { get; set; }
+        public List<int> IdMedicamente { get; set; }
+        public List<string> Doze { get; set; }
         public virtual ICollection<RetetaXMedicament> RetetaXMedicament { get; set; }
     }
 }

@@ -10,6 +10,8 @@ namespace Licenta2022.Migrations
         public Configuration()
         {
             AutomaticMigrationsEnabled = true;
+            AutomaticMigrationDataLossAllowed = true;
+            ContextKey = "Licenta2022.Models.ApplicationDbContext";
         }
 
         protected override void Seed(Licenta2022.Models.ApplicationDbContext context)

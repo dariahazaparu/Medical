@@ -39,7 +39,7 @@ namespace Licenta2022.Models
         public DbSet<Serviciu> Servicii { get; set; }
         public DbSet<Reteta> Retete { get; set; }
         public DbSet<Medicament> Medicamente { get; set; }
-        public DbSet<RetetaXMedicament> RetetaMedicaments { get; set; }
+        public DbSet<RetetaXMedicament> RetetaXMedicaments { get; set; }
 
         public static ApplicationDbContext Create()
         {

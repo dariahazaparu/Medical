@@ -6,37 +6,79 @@
 
 <h2>Create</h2>
 
-@using (Html.BeginForm()) 
+@using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
-<div class="form-horizontal">
-    <h4>Reteta</h4>
-    <hr />
-    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-    <div class="form-group">
-        @Html.LabelFor(model => model.DataEmiterii, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.DataEmiterii, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.DataEmiterii, "", new { @class = "text-danger" })
+
+    <script>
+        var currentDivId = 0;
+
+        // pentru a crea un medicament de la inceput
+        window.onload = () => {
+            onCreate()
+        }
+
+        const onDelete = (id) => {
+            const element = document.getElementById(id);
+
+            element.parentNode.removeChild(element);
+        }
+
+        const onCreate = () => {
+            const divMedicamente = $("#medicamente");
+
+            const randId = ++currentDivId;
+
+            divMedicamente.append(`
+                <div class="element-medicament" id="${randId}">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.IdMedicamente, "Medicament", htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.DropDownListFor(model => model.IdMedicamente, new SelectList(ViewBag.Medicamente, "Value", "Text"),
+                                                    "Selecteaza un medicament", new { @class = "form-control form-title" })
+
+                        </div>
+                    </div>
+
+                     <div class="form-group">
+                        @Html.LabelFor(model => model.Doze, "Doza", htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            <input name="Doze" type="text" value="" />
+                        </div>
+                    </div>
+
+                    <button style="text - align: right;" type="button" onclick="onDelete(${randId})">Delete</button>
+                </div>
+    `);
+        }
+    </script>
+
+    <div class="form-horizontal">
+
+
+        <h4>Reteta</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.DataEmiterii, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.DataEmiterii, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.DataEmiterii, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div id="medicamente">
+
+        </div>
+
+        <button type="button" onclick="onCreate()">Adauga medicament</button>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
         </div>
     </div>
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.IdMedicamente, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.DropDownListFor(model => model.IdMedicamente, new MultiSelectList(ViewBag.Medicamente, "Value", "Text"),
-                                    "Medicamente", new { @class = "form-control form-title", @multiple = "multiple" })
-        </div>
-    </div>
-
-
-    <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
-            <input type="submit" value="Create" class="btn btn-default" />
-        </div>
-    </div>
-</div>
 }
 
 <div>

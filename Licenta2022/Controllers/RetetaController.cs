@@ -67,23 +67,26 @@ namespace Licenta2022.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,DataEmiterii,IdMedicamente")] Reteta reteta)
+        public ActionResult Create([Bind(Include = "Id,DataEmiterii,IdMedicamente,Doze")] Reteta reteta)
         {
             if (ModelState.IsValid)
             {
                 reteta.RetetaXMedicament = new List<RetetaXMedicament>();
-                foreach (var id in reteta.IdMedicamente)
+                for (int i = 0; i < reteta.IdMedicamente.Count; i++)
                 {
-                    var medicament = db.Medicamente.Where(x => x.Id == id).Select(x => x).ToList();
-                    reteta.RetetaXMedicament.Add(new RetetaXMedicament()
+                    var idmed = reteta.IdMedicamente[i];
+                    var doza = reteta.Doze[i];
+                    var medicament = db.Medicamente.Where(x => x.Id == idmed).Select(x => x).ToList();
+                    var mij = new RetetaXMedicament()
                     {
-                        IdMedicament = id,
+                        IdMedicament = idmed,
                         IdReteta = reteta.Id,
-                        Doza = "0",
+                        Doza = doza,
                         Reteta = reteta,
                         Medicament = medicament.FirstOrDefault()
-                    });
+                    };
 
+                    reteta.RetetaXMedicament.Add(mij);
                 }
 
                 db.Retete.Add(reteta);
