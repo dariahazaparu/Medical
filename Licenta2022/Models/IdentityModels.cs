@@ -40,6 +40,8 @@ namespace Licenta2022.Models
         public DbSet<Reteta> Retete { get; set; }
         public DbSet<Medicament> Medicamente { get; set; }
         public DbSet<RetetaXMedicament> RetetaXMedicaments { get; set; }
+        public DbSet<Diagnostic> Diagnostics { get; set; }
+        public DbSet<PacientXDiagnostic> PacientXDiagnostics { get; set; }
 
         public static ApplicationDbContext Create()
         {

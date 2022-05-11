@@ -94,6 +94,52 @@ namespace Licenta2022.Migrations
                 .PrimaryKey(t => t.Id);
             
             CreateTable(
+                "dbo.Diagnostics",
+                c => new
+                    {
+                        Id = c.Int(nullable: false, identity: true),
+                        Denumire = c.String(nullable: false),
+                        Descriere = c.String(nullable: false),
+                    })
+                .PrimaryKey(t => t.Id);
+            
+            CreateTable(
+                "dbo.PacientXDiagnostics",
+                c => new
+                    {
+                        Id = c.Int(nullable: false, identity: true),
+                        IdPacient = c.Int(nullable: false),
+                        IdDiagnostic = c.Int(nullable: false),
+                        Data = c.DateTime(nullable: false),
+                        Diagnostic_Id = c.Int(),
+                        Pacient_Id = c.Int(),
+                    })
+                .PrimaryKey(t => t.Id)
+                .ForeignKey("dbo.Diagnostics", t => t.Diagnostic_Id)
+                .ForeignKey("dbo.Pacients", t => t.Pacient_Id)
+                .Index(t => t.Diagnostic_Id)
+                .Index(t => t.Pacient_Id);
+            
+            CreateTable(
+                "dbo.Pacients",
+                c => new
+                    {
+                        Id = c.Int(nullable: false, identity: true),
+                        Nume = c.String(nullable: false),
+                        Prenume = c.String(nullable: false),
+                        CNP = c.String(nullable: false),
+                        IdAdresa = c.Int(nullable: false),
+                        IdAsigurare = c.Int(nullable: false),
+                        Adresa_Id = c.Int(),
+                        Asigurare_Id = c.Int(),
+                    })
+                .PrimaryKey(t => t.Id)
+                .ForeignKey("dbo.Adresas", t => t.Adresa_Id)
+                .ForeignKey("dbo.Asigurares", t => t.Asigurare_Id)
+                .Index(t => t.Adresa_Id)
+                .Index(t => t.Asigurare_Id);
+            
+            CreateTable(
                 "dbo.Medicaments",
                 c => new
                     {
@@ -128,25 +174,6 @@ namespace Licenta2022.Migrations
                         DataEmiterii = c.DateTime(nullable: false),
                     })
                 .PrimaryKey(t => t.Id);
-            
-            CreateTable(
-                "dbo.Pacients",
-                c => new
-                    {
-                        Id = c.Int(nullable: false, identity: true),
-                        Nume = c.String(nullable: false),
-                        Prenume = c.String(nullable: false),
-                        CNP = c.String(nullable: false),
-                        IdAdresa = c.Int(nullable: false),
-                        IdAsigurare = c.Int(nullable: false),
-                        Adresa_Id = c.Int(),
-                        Asigurare_Id = c.Int(),
-                    })
-                .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.Adresas", t => t.Adresa_Id)
-                .ForeignKey("dbo.Asigurares", t => t.Asigurare_Id)
-                .Index(t => t.Adresa_Id)
-                .Index(t => t.Asigurare_Id);
             
             CreateTable(
                 "dbo.AspNetRoles",
@@ -224,10 +251,12 @@ namespace Licenta2022.Migrations
             DropForeignKey("dbo.AspNetUserLogins", "UserId", "dbo.AspNetUsers");
             DropForeignKey("dbo.AspNetUserClaims", "UserId", "dbo.AspNetUsers");
             DropForeignKey("dbo.AspNetUserRoles", "RoleId", "dbo.AspNetRoles");
-            DropForeignKey("dbo.Pacients", "Asigurare_Id", "dbo.Asigurares");
-            DropForeignKey("dbo.Pacients", "Adresa_Id", "dbo.Adresas");
             DropForeignKey("dbo.RetetaXMedicaments", "Reteta_Id", "dbo.Retetas");
             DropForeignKey("dbo.RetetaXMedicaments", "Medicament_Id", "dbo.Medicaments");
+            DropForeignKey("dbo.PacientXDiagnostics", "Pacient_Id", "dbo.Pacients");
+            DropForeignKey("dbo.Pacients", "Asigurare_Id", "dbo.Asigurares");
+            DropForeignKey("dbo.Pacients", "Adresa_Id", "dbo.Adresas");
+            DropForeignKey("dbo.PacientXDiagnostics", "Diagnostic_Id", "dbo.Diagnostics");
             DropForeignKey("dbo.Adresas", "Localitate_Id", "dbo.Localitates");
             DropForeignKey("dbo.Servicius", "Specialitate_Id", "dbo.Specialitates");
             DropForeignKey("dbo.Doctors", "Specialitate_Id", "dbo.Specialitates");
@@ -239,10 +268,12 @@ namespace Licenta2022.Migrations
             DropIndex("dbo.AspNetUserRoles", new[] { "RoleId" });
             DropIndex("dbo.AspNetUserRoles", new[] { "UserId" });
             DropIndex("dbo.AspNetRoles", "RoleNameIndex");
-            DropIndex("dbo.Pacients", new[] { "Asigurare_Id" });
-            DropIndex("dbo.Pacients", new[] { "Adresa_Id" });
             DropIndex("dbo.RetetaXMedicaments", new[] { "Reteta_Id" });
             DropIndex("dbo.RetetaXMedicaments", new[] { "Medicament_Id" });
+            DropIndex("dbo.Pacients", new[] { "Asigurare_Id" });
+            DropIndex("dbo.Pacients", new[] { "Adresa_Id" });
+            DropIndex("dbo.PacientXDiagnostics", new[] { "Pacient_Id" });
+            DropIndex("dbo.PacientXDiagnostics", new[] { "Diagnostic_Id" });
             DropIndex("dbo.Servicius", new[] { "Specialitate_Id" });
             DropIndex("dbo.Doctors", new[] { "Specialitate_Id" });
             DropIndex("dbo.Doctors", new[] { "Clinica_Id" });
@@ -253,10 +284,12 @@ namespace Licenta2022.Migrations
             DropTable("dbo.AspNetUsers");
             DropTable("dbo.AspNetUserRoles");
             DropTable("dbo.AspNetRoles");
-            DropTable("dbo.Pacients");
             DropTable("dbo.Retetas");
             DropTable("dbo.RetetaXMedicaments");
             DropTable("dbo.Medicaments");
+            DropTable("dbo.Pacients");
+            DropTable("dbo.PacientXDiagnostics");
+            DropTable("dbo.Diagnostics");
             DropTable("dbo.Asigurares");
             DropTable("dbo.Localitates");
             DropTable("dbo.Servicius");

@@ -96,6 +96,9 @@ namespace Licenta2022.Controllers
                 var asigurare = db.Asigurari.Where(x => x.Id == pacient.IdAsigurare).Select(x => x).ToList();
                 pacient.Asigurare = asigurare.FirstOrDefault();
 
+                pacient.PacientXDiagnostics = new List<PacientXDiagnostic>();
+                pacient.IdDiagnostics = new List<int>();
+
                 db.Pacienti.Add(pacient);
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -124,7 +127,7 @@ namespace Licenta2022.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Nume,Prenume,CNP,IdAdresa,IdAsigurae")] Pacient pacient)
+        public ActionResult Edit([Bind(Include = "Id,Nume,Prenume,CNP,IdAdresa,IdAsigurare")] Pacient pacient)
         {
             if (ModelState.IsValid)
             {
@@ -168,6 +171,74 @@ namespace Licenta2022.Controllers
                 db.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        // GET: Pacient/Create
+        public ActionResult AddDiagnostic(int? id)
+        {
+            ViewBag.Diagnostics = GetAllDiagnoses();
+
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Pacient pacient = db.Pacienti.Find(id);
+            if (pacient == null)
+            {
+                return HttpNotFound();
+            }
+            return View(pacient);
+        }
+
+        [NonAction]
+        private IEnumerable<SelectListItem> GetAllDiagnoses()
+        {
+            var selectList = new List<SelectListItem>();
+
+            var diagnostics = db.Diagnostics.Select(x => x);
+
+            foreach (var diagnostic in diagnostics)
+            {
+                selectList.Add(new SelectListItem
+                {
+                    Value = diagnostic.Id.ToString(),
+                    Text = diagnostic.Denumire.ToString()
+                });
+            }
+
+            return selectList;
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult AddDiagnostic([Bind(Include = "Id,Nume,Prenume,CNP,IdAdresa,IdAsigurare,IdDiagnostics")] Pacient pacient)
+        {
+            if (ModelState.IsValid)
+            {
+                if (pacient.PacientXDiagnostics == null)
+                    pacient.PacientXDiagnostics = new List<PacientXDiagnostic>();
+
+                var id = pacient.IdDiagnostics[0];
+                var diag = db.Diagnostics.Where(x => x.Id == id).Select(x => x).ToList();
+
+                var pxd = new PacientXDiagnostic()
+                {
+                    IdDiagnostic = id,
+                    IdPacient = pacient.Id,
+                    Data = DateTime.Now,
+                    Pacient = pacient,
+                    Diagnostic = diag.FirstOrDefault()
+                };
+                pacient.PacientXDiagnostics.Add(pxd);
+
+                db.PacientXDiagnostics.Add(pxd);
+                db.Entry(pacient).State = EntityState.Modified;
+
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+
+            return View(pacient);
         }
     }
 }

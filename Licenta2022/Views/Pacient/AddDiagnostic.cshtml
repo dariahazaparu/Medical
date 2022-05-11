@@ -1,0 +1,50 @@
+﻿@model Licenta2022.Models.Pacient
+
+@{
+    ViewBag.Title = "AddDiagnostic";
+}
+
+<h2>AddDiagnostic</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal">
+        <h4>Pacient</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.Id)
+        @Html.HiddenFor(model => model.Nume)
+        @Html.HiddenFor(model => model.Prenume)
+        @Html.HiddenFor(model => model.IdAdresa)
+        @Html.HiddenFor(model => model.IdAsigurare)
+        @Html.HiddenFor(model => model.CNP)
+        <dl>
+            <dt>
+                @Html.DisplayNameFor(model => model.Nume)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Prenume)
+            </dd>
+        </dl>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.IdDiagnostics, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.IdDiagnostics, new SelectList(ViewBag.Diagnostics, "Value", "Text"),
+                                        "Diagnostic", new { @class = "form-control form-title" })
+                @Html.ValidationMessage("IdDiagnostics", null, new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Add" class="btn btn-default" />
+            </div>
+        </div>
+
+    </div>
+}
+
