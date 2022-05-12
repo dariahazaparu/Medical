@@ -202,6 +202,7 @@
     <Compile Include="Models\Reteta.cs" />
     <Compile Include="Models\RetetaXMedicament.cs" />
     <Compile Include="Models\Serviciu.cs" />
+    <Compile Include="Models\ServiciuXAsigurare.cs" />
     <Compile Include="Models\Specialitate.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
@@ -315,6 +316,7 @@
     <Content Include="Views\Medicament\Edit.cshtml" />
     <Content Include="Views\Medicament\Index.cshtml" />
     <Content Include="Views\Pacient\AddDiagnostic.cshtml" />
+    <Content Include="Views\Asigurare\AddService.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

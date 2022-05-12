@@ -1,0 +1,85 @@
+﻿@model Licenta2022.Models.Asigurare
+
+@{
+    ViewBag.Title = "AddService";
+}
+
+<h2>AddService</h2>
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <script>
+        var currentDivId = 0;
+
+        window.onload = () => {
+            onCreate()
+        }
+
+        const onDelete = (id) => {
+            const element = document.getElementById(id);
+
+            element.parentNode.removeChild(element);
+        }
+
+        const onCreate = () => {
+            const divMedicamente = $("#servicii");
+
+            const randId = ++currentDivId;
+
+            divMedicamente.append(`
+                <div class="element-serviciu" id="${randId}">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.IdServicii, "Serviciu", htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.DropDownListFor(model => model.IdServicii, new SelectList(ViewBag.Servicii, "Value", "Text"),
+                                                    "Selecteaza un serviciu", new { @class = "form-control form-title" })
+
+                        </div>
+                    </div>
+
+                     <div class="form-group">
+                        @Html.LabelFor(model => model.ProcenteReducere, "Reducere", htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            <input name="ProcenteReducere" type="number" value="" />
+                        </div>
+                    </div>
+
+                    <button style="text - align: right;" type="button" onclick="onDelete(${randId})">Delete</button>
+                </div>
+    `);
+        }
+    </script>
+
+    <div class="form-horizontal">
+        <h4>Pacient</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.Id)
+        @Html.HiddenFor(model => model.Denumire)
+
+
+        @Html.DisplayFor(model => model.Denumire)
+
+        <div id="servicii">
+
+        </div>
+
+        <button type="button" onclick="onCreate()">Adauga serviciu</button>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Add" class="btn btn-default" />
+            </div>
+        </div>
+
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+

@@ -15,5 +15,7 @@ namespace Licenta2022.Models
         public int IdSpecialitate { get; set; }
 
         public virtual Specialitate Specialitate { get; set; }
+
+        public virtual ICollection<ServiciuXAsigurare> ServiciuXAsigurari { get; set; }
     }
 }

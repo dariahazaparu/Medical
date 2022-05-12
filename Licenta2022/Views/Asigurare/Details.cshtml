@@ -17,6 +17,16 @@
         <dd>
             @Html.DisplayFor(model => model.Denumire)
         </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.IdServicii)
+        </dt>
+
+        <dd>
+            @foreach( var serv in Model.ServiciuXAsigurari)
+            {
+                @serv.Serviciu.Denumire
+            }
+        </dd>
 
     </dl>
 </div>
