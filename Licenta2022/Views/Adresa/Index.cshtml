@@ -18,7 +18,7 @@
             @Html.DisplayNameFor(model => model.Numar)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.IdLocalitate)
+            @Html.DisplayNameFor(model => model.Localitate)
         </th>
         <th></th>
     </tr>
@@ -32,7 +32,7 @@
             @Html.DisplayFor(modelItem => item.Numar)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.IdLocalitate)
+            @Html.DisplayFor(modelItem => item.Localitate.Nume)
         </td>
         <td>
             @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |

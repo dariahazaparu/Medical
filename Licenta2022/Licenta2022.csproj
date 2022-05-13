@@ -189,10 +189,12 @@
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Adresa.cs" />
+    <Compile Include="Models\FormModels\AdresaForm.cs" />
     <Compile Include="Models\Asigurare.cs" />
     <Compile Include="Models\Clinica.cs" />
     <Compile Include="Models\Diagnostic.cs" />
     <Compile Include="Models\Doctor.cs" />
+    <Compile Include="Models\FormModels\ClinicaForm.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\Localitate.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
@@ -336,6 +338,7 @@
       <DependentUpon>202205101040355_Initial.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

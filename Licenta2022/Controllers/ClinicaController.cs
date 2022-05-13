@@ -66,11 +66,16 @@ namespace Licenta2022.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Nume")] Clinica clinica)
+        public ActionResult Create([Bind(Include = "Id,Nume,IdAdresa")] ClinicaForm clinicaForm)
         {
             if (ModelState.IsValid)
             {
-                var adresa = db.Adrese.Where(x => x.Id == clinica.IdAdresa).Select(x => x).ToList();
+                var clinica = new Clinica()
+                {
+                    Nume = clinicaForm.Nume
+                };
+
+                var adresa = db.Adrese.Where(x => x.Id == clinicaForm.IdAdresa).Select(x => x).ToList();
                 clinica.Adresa = adresa.FirstOrDefault();
 
                 db.Clinici.Add(clinica);
@@ -78,7 +83,7 @@ namespace Licenta2022.Controllers
                 return RedirectToAction("Index");
             }
 
-            return View(clinica);
+            return View(clinicaForm);
         }
 
         // GET: Clinica/Edit/5

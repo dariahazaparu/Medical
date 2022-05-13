@@ -6,14 +6,14 @@ using System.Web;
 
 namespace Licenta2022.Models
 {
-    public class Clinica
+    public class AdresaForm
     {
         [Key]
         public int Id { get; set; }
         [Required]
-        public string Nume { get; set; }
+        public string Strada { get; set; }
+        public int Numar { get; set; }
+        public int IdLocalitate { get; set; }
 
-        public virtual ICollection<Doctor> Doctori { get; set; }
-        public virtual Adresa Adresa { get; set; }
     }
 }

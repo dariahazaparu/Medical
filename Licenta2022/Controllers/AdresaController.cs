@@ -66,11 +66,17 @@ namespace Licenta2022.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Strada,Numar,IdLocalitate")] Adresa adresa)
+        public ActionResult Create([Bind(Include = "Id,Strada,Numar,IdLocalitate")] AdresaForm adresaForm)
         {
             if (ModelState.IsValid)
             {
-                var localitate = db.Localitati.Where(x => x.Id == adresa.IdLocalitate).Select(x => x).ToList();
+                var adresa = new Adresa()
+                {
+                    Strada = adresaForm.Strada,
+                    Numar = adresaForm.Numar
+                };
+
+                var localitate = db.Localitati.Where(x => x.Id == adresaForm.IdLocalitate).Select(x => x).ToList();
                 adresa.Localitate = localitate.FirstOrDefault();
 
                 db.Adrese.Add(adresa);
@@ -78,7 +84,7 @@ namespace Licenta2022.Controllers
                 return RedirectToAction("Index");
             }
 
-            return View(adresa);
+            return View(adresaForm);
         }
 
         // GET: Adresa/Edit/5
