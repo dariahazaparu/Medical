@@ -66,11 +66,17 @@ namespace Licenta2022.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Denumire,IdSpecialitate")] Serviciu serviciu)
+        public ActionResult Create([Bind(Include = "Id,Denumire,Pret,IdSpecialitate")] ServiciuForm serviciuForm)
         {
             if (ModelState.IsValid)
             {
-                var specialitate = db.Specialitati.Where(x => x.Id == serviciu.IdSpecialitate).Select(x => x).ToList();
+                var serviciu = new Serviciu()
+                {
+                    Denumire = serviciuForm.Denumire,
+                    Pret = serviciuForm.Pret
+                };
+
+                var specialitate = db.Specialitati.Where(x => x.Id == serviciuForm.IdSpecialitate).Select(x => x).ToList();
                 serviciu.Specialitate = specialitate.FirstOrDefault();
 
                 db.Servicii.Add(serviciu);
@@ -78,7 +84,7 @@ namespace Licenta2022.Controllers
                 return RedirectToAction("Index");
             }
 
-            return View(serviciu);
+            return View(serviciuForm);
         }
 
         // GET: Serviciu/Edit/5

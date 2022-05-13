@@ -6,7 +6,7 @@ using System.Web;
 
 namespace Licenta2022.Models
 {
-    public class Serviciu
+    public class ServiciuForm
     {
         [Key]
         public int Id { get; set; }
@@ -14,8 +14,6 @@ namespace Licenta2022.Models
         public string Denumire { get; set; }
         [Required]
         public float Pret { get; set; }
-
-        public virtual Specialitate Specialitate { get; set; }
-        public virtual ICollection<ServiciuXAsigurare> ServiciuXAsigurari { get; set; }
+        public int IdSpecialitate { get; set; }
     }
 }
