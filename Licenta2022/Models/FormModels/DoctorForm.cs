@@ -6,7 +6,7 @@ using System.Web;
 
 namespace Licenta2022.Models
 {
-    public class Doctor
+    public class DoctorForm
     {
         [Key]
         public int Id { get; set; }
@@ -15,8 +15,7 @@ namespace Licenta2022.Models
         [Required]
         public string Prenume { get; set; }
         public DateTime DataAngajarii { get; set; }
-        
-        public virtual Specialitate Specialitate { get; set; }
-        public virtual Clinica Clinica { get; set; }
+        public int IdSpecialitate { get; set; }
+        public int IdClinica { get; set; }
     }
 }

@@ -195,6 +195,7 @@
     <Compile Include="Models\Diagnostic.cs" />
     <Compile Include="Models\Doctor.cs" />
     <Compile Include="Models\FormModels\ClinicaForm.cs" />
+    <Compile Include="Models\FormModels\DoctorForm.cs" />
     <Compile Include="Models\FormModels\RetetaForm.cs" />
     <Compile Include="Models\FormModels\ServiciuForm.cs" />
     <Compile Include="Models\IdentityModels.cs" />
@@ -278,7 +279,7 @@
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Doctor\Index.cshtml" />
-    <Content Include="Views\Doctor\New.cshtml" />
+    <Content Include="Views\Doctor\Create.cshtml" />
     <Content Include="Views\Clinica\Create.cshtml" />
     <Content Include="Views\Clinica\Delete.cshtml" />
     <Content Include="Views\Clinica\Details.cshtml" />
@@ -321,6 +322,9 @@
     <Content Include="Views\Medicament\Index.cshtml" />
     <Content Include="Views\Pacient\AddDiagnostic.cshtml" />
     <Content Include="Views\Asigurare\AddService.cshtml" />
+    <Content Include="Views\Doctor\Delete.cshtml" />
+    <Content Include="Views\Doctor\Details.cshtml" />
+    <Content Include="Views\Doctor\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
