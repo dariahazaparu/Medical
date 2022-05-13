@@ -195,6 +195,7 @@
     <Compile Include="Models\Diagnostic.cs" />
     <Compile Include="Models\Doctor.cs" />
     <Compile Include="Models\FormModels\ClinicaForm.cs" />
+    <Compile Include="Models\FormModels\RetetaForm.cs" />
     <Compile Include="Models\FormModels\ServiciuForm.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\Localitate.cs" />

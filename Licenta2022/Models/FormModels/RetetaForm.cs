@@ -6,11 +6,11 @@ using System.Web;
 
 namespace Licenta2022.Models
 {
-    public class Reteta
+    public class RetetaForm
     {
         [Key]
         public int Id { get; set; }
-        public DateTime DataEmiterii { get; set; }
-        public virtual ICollection<RetetaXMedicament> RetetaXMedicament { get; set; }
+        public List<int> IdMedicamente { get; set; }
+        public List<string> Doze { get; set; }
     }
 }

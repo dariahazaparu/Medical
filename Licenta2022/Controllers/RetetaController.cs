@@ -67,17 +67,22 @@ namespace Licenta2022.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,DataEmiterii,IdMedicamente,Doze")] Reteta reteta)
+        public ActionResult Create([Bind(Include = "Id,DataEmiterii,IdMedicamente,Doze")] RetetaForm retetaForm)
         {
             if (ModelState.IsValid)
             {
-                reteta.RetetaXMedicament = new List<RetetaXMedicament>();
-                for (int i = 0; i < reteta.IdMedicamente.Count; i++)
+                var reteta = new Reteta()
                 {
-                    var idmed = reteta.IdMedicamente[i];
-                    var doza = reteta.Doze[i];
+                    DataEmiterii = DateTime.Now,
+                    RetetaXMedicament = new List<RetetaXMedicament>()
+                };
+            
+                for (int i = 0; i < retetaForm.IdMedicamente.Count; i++)
+                {
+                    var idmed = retetaForm.IdMedicamente[i];
+                    var doza = retetaForm.Doze[i];
                     var medicament = db.Medicamente.Where(x => x.Id == idmed).Select(x => x).ToList();
-                    var mij = new RetetaXMedicament()
+                    var rxm = new RetetaXMedicament()
                     {
                         IdMedicament = idmed,
                         IdReteta = reteta.Id,
@@ -86,7 +91,7 @@ namespace Licenta2022.Controllers
                         Medicament = medicament.FirstOrDefault()
                     };
 
-                    reteta.RetetaXMedicament.Add(mij);
+                    reteta.RetetaXMedicament.Add(rxm);
                 }
 
                 db.Retete.Add(reteta);
@@ -94,7 +99,7 @@ namespace Licenta2022.Controllers
                 return RedirectToAction("Index");
             }
 
-            return View(reteta);
+            return View(retetaForm);
         }
 
         // GET: Reteta/Edit/5
