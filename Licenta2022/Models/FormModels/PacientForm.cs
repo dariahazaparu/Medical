@@ -6,7 +6,7 @@ using System.Web;
 
 namespace Licenta2022.Models
 {
-    public class Pacient
+    public class PacientForm
     {
         [Key]
         public int Id { get; set; }
@@ -16,9 +16,7 @@ namespace Licenta2022.Models
         public string Prenume { get; set; }
         [Required]
         public string CNP { get; set; }
-
-        public virtual Adresa Adresa { get; set; }
-        public virtual Asigurare Asigurare { get; set; }
-        public virtual ICollection<PacientXDiagnostic> PacientXDiagnostics { get; set; }
+        public int IdAdresa { get; set; }
+        public int IdAsigurare { get; set; }
     }
 }
