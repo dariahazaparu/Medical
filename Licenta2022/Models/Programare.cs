@@ -6,16 +6,14 @@ using System.Web;
 
 namespace Licenta2022.Models
 {
-    public class RetetaXMedicament
+    public class Programare
     {
         [Key]
         public int Id { get; set; }
-        public int IdReteta { get; set; }
-        public int IdMedicament { get; set; }
+        public DateTime Data { get; set; }
 
-        public string Doza { get; set; }
-
+        public virtual Pacient Pacient { get; set; }
+        public virtual Doctor Doctor { get; set; }
         public virtual Reteta Reteta { get; set; }
-        public virtual Medicament Medicament { get; set; }
     }
 }

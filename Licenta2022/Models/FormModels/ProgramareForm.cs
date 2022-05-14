@@ -6,12 +6,12 @@ using System.Web;
 
 namespace Licenta2022.Models
 {
-    public class RetetaForm
+    public class ProgramareForm
     {
         [Key]
         public int Id { get; set; }
-        public int IdProgramare { get; set; }
-        public List<int> IdMedicamente { get; set; }
-        public List<string> Doze { get; set; }
+        public DateTime Data { get; set; }
+        public int IdPacient { get; set; }
+        public int IdDoctor { get; set; }
     }
 }

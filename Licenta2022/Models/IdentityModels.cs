@@ -43,6 +43,8 @@ namespace Licenta2022.Models
         public DbSet<Diagnostic> Diagnostics { get; set; }
         public DbSet<PacientXDiagnostic> PacientXDiagnostics { get; set; }
         public DbSet<ServiciuXAsigurare> ServiciuXAsigurari { get; set; }
+        public DbSet<Programare> Programari { get; set; }
+        public DbSet<Trimitere> Trimiteri { get; set; }
 
 
         public static ApplicationDbContext Create()

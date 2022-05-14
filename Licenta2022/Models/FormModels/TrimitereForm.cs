@@ -1,17 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
 namespace Licenta2022.Models
 {
-    public class RetetaForm
+    public class TrimitereForm
     {
-        [Key]
         public int Id { get; set; }
+        public string Observatii { get; set; }
         public int IdProgramare { get; set; }
-        public List<int> IdMedicamente { get; set; }
-        public List<string> Doze { get; set; }
+        public int IdPacient { get; set; }
+        public int IdSpecializare { get; set; }
     }
 }
