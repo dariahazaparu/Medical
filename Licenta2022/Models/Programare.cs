@@ -13,6 +13,7 @@ namespace Licenta2022.Models
         public int Id { get; set; }
         public DateTime Data { get; set; }
 
+        public virtual ICollection<Trimitere> Trimiteri { get; set; }
         public virtual Pacient Pacient { get; set; }
         public virtual Doctor Doctor { get; set; }
         public virtual ICollection<Reteta> Retete { get; set; }

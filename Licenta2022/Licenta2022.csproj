@@ -180,7 +180,7 @@
     <Compile Include="Controllers\ProgramareController.cs" />
     <Compile Include="Controllers\RetetaController.cs" />
     <Compile Include="Controllers\ServiciuController.cs" />
-    <Compile Include="Controllers\TrimiteresController.cs" />
+    <Compile Include="Controllers\TrimitereController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -201,6 +201,7 @@
     <Compile Include="Models\FormModels\DoctorForm.cs" />
     <Compile Include="Models\FormModels\PacientForm.cs" />
     <Compile Include="Models\FormModels\ProgramareForm.cs" />
+    <Compile Include="Models\FormModels\ProgramareFromForm.cs" />
     <Compile Include="Models\FormModels\RetetaForm.cs" />
     <Compile Include="Models\FormModels\ServiciuForm.cs" />
     <Compile Include="Models\FormModels\TrimitereForm.cs" />
@@ -338,11 +339,12 @@
     <Content Include="Views\Programare\Details.cshtml" />
     <Content Include="Views\Programare\Edit.cshtml" />
     <Content Include="Views\Programare\Index.cshtml" />
-    <Content Include="Views\Trimiteres\Create.cshtml" />
-    <Content Include="Views\Trimiteres\Delete.cshtml" />
-    <Content Include="Views\Trimiteres\Details.cshtml" />
-    <Content Include="Views\Trimiteres\Edit.cshtml" />
-    <Content Include="Views\Trimiteres\Index.cshtml" />
+    <Content Include="Views\Trimitere\Create.cshtml" />
+    <Content Include="Views\Trimitere\Delete.cshtml" />
+    <Content Include="Views\Trimitere\Details.cshtml" />
+    <Content Include="Views\Trimitere\Edit.cshtml" />
+    <Content Include="Views\Trimitere\Index.cshtml" />
+    <Content Include="Views\Programare\CreateFromTrimitere.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

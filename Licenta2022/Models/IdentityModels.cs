@@ -52,11 +52,6 @@ namespace Licenta2022.Models
             return new ApplicationDbContext();
         }
 
-        protected override void OnModelCreating(DbModelBuilder modelBuilder)
-        {
-            base.OnModelCreating(modelBuilder);
-            //modelBuilder.Entity<Reteta>(entity => entity.Property(e => e.Id).ValueGeneratedOnAdd());
-        }
-
+        public System.Data.Entity.DbSet<Licenta2022.Models.ProgramareFromForm> ProgramareFromForms { get; set; }
     }
 }

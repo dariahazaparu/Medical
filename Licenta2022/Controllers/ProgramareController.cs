@@ -169,5 +169,65 @@ namespace Licenta2022.Controllers
             }
             base.Dispose(disposing);
         }
+
+        public ActionResult CreateFromTrimitere(int? id, int? id2)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Trimitere trimitere = db.Trimiteri.Find(id);
+            if (trimitere == null)
+            {
+                return HttpNotFound();
+            }
+            Pacient pacient = db.Pacienti.Find(id2);
+            if (pacient == null)
+            {
+                return HttpNotFound();
+            }
+            ProgramareFromForm form = new ProgramareFromForm()
+            {
+                IdTrimitere = trimitere.Id,
+                IdPacient = pacient.Id
+            };
+            ViewBag.Doctori = GetAllDoctors();
+            return View(form);
+        }
+
+        // POST: Programare/Create
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CreateFromTrimitere([Bind(Include = "Id,Data,IdPacient,IdDoctor,IdTrimitere")] ProgramareFromForm form)
+        {
+            if (ModelState.IsValid)
+            {
+                var programare = new Programare()
+                {
+                    Data = form.Data
+                };
+
+                var doctor = db.Doctori.Where(x => x.Id == form.IdDoctor).Select(x => x).ToList();
+                programare.Doctor = doctor.FirstOrDefault();
+
+                var pacient = db.Pacienti.Where(x => x.Id == form.IdPacient).Select(x => x).ToList();
+                programare.Pacient = pacient.FirstOrDefault();
+
+                var trimitere = db.Trimiteri.Where(x => x.Id == form.IdTrimitere).Select(x => x).ToList().FirstOrDefault();
+                trimitere.org = true;
+                programare.Trimiteri = new List<Trimitere>();
+                programare.Trimiteri.Add(trimitere);
+
+                programare.Retete = new List<Reteta>();
+
+                db.Programari.Add(programare);
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+
+            return View(form);
+        }
     }
 }

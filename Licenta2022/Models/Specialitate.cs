@@ -15,5 +15,6 @@ namespace Licenta2022.Models
 
         public virtual ICollection<Doctor> Doctori { get; set; }
         public virtual ICollection<Serviciu> Servicii { get; set; }
+        public virtual ICollection<Trimitere> Trimiteri { get; set; }
     }
 }

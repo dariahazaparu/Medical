@@ -17,6 +17,16 @@
         <dd>
             @Html.DisplayFor(model => model.Data)
         </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Trimiteri)
+        </dt>
+
+        <dd>
+            @foreach (var item in Model.Trimiteri)
+            {
+                @item.Observatii
+            }
+        </dd>
 
     </dl>
 </div>
