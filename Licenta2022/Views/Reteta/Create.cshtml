@@ -59,7 +59,8 @@
         <h4>Reteta</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-
+        @Html.HiddenFor(model => model.Id)
+        @Html.HiddenFor(model => model.IdProgramare)
         <div id="medicamente">
 
         </div>

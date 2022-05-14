@@ -6,14 +6,12 @@ using System.Web;
 
 namespace Licenta2022.Models
 {
-    public class Specialitate
+    public class ProgramareForm
     {
         [Key]
         public int Id { get; set; }
-        [Required]
-        public string Denumire { get; set; }
-
-        public virtual ICollection<Doctor> Doctori { get; set; }
-        public virtual ICollection<Serviciu> Servicii { get; set; }
+        public DateTime Data { get; set; }
+        public int IdPacient { get; set; }
+        public int IdDoctor { get; set; }
     }
 }

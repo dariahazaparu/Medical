@@ -36,10 +36,23 @@ namespace Licenta2022.Controllers
         }
 
         // GET: Reteta/Create
-        public ActionResult Create()
+        public ActionResult Create(int? id)
         {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Programare programare = db.Programari.Find(id);
+            if (programare == null)
+            {
+                return HttpNotFound();
+            }
+            RetetaForm reteta = new RetetaForm()
+            {
+                IdProgramare = programare.Id
+            };
             ViewBag.Medicamente = GetAllMedicine();
-            return View();
+            return View(reteta);
         }
 
 
@@ -67,8 +80,29 @@ namespace Licenta2022.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,DataEmiterii,IdMedicamente,Doze")] RetetaForm retetaForm)
+        public ActionResult Create([Bind(Include = "DataEmiterii,IdProgramare,IdMedicamente,Doze")] RetetaForm retetaForm)
         {
+
+            //var programare = db.Programari.Where(x => x.Id == retetaForm.IdProgramare).Select(x => x).ToList().FirstOrDefault();
+            ////db.Programari.Attach(programare);
+            //var reteta = new Reteta()
+            //{
+            //    DataEmiterii = DateTime.Now,
+            //    RetetaXMedicament = new List<RetetaXMedicament>()
+            //};
+            ////programare.Reteta = reteta;
+            ////db.Entry(programare).State = EntityState.Modified;
+            ////db.Programari.Attach(programare);
+            ////db.Retete.Add(reteta);
+
+            //db.Retete.Add(reteta);
+            //db.SaveChanges();
+
+            ////reteta.Programare = programare;
+            ////db.Entry(reteta).State = EntityState.Modified;
+            ////db.SaveChanges();
+
+
             if (ModelState.IsValid)
             {
                 var reteta = new Reteta()
@@ -76,7 +110,10 @@ namespace Licenta2022.Controllers
                     DataEmiterii = DateTime.Now,
                     RetetaXMedicament = new List<RetetaXMedicament>()
                 };
-            
+                var programare = db.Programari.Find(retetaForm.IdProgramare);
+                reteta.Programare = programare;
+
+
                 for (int i = 0; i < retetaForm.IdMedicamente.Count; i++)
                 {
                     var idmed = retetaForm.IdMedicamente[i];
@@ -90,7 +127,6 @@ namespace Licenta2022.Controllers
                         Reteta = reteta,
                         Medicament = medicament.FirstOrDefault()
                     };
-
                     reteta.RetetaXMedicament.Add(rxm);
                 }
 

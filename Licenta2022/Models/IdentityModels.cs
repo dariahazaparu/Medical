@@ -43,11 +43,19 @@ namespace Licenta2022.Models
         public DbSet<Diagnostic> Diagnostics { get; set; }
         public DbSet<PacientXDiagnostic> PacientXDiagnostics { get; set; }
         public DbSet<ServiciuXAsigurare> ServiciuXAsigurari { get; set; }
+        public DbSet<Programare> Programari { get; set; }
+        public DbSet<Trimitere> Trimiteri { get; set; }
 
 
         public static ApplicationDbContext Create()
         {
             return new ApplicationDbContext();
+        }
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            //modelBuilder.Entity<Reteta>(entity => entity.Property(e => e.Id).ValueGeneratedOnAdd());
         }
 
     }

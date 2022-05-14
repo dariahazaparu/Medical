@@ -177,8 +177,10 @@
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\MedicamentController.cs" />
     <Compile Include="Controllers\PacientController.cs" />
+    <Compile Include="Controllers\ProgramareController.cs" />
     <Compile Include="Controllers\RetetaController.cs" />
     <Compile Include="Controllers\ServiciuController.cs" />
+    <Compile Include="Controllers\TrimiteresController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -198,19 +200,23 @@
     <Compile Include="Models\FormModels\PacientAddDiagnosticForm.cs" />
     <Compile Include="Models\FormModels\DoctorForm.cs" />
     <Compile Include="Models\FormModels\PacientForm.cs" />
+    <Compile Include="Models\FormModels\ProgramareForm.cs" />
     <Compile Include="Models\FormModels\RetetaForm.cs" />
     <Compile Include="Models\FormModels\ServiciuForm.cs" />
+    <Compile Include="Models\FormModels\TrimitereForm.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\Localitate.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Medicament.cs" />
     <Compile Include="Models\Pacient.cs" />
-    <Compile Include="Models\PacientXDiagnostic.cs" />
+    <Compile Include="Models\JoiningModels\PacientXDiagnostic.cs" />
+    <Compile Include="Models\Programare.cs" />
     <Compile Include="Models\Reteta.cs" />
-    <Compile Include="Models\RetetaXMedicament.cs" />
+    <Compile Include="Models\JoiningModels\RetetaXMedicament.cs" />
     <Compile Include="Models\Serviciu.cs" />
-    <Compile Include="Models\ServiciuXAsigurare.cs" />
+    <Compile Include="Models\JoiningModels\ServiciuXAsigurare.cs" />
     <Compile Include="Models\Specialitate.cs" />
+    <Compile Include="Models\Trimitere.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -327,6 +333,16 @@
     <Content Include="Views\Doctor\Delete.cshtml" />
     <Content Include="Views\Doctor\Details.cshtml" />
     <Content Include="Views\Doctor\Edit.cshtml" />
+    <Content Include="Views\Programare\Create.cshtml" />
+    <Content Include="Views\Programare\Delete.cshtml" />
+    <Content Include="Views\Programare\Details.cshtml" />
+    <Content Include="Views\Programare\Edit.cshtml" />
+    <Content Include="Views\Programare\Index.cshtml" />
+    <Content Include="Views\Trimiteres\Create.cshtml" />
+    <Content Include="Views\Trimiteres\Delete.cshtml" />
+    <Content Include="Views\Trimiteres\Details.cshtml" />
+    <Content Include="Views\Trimiteres\Edit.cshtml" />
+    <Content Include="Views\Trimiteres\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

@@ -12,7 +12,6 @@ namespace Licenta2022.Models
         public int Id { get; set; }
         public int IdReteta { get; set; }
         public int IdMedicament { get; set; }
-
         public string Doza { get; set; }
 
         public virtual Reteta Reteta { get; set; }
