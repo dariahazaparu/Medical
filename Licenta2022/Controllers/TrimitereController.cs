@@ -105,7 +105,8 @@ namespace Licenta2022.Controllers
                 {
                     var programare = db.Programari.Find(trimitereForm.IdProgramare);
                     trimitere.Programare = programare;
-                    //programare.Trimiteri.Item1 = trimitere;
+                    trimitere.ProgramareT = null;
+                    programare.Trimiere = trimitere;
                 }
 
                 trimitere.org = false;

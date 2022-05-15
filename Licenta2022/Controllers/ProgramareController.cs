@@ -95,6 +95,8 @@ namespace Licenta2022.Controllers
                 programare.Pacient = pacient.FirstOrDefault();
 
                 programare.Retete = new List<Reteta>();
+                programare.Trimiere = null;
+                programare.TrimitereT = null;
 
                 db.Programari.Add(programare);
                 db.SaveChanges();
@@ -217,8 +219,8 @@ namespace Licenta2022.Controllers
 
                 var trimitere = db.Trimiteri.Where(x => x.Id == form.IdTrimitere).Select(x => x).ToList().FirstOrDefault();
                 trimitere.org = true;
-                programare.Trimiteri = new List<Trimitere>();
-                programare.Trimiteri.Add(trimitere);
+                trimitere.ProgramareT = programare;
+                programare.TrimitereT = trimitere;
 
                 programare.Retete = new List<Reteta>();
 

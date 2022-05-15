@@ -14,6 +14,7 @@ namespace Licenta2022.Models
 
         public bool org { get; set; }
         public virtual Programare Programare { get; set; } 
+        public virtual Programare ProgramareT { get; set; } 
         public virtual Pacient Pacient { get; set; }
         public virtual Specialitate Specialitate { get; set; }
 
