@@ -172,6 +172,7 @@
     <Compile Include="Controllers\AsigurareController.cs" />
     <Compile Include="Controllers\ClinicaController.cs" />
     <Compile Include="Controllers\DoctorController.cs" />
+    <Compile Include="Controllers\FacturaController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LocalitateController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
@@ -191,12 +192,14 @@
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Adresa.cs" />
+    <Compile Include="Models\Factura.cs" />
     <Compile Include="Models\FormModels\AdresaForm.cs" />
     <Compile Include="Models\Asigurare.cs" />
     <Compile Include="Models\Clinica.cs" />
     <Compile Include="Models\Diagnostic.cs" />
     <Compile Include="Models\Doctor.cs" />
     <Compile Include="Models\FormModels\ClinicaForm.cs" />
+    <Compile Include="Models\FormModels\FacturaForm.cs" />
     <Compile Include="Models\FormModels\PacientAddDiagnosticForm.cs" />
     <Compile Include="Models\FormModels\DoctorForm.cs" />
     <Compile Include="Models\FormModels\PacientForm.cs" />
@@ -345,6 +348,11 @@
     <Content Include="Views\Trimitere\Edit.cshtml" />
     <Content Include="Views\Trimitere\Index.cshtml" />
     <Content Include="Views\Programare\CreateFromTrimitere.cshtml" />
+    <Content Include="Views\Factura\Create.cshtml" />
+    <Content Include="Views\Factura\Delete.cshtml" />
+    <Content Include="Views\Factura\Details.cshtml" />
+    <Content Include="Views\Factura\Edit.cshtml" />
+    <Content Include="Views\Factura\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
