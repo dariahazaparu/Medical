@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using Licenta2022.Models;
 
 namespace Licenta2022.Controllers
+    
 {
     public class TrimitereController : Controller
     {
@@ -58,17 +59,19 @@ namespace Licenta2022.Controllers
                 IdProgramare = programare.Id
             };
             ViewBag.Specialitati = GetAllSpecialties();
+            ViewBag.Servicii = GetAllServices();
             return View(trimitereForm);
         }
 
 
         [NonAction]
-        private IEnumerable<SelectListItem> GetAllSpecialties()
+        private IEnumerable<Specialitate> GetAllSpecialties()
         {
             var selectList = new List<SelectListItem>();
 
             var specialitati = db.Specialitati.Select(x => x);
 
+            List<Serviciu> sl = new List<Serviciu>();
             foreach (var specialitate in specialitati)
             {
                 selectList.Add(new SelectListItem
@@ -78,7 +81,26 @@ namespace Licenta2022.Controllers
                 });
             }
 
-            return selectList;
+            return specialitati;
+        }
+
+        [NonAction]
+        private IEnumerable<Serviciu> GetAllServices()
+        {
+            var selectList = new List<SelectListItem>();
+
+            var servicii = db.Servicii.Select(x => x);
+
+            foreach (var serviciu in servicii)
+            {
+                selectList.Add(new SelectListItem
+                {
+                    Value = serviciu.Id.ToString(),
+                    Text = serviciu.Denumire.ToString()
+                });
+            }
+
+            return servicii;
         }
 
 
@@ -87,7 +109,7 @@ namespace Licenta2022.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Observatii,IdProgramare,IdPacient,IdSpecializare")] TrimitereForm trimitereForm)
+        public ActionResult Create([Bind(Include = "Id,Observatii,IdProgramare,IdPacient,IdSpecializare,IdServicii")] TrimitereForm trimitereForm)
         {
             if (ModelState.IsValid)
             {
@@ -110,6 +132,12 @@ namespace Licenta2022.Controllers
                 }
 
                 trimitere.org = false;
+                trimitere.Servicii = new List<Serviciu>();
+                for (int i = 0; i< trimitereForm.IdServicii.Count(); i++)
+                {
+                    var serviciu = db.Servicii.Find(trimitereForm.IdServicii[i]);
+                    trimitere.Servicii.Add(serviciu);
+                }
 
                 db.Trimiteri.Add(trimitere);
                 db.SaveChanges();

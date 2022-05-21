@@ -12,5 +12,6 @@ namespace Licenta2022.Models
         public int IdProgramare { get; set; }
         public int IdPacient { get; set; }
         public int IdSpecializare { get; set; }
+        public List<int> IdServicii { get; set; }
     }
 }

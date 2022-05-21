@@ -30,6 +30,17 @@
 
     </dl>
 </div>
+
+<div>
+    @if (Model.TrimitereT != null)
+    {
+        foreach (var serv in Model.TrimitereT.Servicii)
+        {
+            @serv.Denumire
+            <br /> 
+        }
+    }
+</div>
 <p>
     @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
     @Html.ActionLink("Back to List", "Index")
