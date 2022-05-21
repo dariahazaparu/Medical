@@ -172,7 +172,7 @@ namespace Licenta2022.Controllers
             base.Dispose(disposing);
         }
 
-        public ActionResult CreateFromTrimitere(int? id, int? id2)
+        public ActionResult CreateFromTrimitere(int? id)
         {
             if (id == null)
             {
@@ -183,7 +183,7 @@ namespace Licenta2022.Controllers
             {
                 return HttpNotFound();
             }
-            Pacient pacient = db.Pacienti.Find(id2);
+            Pacient pacient = db.Pacienti.Find(trimitere.Pacient.Id);
             if (pacient == null)
             {
                 return HttpNotFound();
