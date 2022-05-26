@@ -5,9 +5,6 @@
 }
 
 <h2>Create</h2>
-<script>
-    model.IdProgramare = 1;
-</script>
 @using (Html.BeginForm()) 
 {
     @Html.AntiForgeryToken()
@@ -19,7 +16,7 @@
     @Html.HiddenFor(model => model.IdPacient)
     @Html.HiddenFor(model => model.IdProgramare)
 
-    <script>
+    <script defer>
         var currentDivId = 0;
 
         // pentru a crea un medicament de la inceput
@@ -37,10 +34,22 @@
                 const options = $(".optionServiciu")
 
                 options.each(function (idx, option) {
-                    if (availableServices.includes(option.getAttribute("data-filter"))) {
+                    const serviceId = option.getAttribute("data-filter");
+
+                    if (availableServices.includes(serviceId)) {
                         $(option).show()
                     } else {
                         $(option).hide()
+                    }
+                })
+
+                const selects = $(".serviciu-select")
+
+                selects.each(function (_, select) {
+                    const currentValue = $(select).val()
+
+                    if (!availableServices.includes(currentValue)) {
+                        $(select).val("")
                     }
                 })
             })
@@ -56,6 +65,11 @@
             const divMedicamente = $("#servicii");
 
             const randId = ++currentDivId;
+            const selectSpecializare = $('#select-specializare :selected')
+
+            let availableServicesForSelectedSpecialty = selectSpecializare?.attr("data-servicii")?.split(",")
+
+            availableServicesForSelectedSpecialty = availableServicesForSelectedSpecialty?.splice(0, availableServicesForSelectedSpecialty.length - 1)?.map(x => parseInt(x))
 
             divMedicamente.append(`
                 <div class="element-medicament" id="${randId}">
@@ -63,9 +77,9 @@
                         @Html.LabelFor(model => model.IdServicii, "Serviciu", htmlAttributes: new { @class = "control-label col-md-2" })
                         <div class="col-md-10">
                             <select class="serviciu-select" name="IdServicii[]">
-<option disabled value="" selected>Selecteaza un serviciu</option>
+                            <option disabled value="" selected>Selecteaza un serviciu</option>
                         @foreach(var serviciu in ViewBag.Servicii) {
-                            <option class="optionServiciu" style="display: none;" data-filter="@serviciu.Id" value="@serviciu.Id"> @serviciu.Denumire
+                            <option style="display: ${availableServicesForSelectedSpecialty?.includes(@serviciu.Id) ? 'block' : 'none'}" class="optionServiciu" data-filter="@serviciu.Id" value="@serviciu.Id"> @serviciu.Denumire
                         </option>
                         }
 </select>
@@ -98,13 +112,11 @@
                 <option value="" selected disabled>Alege o specializare</option>
                 @foreach (var specialitate in ViewBag.Specialitati)
                 {
-                        String ids = "";
-                        foreach(var serviciu in specialitate.Servicii)
-                        {
-                            ids += serviciu.Id + ",";
-                        }
-                        
-                     
+                    String ids = "";
+                    foreach(var serviciu in specialitate.Servicii)
+                    {
+                        ids += serviciu.Id + ",";
+                    }
                     <option data-servicii="@ids" value="@specialitate.Id">@specialitate.Denumire</option>
                 }
             </select>
