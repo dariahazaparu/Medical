@@ -179,6 +179,7 @@
     <Compile Include="Controllers\MedicamentController.cs" />
     <Compile Include="Controllers\PacientController.cs" />
     <Compile Include="Controllers\ProgramareController.cs" />
+    <Compile Include="Controllers\ProgramTemplateController.cs" />
     <Compile Include="Controllers\RetetaController.cs" />
     <Compile Include="Controllers\ServiciuController.cs" />
     <Compile Include="Controllers\TrimitereController.cs" />
@@ -205,6 +206,7 @@
     <Compile Include="Models\FormModels\PacientForm.cs" />
     <Compile Include="Models\FormModels\ProgramareForm.cs" />
     <Compile Include="Models\FormModels\ProgramareFromForm.cs" />
+    <Compile Include="Models\FormModels\ProgramForm.cs" />
     <Compile Include="Models\FormModels\RetetaForm.cs" />
     <Compile Include="Models\FormModels\ServiciuForm.cs" />
     <Compile Include="Models\FormModels\TrimitereForm.cs" />
@@ -215,6 +217,7 @@
     <Compile Include="Models\Pacient.cs" />
     <Compile Include="Models\JoiningModels\PacientXDiagnostic.cs" />
     <Compile Include="Models\Programare.cs" />
+    <Compile Include="Models\ProgramTemplate.cs" />
     <Compile Include="Models\Reteta.cs" />
     <Compile Include="Models\JoiningModels\RetetaXMedicament.cs" />
     <Compile Include="Models\Serviciu.cs" />
@@ -353,6 +356,12 @@
     <Content Include="Views\Factura\Details.cshtml" />
     <Content Include="Views\Factura\Edit.cshtml" />
     <Content Include="Views\Factura\Index.cshtml" />
+    <Content Include="Views\ProgramTemplate\Create.cshtml" />
+    <Content Include="Views\ProgramTemplate\Delete.cshtml" />
+    <Content Include="Views\ProgramTemplate\Details.cshtml" />
+    <Content Include="Views\ProgramTemplate\Edit.cshtml" />
+    <Content Include="Views\ProgramTemplate\Index.cshtml" />
+    <Content Include="Views\Doctor\Program.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

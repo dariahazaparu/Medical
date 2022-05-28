@@ -8,8 +8,6 @@ namespace Licenta2022.Models
 {
     public class RetetaForm
     {
-        [Key]
-        public int Id { get; set; }
         public int IdProgramare { get; set; }
         public List<int> IdMedicamente { get; set; }
         public List<string> Doze { get; set; }

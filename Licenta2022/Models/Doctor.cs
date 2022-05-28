@@ -18,5 +18,6 @@ namespace Licenta2022.Models
         
         public virtual Specialitate Specialitate { get; set; }
         public virtual Clinica Clinica { get; set; }
+        public virtual ICollection<ProgramTemplate> Program { get; set; }
     }
 }

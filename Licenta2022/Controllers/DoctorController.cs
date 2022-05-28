@@ -177,5 +177,58 @@ namespace Licenta2022.Controllers
 
             return selectList;
         }
+
+        // GET
+        public ActionResult Program(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Doctor doctor = db.Doctori.Find(id);
+            if (doctor == null)
+            {
+                return HttpNotFound();
+            }
+            var programForm = new ProgramForm()
+            {
+                IdDoctor = doctor.Id
+            };
+            return View(programForm);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Program([Bind(Include = "IdDoctor,Data,Config")] ProgramForm programForm)
+        {
+            if (ModelState.IsValid)
+            {
+                var programTemplate = new ProgramTemplate()
+                {
+                    Data = programForm.Data,
+                    Config = ""
+                };
+
+                var doctor = db.Doctori.Find(programForm.IdDoctor);
+
+                foreach (var i in programForm.Config)
+                {
+                    if (i == true)
+                    {
+                        programTemplate.Config += "0";
+                    }
+                    else
+                    {
+                        programTemplate.Config += "1";
+                    }
+                }
+                doctor.Program.Add(programTemplate);
+                db.ProgramTemplates.Add(programTemplate);
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+
+            return View(programForm);
+        }
     }
 }

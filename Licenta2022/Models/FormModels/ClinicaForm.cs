@@ -8,9 +8,6 @@ namespace Licenta2022.Models
 {
     public class ClinicaForm
     {
-        [Key]
-        public int Id { get; set; }
-        [Required]
         public string Nume { get; set; }
         public int IdAdresa { get; set; }
     }
