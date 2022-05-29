@@ -45,17 +45,18 @@ namespace Licenta2022.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Data,Config")] ProgramTemplate programTemplate)
+        //[ValidateAntiForgeryToken]
+        public ActionResult Create([Bind(Include = "Id,Data,Config")] ProgramForm programTemplate)
         {
-            if (ModelState.IsValid)
-            {
-                db.ProgramTemplates.Add(programTemplate);
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
+            return RedirectToAction("Index");
+            //if (ModelState.IsValid)
+            //{
+            //    //db.ProgramTemplates.Add(programTemplate);
+            //    //db.SaveChanges();
+            //    return RedirectToAction("Index");
+            // }
 
-            return View(programTemplate);
+            //return View(programTemplate);
         }
 
         // GET: ProgramTemplate/Edit/5
