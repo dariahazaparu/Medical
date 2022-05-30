@@ -261,3 +261,4 @@ __pycache__/
 *.pyc
 
 Licenta2022/dist/*
+Licenta2022/package-lock.json
