@@ -1,4 +1,7 @@
+const webpack = require("webpack");
+
 const path = require("path");
+
 const { WebpackManifestPlugin } = require("webpack-manifest-plugin");
 
 module.exports = {
@@ -10,9 +13,10 @@ module.exports = {
     publicPath: "/dist/",
   },
   resolve: {
+    extensions: [".ts", ".js"],
     fallback: {
-      buffer: false,
-      stream: false,
+      stream: require.resolve("stream-browserify"),
+      buffer: require.resolve("buffer"),
     },
   },
   mode: process.env.NODE_ENV === "production" ? "production" : "development",
@@ -49,6 +53,13 @@ module.exports = {
     ],
   },
   plugins: [
+    new webpack.ProvidePlugin({
+      Buffer: ["buffer", "Buffer"],
+    }),
+    new webpack.ProvidePlugin({
+      process: "process/browser",
+    }),
+
     new WebpackManifestPlugin({
       fileName: "asset-manifest.json",
       generate: (seed, files) => {
