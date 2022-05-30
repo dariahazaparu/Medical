@@ -4,6 +4,8 @@ const path = require("path");
 
 const { WebpackManifestPlugin } = require("webpack-manifest-plugin");
 
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+
 module.exports = {
   entry: "./Content/components/expose-components.js",
   output: {
@@ -48,7 +50,7 @@ module.exports = {
       },
       {
         test: /\.css$/i,
-        use: ["style-loader", "css-loader"],
+        use: [MiniCssExtractPlugin.loader, "css-loader"],
       },
     ],
   },
@@ -59,6 +61,8 @@ module.exports = {
     new webpack.ProvidePlugin({
       process: "process/browser",
     }),
+
+    new MiniCssExtractPlugin(),
 
     new WebpackManifestPlugin({
       fileName: "asset-manifest.json",
