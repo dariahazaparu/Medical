@@ -113,7 +113,7 @@ const ProgramareCreateComponent: React.FC<IProgramareCreateComponent> = (props) 
 
                                 const startHour = moment(startOfDay).add(idx * 15, "minutes").format("HH:mm")
 
-                                return <Radio.Button onChange={e => {
+                                return <Radio.Button style={{ marginLeft: "1rem" }} onChange={e => {
                                     onSelectInterval(e.target.value)
                                     setProgramId(program.Id)
                                 }} key={idx} checked={programId === program.Id && idx === programIntervalIndex} value={idx}>{startHour}</Radio.Button>
