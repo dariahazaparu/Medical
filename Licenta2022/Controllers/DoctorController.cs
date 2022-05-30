@@ -185,45 +185,51 @@ namespace Licenta2022.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
             Doctor doctor = db.Doctori.Find(id);
+
             if (doctor == null)
             {
                 return HttpNotFound();
             }
-            var programForm = new ProgramForm()
+
+            var programForm = new DoctorProgramForm()
             {
-                IdDoctor = doctor.Id
+               IdDoctor  = doctor.Id,
             };
+
+            ViewBag.Templates = db.ProgramTemplates.Select(x => x).ToList();
+
             return View(programForm);
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Program([Bind(Include = "IdDoctor,Data,Config")] ProgramForm programForm)
+        //[ValidateAntiForgeryToken]
+        public ActionResult Program([Bind(Include = "IdDoctor,Programe")] DoctorProgramForm programForm)
         {
             if (ModelState.IsValid)
             {
-                var programTemplate = new ProgramTemplate()
-                {
-                    Data = programForm.Data,
-                    Config = ""
-                };
-
                 var doctor = db.Doctori.Find(programForm.IdDoctor);
 
-                foreach (var i in programForm.Config)
+                foreach (var program in programForm.Programe)
                 {
-                    if (i == true)
+                    var programTemplate = db.ProgramTemplates.Find(program.IdProgramTemplate);
+
+                    var doctorProgramTemplate = new DoctorXProgramTemplate()
                     {
-                        programTemplate.Config += "0";
-                    }
-                    else
-                    {
-                        programTemplate.Config += "1";
-                    }
+                        Data = program.Data,
+                        Config = programTemplate.Config,
+
+                        Doctor = doctor,
+                        IdDoctor = programForm.IdDoctor,
+
+                        ProgramTemplate = programTemplate,
+                        IdProgramTemplate = program.IdProgramTemplate,
+                    };
+
+                    doctor.DoctorXProgramTemplates.Add(doctorProgramTemplate);
                 }
-                doctor.Program.Add(programTemplate);
-                db.ProgramTemplates.Add(programTemplate);
+
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }

@@ -430,6 +430,7 @@
     <Compile Include="Models\Clinica.cs" />
     <Compile Include="Models\Diagnostic.cs" />
     <Compile Include="Models\Doctor.cs" />
+    <Compile Include="Models\FormModels\DoctorProgramForm.cs" />
     <Compile Include="Models\FormModels\ClinicaForm.cs" />
     <Compile Include="Models\FormModels\FacturaForm.cs" />
     <Compile Include="Models\FormModels\PacientAddDiagnosticForm.cs" />
@@ -442,6 +443,7 @@
     <Compile Include="Models\FormModels\ServiciuForm.cs" />
     <Compile Include="Models\FormModels\TrimitereForm.cs" />
     <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\JoiningModels\DoctorXProgramTemplate.cs" />
     <Compile Include="Models\Localitate.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Medicament.cs" />

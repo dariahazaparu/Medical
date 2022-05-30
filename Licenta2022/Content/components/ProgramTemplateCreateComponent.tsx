@@ -1,7 +1,7 @@
 ﻿import { useState } from "react";
 
 import axios from 'axios'
-import { DatePicker, TimePicker } from "antd";
+import { DatePicker, notification, TimePicker } from "antd";
 import moment, { Moment } from "moment";
 
 import 'antd/dist/antd.css';
@@ -64,7 +64,6 @@ const OldComponent = () => {
 }
 
 const ProgramTemplateCreateComponent = (props: any) => {
-    const [date, setDate] = useState(moment());
     const [startHour, setStartHour] = useState(null);
     const [endHour, setEndHour] = useState(null);
 
@@ -82,24 +81,36 @@ const ProgramTemplateCreateComponent = (props: any) => {
         }
     };
 
-    const onSubmit = () => {
-        const startIndex =
-            (startHour.get("hours") * 60 + startHour.get("minutes")) / 15;
-        const endIndex = (endHour.get("hours") * 60 + endHour.get("minutes")) / 15;
+    const onSubmit = async () => {
+        let config = null
 
-        const answer = new Array(96)
-            .fill(null)
-            .map((_, idx) => isWholeDay || (idx >= startIndex && idx < endIndex));
+        if (isWholeDay) {
+            config = "1".repeat(96)
+        }
 
-        console.log({ answer });
+        else {
+            const startIndex =
+                (startHour.get("hours") * 60 + startHour.get("minutes")) / 15;
+            const endIndex = (endHour.get("hours") * 60 + endHour.get("minutes")) / 15;
+
+            config = new Array(96).fill(null).map((_, idx) => Number((idx >= startIndex && idx < endIndex))).join("")
+        }
+
+        const response = await axios.post("/ProgramTemplate/Create", {
+            Config: config,
+        })
+
+        if (response.status === 200) {
+            window.location.href = "/ProgramTemplate"
+        }
+
+        // else {
+        //     notification.info({message: response.})
+        // }
     };
 
     return (
         <div className="App">
-            <div>
-                <DatePicker value={date} onChange={setDate} />
-            </div>
-
             <div style={{ marginTop: "1rem" }}>
                 <label>Whole day?</label>
                 <input
@@ -134,7 +145,7 @@ const ProgramTemplateCreateComponent = (props: any) => {
                 />
             </div>
 
-            <button disabled={!startHour} onClick={onSubmit}>
+            <button disabled={!startHour && !isWholeDay} onClick={onSubmit}>
                 Create
             </button>
         </div>

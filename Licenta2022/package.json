@@ -37,6 +37,7 @@
     "babel-loader": "8.0.6",
     "babel-runtime": "6.26.0",
     "buffer": "^6.0.3",
+    "crypto-browserify": "^3.12.0",
     "css-loader": "^5.0.2",
     "mini-css-extract-plugin": "^2.6.0",
     "process": "^0.11.10",

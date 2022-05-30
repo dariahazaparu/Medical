@@ -10,10 +10,7 @@ namespace Licenta2022.Models
     {
         [Key]
         public int Id { get; set; }
-        public DateTime Data { get; set; }
         public string Config { get; set; }
-        public string Descriere { get; set; }
-
         public virtual ICollection<Doctor> Doctori { get; set; }
     }
 }

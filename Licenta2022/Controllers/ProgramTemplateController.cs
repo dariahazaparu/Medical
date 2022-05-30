@@ -46,17 +46,22 @@ namespace Licenta2022.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         //[ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Data,Config")] ProgramForm programTemplate)
+        public ActionResult Create([Bind(Include = "Config")] ProgramForm programTemplateForm)
         {
-            return RedirectToAction("Index");
-            //if (ModelState.IsValid)
-            //{
-            //    //db.ProgramTemplates.Add(programTemplate);
-            //    //db.SaveChanges();
-            //    return RedirectToAction("Index");
-            // }
+            if (ModelState.IsValid)
+            {
+                ProgramTemplate programTemplate = new ProgramTemplate()
+                {
+                    Config = programTemplateForm.Config
+                };
 
-            //return View(programTemplate);
+                db.ProgramTemplates.Add(programTemplate);
+                db.SaveChanges();
+
+                return RedirectToAction("Index");
+            }
+
+            return View(programTemplateForm);
         }
 
         // GET: ProgramTemplate/Edit/5

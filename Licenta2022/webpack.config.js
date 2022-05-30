@@ -7,7 +7,9 @@ const { WebpackManifestPlugin } = require("webpack-manifest-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = {
-  entry: "./Content/components/expose-components.js",
+  context: path.join(__dirname, "Content", "components"),
+
+  entry: "./expose-components.js",
   output: {
     filename: "[name].js",
     globalObject: "this",
@@ -19,6 +21,7 @@ module.exports = {
     fallback: {
       stream: require.resolve("stream-browserify"),
       buffer: require.resolve("buffer"),
+      crypto: require.resolve("crypto-browserify")
     },
   },
   mode: process.env.NODE_ENV === "production" ? "production" : "development",
