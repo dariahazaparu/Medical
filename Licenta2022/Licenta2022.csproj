@@ -438,6 +438,7 @@
     <Compile Include="Models\FormModels\PacientForm.cs" />
     <Compile Include="Models\FormModels\ProgramareForm.cs" />
     <Compile Include="Models\FormModels\ProgramareFromForm.cs" />
+    <Compile Include="Models\FormModels\ProgramareViewCreateForm.cs" />
     <Compile Include="Models\FormModels\ProgramForm.cs" />
     <Compile Include="Models\FormModels\RetetaForm.cs" />
     <Compile Include="Models\FormModels\ServiciuForm.cs" />

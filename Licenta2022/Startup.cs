@@ -21,7 +21,7 @@ namespace Licenta2022
 		}
 
 		// public void Configure(IApplicationBuilder app)
-        // {
+		// {
 		// 	app.UseReact(config =>
 		// 	{
 		// 		config
@@ -45,5 +45,10 @@ namespace Licenta2022
 		// 	// Build the intermediate service provider then return it
 		// 	services.BuildServiceProvider();
 		// }
+
+		//public void ConfigureServices(IServiceCollection services)
+		//{
+		//	services.AddControlers().AddNewtonsoftJson(x => x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+		//}
 	}
 }

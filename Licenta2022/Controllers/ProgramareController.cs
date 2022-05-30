@@ -47,12 +47,63 @@ namespace Licenta2022.Controllers
             {
                 return HttpNotFound();
             }
-            var programareForm = new ProgramareForm()
+
+            var programareViewSpecialitati = new List<ProgramareViewSpecialitate>();
+
+            var specialitati = db.Specialitati.Select(x => x).ToList();
+
+            foreach (var specialitate in specialitati)
             {
-                IdPacient = pacient.Id
-            };
-            ViewBag.Doctori = GetAllDoctors();
-            return View(programareForm);
+                var programareViewSpecialitate = new ProgramareViewSpecialitate
+                {
+                    Id = specialitate.Id,
+                    Nume = specialitate.Denumire
+                };
+
+                var doctoriDb = db.Doctori.Where(doctor => doctor.Specialitate.Id == specialitate.Id).ToList();
+
+                var doctori = new List<ProgramareViewDoctor>();
+
+                foreach (var doctorDb in doctoriDb) {
+                    var programe = new List<ProgramareViewDoctorProgram>();
+
+                    foreach (var program in doctorDb.DoctorXProgramTemplates)
+                    {
+                        programe.Add(new ProgramareViewDoctorProgram()
+                        {
+                            Id=program.Id,
+                            Config=program.Config,
+                            Data=program.Data
+                        });
+                    }
+
+                    var doctor = new ProgramareViewDoctor()
+                    {
+                        Id=doctorDb.Id,
+                        Nume=doctorDb.Nume,
+                        Prenume=doctorDb.Prenume,
+                        Programe=programe
+                    };
+
+                    doctori.Add(doctor);
+                }
+
+                programareViewSpecialitate.Doctori = doctori;
+
+                programareViewSpecialitati.Add(programareViewSpecialitate);
+            }
+
+            ViewBag.Specialitati = programareViewSpecialitati;
+            ViewBag.IdPacient = id;
+
+            //var doctori = db.Doctori;
+            //foreach(var d in doctori)
+            //{
+            //    var program = d.DoctorXProgramTemplates.Select(x => new {x.Data, x.Config}).ToList();
+            //    ViewBag.Doctori.Add(program, new {d.Id, d.Nume, d.Prenume});
+            //}
+
+            return View();
         }
 
         [NonAction]

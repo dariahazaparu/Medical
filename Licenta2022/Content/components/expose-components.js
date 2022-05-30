@@ -4,6 +4,7 @@ import ReactDOMServer from 'react-dom/server';
 
 import ProgramTemplateCreateComponent from "./ProgramTemplateCreateComponent.tsx"
 import DoctorProgramTemplateCreateComponent from "./DoctorProgramTemplateCreateComponent.tsx"
+import ProgramareCreateComponent from "./ProgramareCreateComponent.tsx"
 
 // any css-in-js or other libraries you want to use server-side
 import { ServerStyleSheet } from 'styled-components';
@@ -17,4 +18,4 @@ global.ReactDOMServer = ReactDOMServer;
 global.Styled = { ServerStyleSheet };
 global.Helmet = Helmet;
 
-global.Components = { ProgramTemplateCreateComponent, DoctorProgramTemplateCreateComponent };
+global.Components = { ProgramTemplateCreateComponent, DoctorProgramTemplateCreateComponent, ProgramareCreateComponent };
