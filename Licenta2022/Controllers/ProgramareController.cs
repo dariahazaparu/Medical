@@ -96,13 +96,6 @@ namespace Licenta2022.Controllers
             ViewBag.Specialitati = programareViewSpecialitati;
             ViewBag.IdPacient = id;
 
-            //var doctori = db.Doctori;
-            //foreach(var d in doctori)
-            //{
-            //    var program = d.DoctorXProgramTemplates.Select(x => new {x.Data, x.Config}).ToList();
-            //    ViewBag.Doctori.Add(program, new {d.Id, d.Nume, d.Prenume});
-            //}
-
             return View();
         }
 
@@ -129,21 +122,26 @@ namespace Licenta2022.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Data,IdPacient,IdDoctor")] ProgramareForm programareForm)
+        public ActionResult Create([Bind(Include = "IdDoctor,IdProgram,ProgramIntervalIndex,IdPacient")] ProgramareCreateForm programareCreateForm)
         {
             if (ModelState.IsValid)
             {
+                var doctor = db.Doctori.Find(programareCreateForm.IdDoctor);
+
+                var pacient = db.Pacienti.Find(programareCreateForm.IdPacient);
+
+                var program = db.DoctorXProgramTemplates.Find(programareCreateForm.IdProgram);
+                var newConfig = program.Config.Substring(0, programareCreateForm.ProgramIntervalIndex) + '0' + program.Config.Substring(programareCreateForm.ProgramIntervalIndex + 1);
+                program.Config = newConfig;
+
+                DateTime data = program.Data.AddMinutes(15 * programareCreateForm.ProgramIntervalIndex);
+                
                 var programare = new Programare()
                 {
-                    Data = programareForm.Data
+                    Doctor = doctor,
+                    Pacient = pacient,
+                    Data = data
                 };
-
-                var doctor = db.Doctori.Where(x => x.Id == programareForm.IdDoctor).Select(x => x).ToList();
-                programare.Doctor = doctor.FirstOrDefault();
-
-                var pacient = db.Pacienti.Where(x => x.Id == programareForm.IdPacient).Select(x => x).ToList();
-                programare.Pacient = pacient.FirstOrDefault();
 
                 programare.Retete = new List<Reteta>();
                 programare.Trimiere = null;
@@ -154,7 +152,7 @@ namespace Licenta2022.Controllers
                 return RedirectToAction("Index");
             }
 
-            return View(programareForm);
+            return View(programareCreateForm);
         }
 
         // GET: Programare/Edit/5

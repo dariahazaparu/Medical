@@ -47,6 +47,7 @@ namespace Licenta2022.Models
         public DbSet<Trimitere> Trimiteri { get; set; }
         public DbSet<Factura> Facturi { get; set; }
         public DbSet<ProgramTemplate> ProgramTemplates { get; set; }
+        public DbSet<DoctorXProgramTemplate> DoctorXProgramTemplates { get; set; }
 
 
         public static ApplicationDbContext Create()

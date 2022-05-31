@@ -5,6 +5,14 @@ using System.Web;
 
 namespace Licenta2022.Models
 {
+
+    public class ProgramareViewSpecialitate
+    {
+        public int Id { get; set; }
+        public string Nume { get; set; }
+        public List<ProgramareViewDoctor> Doctori { get; set; }
+    }
+
     public class ProgramareViewDoctor
     {
         public int Id { get; set; }
@@ -12,13 +20,6 @@ namespace Licenta2022.Models
         public string Prenume { get; set; }
  
         public List<ProgramareViewDoctorProgram> Programe { get; set; }
-    }
-
-    public class ProgramareViewSpecialitate
-    {
-        public int Id { get; set; }
-        public string Nume { get; set; }
-        public List<ProgramareViewDoctor> Doctori { get; set; }
     }
 
     public class ProgramareViewDoctorProgram

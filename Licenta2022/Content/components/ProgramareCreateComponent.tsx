@@ -2,6 +2,7 @@ import { Button, DatePicker, Radio, Select, TimePicker } from 'antd'
 import { useState } from 'react'
 
 import moment from 'moment'
+import axios from 'axios'
 
 interface Specialitate {
     Id: number
@@ -68,6 +69,17 @@ const ProgramareCreateComponent: React.FC<IProgramareCreateComponent> = (props) 
     }
 
     const onCreate = async () => {
+        const response = await axios.post("/Programare/Create", {
+            IdDoctor: doctorId,
+            IdProgram: programId,
+            ProgramIntervalIndex: programIntervalIndex,
+            IdPacient: idPacient
+        })
+
+        if (response.status === 200) {
+            window.location.href = "/Programare"
+        }
+
         console.log({ specializareId, doctorId, programId, programIntervalIndex, idPacient })
     }
 
@@ -123,7 +135,7 @@ const ProgramareCreateComponent: React.FC<IProgramareCreateComponent> = (props) 
                 </div>
             ) : null}
 
-            <Button style={{ marginTop: "2rem" }} onClick={onCreate}>Create</Button>
+            <Button disabled={!programIntervalIndex} style={{ marginTop: "2rem" }} onClick={onCreate}>Create</Button>
         </div>
     )
 }
