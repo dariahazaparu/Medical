@@ -12,10 +12,11 @@ namespace Licenta2022.Models
         public int Id { get; set; }
         [Required]
         public string Denumire { get; set; }
-        public int IdSpecialitate { get; set; }
+        [Required]
+        public float Pret { get; set; }
 
         public virtual Specialitate Specialitate { get; set; }
-
         public virtual ICollection<ServiciuXAsigurare> ServiciuXAsigurari { get; set; }
+        public virtual ICollection<Trimitere> Trimiteri { get; set; }
     }
 }

@@ -15,9 +15,11 @@
             @Html.DisplayNameFor(model => model.Denumire)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.IdSpecialitate)
+            @Html.DisplayNameFor(model => model.Specialitate)
         </th>
-        <th></th>
+        <th>
+            @Html.DisplayNameFor(model => model.Pret)
+        </th>
     </tr>
 
 @foreach (var item in Model) {
@@ -27,6 +29,9 @@
         </td>
         <td>
             @item.Specialitate.Denumire
+        </td>
+        <td>
+            @item.Pret
         </td>
         <td>
             @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |

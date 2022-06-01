@@ -99,25 +99,30 @@ namespace Licenta2022.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Nume,Prenume,CNP,IdAdresa,IdAsigurare")] Pacient pacient)
+        public ActionResult Create([Bind(Include = "Id,Nume,Prenume,CNP,IdAdresa,IdAsigurare")] PacientForm pacientForm)
         {
             if (ModelState.IsValid)
             {
-                var adresa = db.Adrese.Where(x => x.Id == pacient.IdAdresa).Select(x => x).ToList();
+                var pacient = new Pacient()
+                {
+                    Nume = pacientForm.Nume,
+                    Prenume = pacientForm.Prenume,
+                    CNP = pacientForm.CNP,
+                    PacientXDiagnostics = new List<PacientXDiagnostic>()
+                };
+
+                var adresa = db.Adrese.Where(x => x.Id == pacientForm.IdAdresa).Select(x => x).ToList();
                 pacient.Adresa = adresa.FirstOrDefault();
 
-                var asigurare = db.Asigurari.Where(x => x.Id == pacient.IdAsigurare).Select(x => x).ToList();
+                var asigurare = db.Asigurari.Where(x => x.Id == pacientForm.IdAsigurare).Select(x => x).ToList();
                 pacient.Asigurare = asigurare.FirstOrDefault();
-
-                pacient.PacientXDiagnostics = new List<PacientXDiagnostic>();
-                pacient.IdDiagnostics = new List<int>();
 
                 db.Pacienti.Add(pacient);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            return View(pacient);
+            return View(pacientForm);
         }
 
         // GET: Pacient/Edit/5
@@ -200,7 +205,14 @@ namespace Licenta2022.Controllers
             {
                 return HttpNotFound();
             }
-            return View(pacient);
+            var pacientForm = new PacientAddDiagnosticForm()
+            {
+                IdPacient = pacient.Id,
+                Nume = pacient.Nume,
+                Prenume = pacient.Prenume
+            };
+
+            return View(pacientForm);
         }
 
         [NonAction]
@@ -224,19 +236,20 @@ namespace Licenta2022.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult AddDiagnostic([Bind(Include = "Id,Nume,Prenume,CNP,IdAdresa,IdAsigurare,IdDiagnostics")] Pacient pacient)
+        public ActionResult AddDiagnostic([Bind(Include = "IdPacient,IdDiagnostic")] PacientAddDiagnosticForm pacientForm)
         {
             if (ModelState.IsValid)
             {
+                var pacient = db.Pacienti.Find(pacientForm.IdPacient);
+
                 if (pacient.PacientXDiagnostics == null)
                     pacient.PacientXDiagnostics = new List<PacientXDiagnostic>();
-
-                var id = pacient.IdDiagnostics[0];
-                var diag = db.Diagnostics.Where(x => x.Id == id).Select(x => x).ToList();
+                
+                var diag = db.Diagnostics.Where(x => x.Id == pacientForm.IdDiagnostic).Select(x => x).ToList();
 
                 var pxd = new PacientXDiagnostic()
                 {
-                    IdDiagnostic = id,
+                    IdDiagnostic = pacientForm.IdDiagnostic,
                     IdPacient = pacient.Id,
                     Data = DateTime.Now,
                     Pacient = pacient,
@@ -244,14 +257,14 @@ namespace Licenta2022.Controllers
                 };
                 pacient.PacientXDiagnostics.Add(pxd);
 
-                db.PacientXDiagnostics.Add(pxd);
+                //db.PacientXDiagnostics.Add(pxd);
                 db.Entry(pacient).State = EntityState.Modified;
 
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            return View(pacient);
+            return View(pacientForm);
         }
     }
 }

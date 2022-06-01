@@ -13,9 +13,9 @@ namespace Licenta2022.Models
         [Required]
         public string Strada { get; set; }
         public int Numar { get; set; }
-        public int IdLocalitate { get; set; }
-
-        public ICollection<Clinica> Clinici { get; set; }
+        
+        public virtual ICollection<Pacient> Pacienti { get; set; }
+        public virtual ICollection<Clinica> Clinici { get; set; }
         public virtual Localitate Localitate { get; set; }
     }
 }

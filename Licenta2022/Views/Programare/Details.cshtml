@@ -1,0 +1,47 @@
+﻿@model Licenta2022.Models.Programare
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Programare</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Data)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Data)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Trimiteri)
+        </dt>
+
+        <dd>
+            @foreach (var item in Model.Trimiteri)
+            {
+                @item.Observatii
+            }
+        </dd>
+
+    </dl>
+</div>
+
+<div>
+    @if (Model.TrimitereT != null)
+    {
+        foreach (var serv in Model.TrimitereT.Servicii)
+        {
+            @serv.Denumire
+            <br /> 
+        }
+    }
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

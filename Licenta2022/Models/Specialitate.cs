@@ -13,7 +13,8 @@ namespace Licenta2022.Models
         [Required]
         public string Denumire { get; set; }
 
-        public ICollection<Doctor> Doctori { get; set; }
-        public ICollection<Serviciu> Servicii { get; set; }
+        public virtual ICollection<Doctor> Doctori { get; set; }
+        public virtual ICollection<Serviciu> Servicii { get; set; }
+        public virtual ICollection<Trimitere> Trimiteri { get; set; }
     }
 }

@@ -14,6 +14,7 @@ namespace Licenta2022.Models
         public string Denumire { get; set; }
         public List<int> IdServicii { get; set; }
         public List<int> ProcenteReducere { get; set; }
+
         public virtual ICollection<ServiciuXAsigurare> ServiciuXAsigurari { get; set; }
     }
 }

@@ -15,10 +15,10 @@ namespace Licenta2022.Models
         [Required]
         public string Prenume { get; set; }
         public DateTime DataAngajarii { get; set; }
-        public int IdSpecialitate { get; set; }
-        public int IdClinica { get; set; }
         
         public virtual Specialitate Specialitate { get; set; }
         public virtual Clinica Clinica { get; set; }
+
+        public virtual ICollection<DoctorXProgramTemplate> DoctorXProgramTemplates { get; set; }
     }
 }

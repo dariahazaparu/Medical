@@ -14,13 +14,18 @@
         <th>
             @Html.DisplayNameFor(model => model.Nume)
         </th>
-        <th></th>
+        <th>
+            @Html.DisplayNameFor(model => model.Adresa)
+        </th>
     </tr>
 
 @foreach (var item in Model) {
     <tr>
         <td>
             @Html.DisplayFor(modelItem => item.Nume)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Adresa.Strada)
         </td>
         <td>
             @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |

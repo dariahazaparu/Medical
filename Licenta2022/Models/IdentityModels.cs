@@ -43,6 +43,11 @@ namespace Licenta2022.Models
         public DbSet<Diagnostic> Diagnostics { get; set; }
         public DbSet<PacientXDiagnostic> PacientXDiagnostics { get; set; }
         public DbSet<ServiciuXAsigurare> ServiciuXAsigurari { get; set; }
+        public DbSet<Programare> Programari { get; set; }
+        public DbSet<Trimitere> Trimiteri { get; set; }
+        public DbSet<Factura> Facturi { get; set; }
+        public DbSet<ProgramTemplate> ProgramTemplates { get; set; }
+        public DbSet<DoctorXProgramTemplate> DoctorXProgramTemplates { get; set; }
 
 
         public static ApplicationDbContext Create()
@@ -50,5 +55,6 @@ namespace Licenta2022.Models
             return new ApplicationDbContext();
         }
 
+        public System.Data.Entity.DbSet<Licenta2022.Models.ProgramareFromForm> ProgramareFromForms { get; set; }
     }
 }

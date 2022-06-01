@@ -136,7 +136,6 @@ namespace Licenta2022.Controllers
                 program.Config = newConfig;
 
                 DateTime data = program.Data.AddMinutes(15 * programareCreateForm.ProgramIntervalIndex);
-
                 var programare = new Programare()
                 {
                     Doctor = doctor,

@@ -13,9 +13,7 @@ namespace Licenta2022.Models
         [Required]
         public string Nume { get; set; }
 
-        public int IdAdresa { get; set; }
-        public ICollection<Doctor> Doctori { get; set; }
-
+        public virtual ICollection<Doctor> Doctori { get; set; }
         public virtual Adresa Adresa { get; set; }
     }
 }

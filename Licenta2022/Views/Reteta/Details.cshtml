@@ -20,6 +20,18 @@
 
     </dl>
 </div>
+
+<div>
+    @foreach (var item in Model.RetetaXMedicament)
+    {
+        @item.Medicament.Denumire
+        <br />
+        @item.Doza
+        <hr />
+
+    }
+</div>
+
 <p>
     @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
     @Html.ActionLink("Back to List", "Index")

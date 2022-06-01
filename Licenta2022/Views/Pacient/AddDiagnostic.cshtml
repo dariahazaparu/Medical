@@ -1,4 +1,4 @@
-﻿@model Licenta2022.Models.Pacient
+﻿@model Licenta2022.Models.PacientAddDiagnosticForm
 
 @{
     ViewBag.Title = "AddDiagnostic";
@@ -13,12 +13,7 @@
         <h4>Pacient</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        @Html.HiddenFor(model => model.Id)
-        @Html.HiddenFor(model => model.Nume)
-        @Html.HiddenFor(model => model.Prenume)
-        @Html.HiddenFor(model => model.IdAdresa)
-        @Html.HiddenFor(model => model.IdAsigurare)
-        @Html.HiddenFor(model => model.CNP)
+        @Html.HiddenFor(model => model.IdPacient)
         <dl>
             <dt>
                 @Html.DisplayNameFor(model => model.Nume)
@@ -30,11 +25,11 @@
         </dl>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.IdDiagnostics, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.IdDiagnostic, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownListFor(model => model.IdDiagnostics, new SelectList(ViewBag.Diagnostics, "Value", "Text"),
+                @Html.DropDownListFor(model => model.IdDiagnostic, new SelectList(ViewBag.Diagnostics, "Value", "Text"),
                                         "Diagnostic", new { @class = "form-control form-title" })
-                @Html.ValidationMessage("IdDiagnostics", null, new { @class = "text-danger" })
+                @Html.ValidationMessage("IdDiagnostic", null, new { @class = "text-danger" })
             </div>
         </div>
 

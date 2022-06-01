@@ -1,29 +1,57 @@
-﻿@{
-    ViewBag.Title = "Doctori";
+﻿@model IEnumerable<Licenta2022.Models.Doctor>
+
+@{
+    ViewBag.Title = "Index";
 }
 
-<div class="page-header text-center" style="border-bottom:none; color: #303952;">
-    <h1 style="font-size:45px;">pls mergi</h1>
-</div>
+<h2>Index</h2>
 
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Nume)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Prenume)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DataAngajarii)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Specialitate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Clinica)
+        </th>
+        <th></th>
+    </tr>
 
-
-<hr style="border:2px #e15f41 solid;" />
-
-@if (ViewBag.Message != null)
-{
-    <div class="text-center">
-        <h3>@ViewBag.Message</h3>
-    </div>
-    <hr style="border:2px #e15f41 solid;" />
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Nume)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Prenume)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DataAngajarii)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Specialitate.Denumire)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Clinica.Nume)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
+            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
+        </td>
+    </tr>
 }
 
-
-@foreach (var doctor in ViewBag.Doctori)
-{
-    <h1><large><strong>@doctor.Nume</strong></large></h1> <h2>@doctor.Prenume</h2>
-    <strong>@doctor.Specialitate.Denumire</strong>
-    <br />
-    <strong>@doctor.Clinica.Nume</strong>
-    <br /><br />
-}
+</table>

@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.Entity;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using Licenta2022.Models;
@@ -14,49 +17,128 @@ namespace Licenta2022.Controllers
         // GET: Doctor
         public ActionResult Index()
         {
-            var doctori = db.Doctori.Include("Specialitate").Include("Clinica").Select(x => x);
-            ViewBag.Doctori = doctori;
-            
-            return View();
+            return View(db.Doctori.ToList());
         }
 
-        //NEW
-        public ActionResult New()
+        // GET: Doctor/Details/5
+        public ActionResult Details(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Doctor doctor = db.Doctori.Find(id);
+            if (doctor == null)
+            {
+                return HttpNotFound();
+            }
+            return View(doctor);
+        }
+
+        // GET: Doctor/Create
+        public ActionResult Create()
         {
             ViewBag.Specialitati = GetAllSpecialties();
             ViewBag.Clinici = GetAllClinics();
-
             return View();
         }
 
+        // POST: Doctor/Create
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        public ActionResult New(Doctor doctor)
+        [ValidateAntiForgeryToken]
+        public ActionResult Create([Bind(Include = "Id,Nume,Prenume,DataAngajarii,IdSpecialitate,IdClinica")] DoctorForm doctorForm)
         {
-            try
+            if (ModelState.IsValid)
             {
-                if (ModelState.IsValid)
+                var doctor = new Doctor()
                 {
-                    var specialitate = db.Specialitati.Where(x => x.Id == doctor.IdSpecialitate).Select(x => x).ToList();
-                    doctor.Specialitate = specialitate.FirstOrDefault();
+                    Nume = doctorForm.Nume,
+                    Prenume = doctorForm.Prenume,
+                    DataAngajarii = doctorForm.DataAngajarii
+                };
 
-                    var clinica = db.Clinici.Where(x => x.Id == doctor.IdClinica).Select(x => x).ToList();
-                    doctor.Clinica = clinica.FirstOrDefault();
+                var specialitate = db.Specialitati.Where(x => x.Id == doctorForm.IdSpecialitate).Select(x => x).ToList();
+                doctor.Specialitate = specialitate.FirstOrDefault();
 
-                    db.Doctori.Add(doctor);
-                    db.SaveChanges();
-                    TempData["message"] = "Un doctor nou a fost adaugat!";
-                    return RedirectToAction("Index");
-                }
-                else
-                {
-                    return View(doctor);
-                }
+                var clinica = db.Clinici.Where(x => x.Id == doctorForm.IdClinica).Select(x => x).ToList();
+                doctor.Clinica = clinica.FirstOrDefault();
+
+                db.Doctori.Add(doctor);
+                db.SaveChanges();
+                return RedirectToAction("Index");
             }
-            catch (Exception e)
-            {
-                return View(doctor);
-            }
+
+            return View(doctorForm);
         }
+
+        // GET: Doctor/Edit/5
+        public ActionResult Edit(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Doctor doctor = db.Doctori.Find(id);
+            if (doctor == null)
+            {
+                return HttpNotFound();
+            }
+            return View(doctor);
+        }
+
+        // POST: Doctor/Edit/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit([Bind(Include = "Id,Nume,Prenume,DataAngajarii,IdSpecialitate,IdClinica")] Doctor doctor)
+        {
+            if (ModelState.IsValid)
+            {
+                db.Entry(doctor).State = EntityState.Modified;
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            return View(doctor);
+        }
+
+        // GET: Doctor/Delete/5
+        public ActionResult Delete(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Doctor doctor = db.Doctori.Find(id);
+            if (doctor == null)
+            {
+                return HttpNotFound();
+            }
+            return View(doctor);
+        }
+
+        // POST: Doctor/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteConfirmed(int id)
+        {
+            Doctor doctor = db.Doctori.Find(id);
+            db.Doctori.Remove(doctor);
+            db.SaveChanges();
+            return RedirectToAction("Index");
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                db.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
 
         [NonAction]
         private IEnumerable<SelectListItem> GetAllSpecialties()
@@ -76,7 +158,7 @@ namespace Licenta2022.Controllers
 
             return selectList;
         }
-        
+
         [NonAction]
         private IEnumerable<SelectListItem> GetAllClinics()
         {
@@ -96,5 +178,63 @@ namespace Licenta2022.Controllers
             return selectList;
         }
 
+        // GET
+        public ActionResult Program(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            Doctor doctor = db.Doctori.Find(id);
+
+            if (doctor == null)
+            {
+                return HttpNotFound();
+            }
+
+            var programForm = new DoctorProgramForm()
+            {
+               IdDoctor  = doctor.Id,
+            };
+
+            ViewBag.Templates = db.ProgramTemplates.Select(x => x).ToList();
+
+            return View(programForm);
+        }
+
+        [HttpPost]
+        //[ValidateAntiForgeryToken]
+        public ActionResult Program([Bind(Include = "IdDoctor,Programe")] DoctorProgramForm programForm)
+        {
+            if (ModelState.IsValid)
+            {
+                var doctor = db.Doctori.Find(programForm.IdDoctor);
+
+                foreach (var program in programForm.Programe)
+                {
+                    var programTemplate = db.ProgramTemplates.Find(program.IdProgramTemplate);
+
+                    var doctorProgramTemplate = new DoctorXProgramTemplate()
+                    {
+                        Data = program.Data,
+                        Config = programTemplate.Config,
+
+                        Doctor = doctor,
+                        IdDoctor = programForm.IdDoctor,
+
+                        ProgramTemplate = programTemplate,
+                        IdProgramTemplate = program.IdProgramTemplate,
+                    };
+
+                    doctor.DoctorXProgramTemplates.Add(doctorProgramTemplate);
+                }
+
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+
+            return View(programForm);
+        }
     }
 }
