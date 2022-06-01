@@ -17,7 +17,18 @@ namespace Licenta2022.Controllers
         // GET: Doctor
         public ActionResult Index()
         {
-            return View(db.Doctori.ToList());
+            var data = db.Doctori.Select(doctor => new
+            {
+                Id = doctor.Id,
+                Nume = doctor.Nume,
+                Prenume = doctor.Prenume,
+                Specializare = doctor.Specialitate.Denumire,
+                Clinica = doctor.Clinica.Nume
+            }) ;
+
+            ViewBag.Data = data;
+
+            return View();
         }
 
         // GET: Doctor/Details/5
