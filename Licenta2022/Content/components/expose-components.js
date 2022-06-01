@@ -7,9 +7,10 @@ import DoctorProgramTemplateCreateComponent from "./DoctorProgramTemplateCreateC
 import ProgramareCreateComponent from "./ProgramareCreateComponent.tsx"
 import PacientTable from "./PacientTable.tsx"
 import ProgramareTable from "./ProgramareTable"
+import TrimitereTable from "./TrimitereTable"
 
 global.React = React;
 global.ReactDOM = ReactDOM;
 global.ReactDOMServer = ReactDOMServer;
 
-global.Components = { ProgramTemplateCreateComponent, DoctorProgramTemplateCreateComponent, ProgramareCreateComponent, PacientTable, ProgramareTable };
+global.Components = { ProgramTemplateCreateComponent, DoctorProgramTemplateCreateComponent, ProgramareCreateComponent, PacientTable, ProgramareTable, TrimitereTable };

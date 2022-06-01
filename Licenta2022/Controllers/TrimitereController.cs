@@ -18,7 +18,24 @@ namespace Licenta2022.Controllers
         // GET: Trimiteres
         public ActionResult Index()
         {
-            return View(db.Trimiteri.ToList());
+            var data = db.Trimiteri.Select(trimitere => new
+            {
+                Id = trimitere.Id,
+
+                Pacient = new
+                {
+                    Nume = trimitere.Pacient.Nume,
+                    Prenume = trimitere.Pacient.Prenume
+                },
+
+                DataProgramare = trimitere.Programare.Data,
+
+                Specializare = trimitere.Specialitate.Denumire
+            });
+
+            ViewBag.Data = data;
+
+            return View();
         }
 
         // GET: Trimiteres/Details/5

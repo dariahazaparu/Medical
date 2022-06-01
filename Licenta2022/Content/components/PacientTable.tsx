@@ -1,13 +1,10 @@
 import { Button, Layout, Typography } from "antd";
 import TableComponent from "./Table"
 import { TableHeader } from "./TableHeader";
-import { TableColumnsType } from "./types";
+import { Person, TableColumnsType } from "./types";
 import { addToRoute } from "./utils";
 
-interface Pacient {
-    Nume: string;
-    Prenume: string;
-
+interface Pacient extends Person {
     Adresa: {
         Localitate: string;
         Strada: string;
