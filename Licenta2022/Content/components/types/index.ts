@@ -8,3 +8,16 @@ export interface Person {
     Nume: string;
     Prenume: string;
 }
+
+export interface Pacient extends Person {
+    Adresa: {
+        Localitate: string;
+        Strada: string;
+        Numar: string;
+    }
+}
+
+export interface DropdownItem {
+    label: string;
+    value: any;
+}

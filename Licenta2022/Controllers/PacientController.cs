@@ -132,28 +132,79 @@ namespace Licenta2022.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Pacient pacient = db.Pacienti.Find(id);
-            if (pacient == null)
+
+            Pacient dbPacient = db.Pacienti.Find(id);
+            
+            if (dbPacient == null)
             {
                 return HttpNotFound();
             }
-            return View(pacient);
+
+            var data = db.Pacienti.Where(pacient => pacient.Id == id).Select(pacient => new
+            {
+                Id = pacient.Id,
+                Nume = pacient.Nume,
+                Prenume = pacient.Prenume,
+                CNP = pacient.CNP,
+
+                IdAdresa = pacient.Adresa.Id,
+                IdLocalitate = pacient.Adresa.Localitate.Id,
+                IdAsigurare = pacient.Asigurare.Id
+            }).FirstOrDefault();
+
+            var adrese = db.Adrese.Select(adresa => new
+            {
+                value = adresa.Id,
+                label = adresa.Strada + " " + adresa.Numar,
+                localitateId = adresa.Localitate.Id
+            }).ToList();
+
+            var localitati = db.Localitati.Select(localitate => new
+            {
+                value = localitate.Id,
+                label = localitate.Nume
+            }).ToList();
+
+            var asigurari = db.Asigurari.Select(asigurare => new
+            {
+                value = asigurare.Id,
+                label = asigurare.Denumire
+            });
+
+            ViewBag.Data = data;
+            ViewBag.Adrese = adrese;
+            ViewBag.Localitati = localitati;
+            ViewBag.Asigurari = asigurari;
+
+            return View();
         }
 
         // POST: Pacient/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Nume,Prenume,CNP,IdAdresa,IdAsigurare")] Pacient pacient)
+        public ActionResult Edit([Bind(Include = "Id,Nume,Prenume,CNP,IdAdresa,IdAsigurare")] PacientEditForm pacientForm)
         {
             if (ModelState.IsValid)
             {
+                var pacient = db.Pacienti.Find(pacientForm.Id);
+
+                pacient.Nume = pacientForm.Nume;
+                pacient.Prenume = pacientForm.Prenume;
+                pacient.CNP = pacientForm.CNP;
+
+                pacient.Adresa = db.Adrese.Where(adresa => adresa.Id == pacientForm.IdAdresa).FirstOrDefault();
+                pacient.Asigurare = db.Asigurari.Where(asigurare => asigurare.Id == pacientForm.IdAsigurare).FirstOrDefault();
+
                 db.Entry(pacient).State = EntityState.Modified;
+
+                db.Entry(pacient.Adresa).State = EntityState.Modified;
+                db.Entry(pacient.Asigurare).State = EntityState.Modified;
+
                 db.SaveChanges();
-                return RedirectToAction("Index");
             }
-            return View(pacient);
+
+            return View();  
         }
 
         // GET: Pacient/Delete/5

@@ -11,8 +11,13 @@ import TrimitereTable from "./TrimitereTable"
 import DoctorTable from "./DoctorTable"
 import ClinicaTable from "./ClinicaTable"
 
+import PacientEdit from "./PacientEdit"
+
 global.React = React;
 global.ReactDOM = ReactDOM;
 global.ReactDOMServer = ReactDOMServer;
 
-global.Components = { ProgramTemplateCreateComponent, DoctorProgramTemplateCreateComponent, ProgramareCreateComponent, PacientTable, ProgramareTable, TrimitereTable, DoctorTable, ClinicaTable };
+global.Components = {
+    ProgramTemplateCreateComponent, DoctorProgramTemplateCreateComponent, ProgramareCreateComponent,
+    PacientTable, ProgramareTable, TrimitereTable, DoctorTable, ClinicaTable, PacientEdit
+};

@@ -435,6 +435,7 @@
     <Compile Include="Models\FormModels\FacturaForm.cs" />
     <Compile Include="Models\FormModels\PacientAddDiagnosticForm.cs" />
     <Compile Include="Models\FormModels\DoctorForm.cs" />
+    <Compile Include="Models\FormModels\PacientEditForm.cs" />
     <Compile Include="Models\FormModels\PacientForm.cs" />
     <Compile Include="Models\FormModels\ProgramareCreateForm.cs" />
     <Compile Include="Models\FormModels\ProgramareForm.cs" />
