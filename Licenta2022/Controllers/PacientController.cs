@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using Licenta2022.Models;
+using Newtonsoft.Json;
 
 namespace Licenta2022.Controllers
 {
@@ -17,7 +19,18 @@ namespace Licenta2022.Controllers
         // GET: Pacient
         public ActionResult Index()
         {
-            return View(db.Pacienti.Include("Adresa").Include("Asigurare").ToList());
+            var data = db.Pacienti.Include("Adresa").Include("Asigurare").Select(p => new { 
+                Id = p.Id,
+                Nume = p.Nume,
+                Prenume = p.Prenume,
+                Adresa = new {  Localitate = p.Adresa.Localitate.Nume,
+                                Strada = p.Adresa.Strada,
+                                Numar = p.Adresa.Numar } 
+            }).ToList();
+            
+            ViewBag.Data = data;
+
+            return View();
         }
 
         // GET: Pacient/Details/5

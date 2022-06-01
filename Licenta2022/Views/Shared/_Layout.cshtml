@@ -9,6 +9,7 @@
 
 </head>
 <body>
+<<<<<<< Updated upstream
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
@@ -26,19 +27,91 @@
                     <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
                 </ul>
                 @Html.Partial("_LoginPartial")
-            </div>
-        </div>
-    </div>
-    <div class="container body-content">
-        @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
-        </footer>
-    </div>
-
+=======
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
+
+    <div id="viewport">
+        <!-- Sidebar -->
+        <div id="sidebar">
+            <header>
+                <a href="#">Medi Cal</a>
+            </header>
+            <ul class="nav">
+                <li>
+                    <a href="/Pacient">
+                        Pacienti
+                    </a>
+                </li>
+                <li>
+                    <a href="/Programare">
+                        Programari
+                    </a>
+                </li>
+                <li>
+                    <a href="/Trimitere">
+                        Trimiteri
+                    </a>
+                </li>
+                <li>
+                    <a href="/Doctor">
+                        Doctori
+                    </a>
+                </li>
+                <li>
+                    <a href="/Asigurare">
+                        Asigurari
+                    </a>
+                </li>
+                <li>
+                    <a href="/Clinica">
+                        Clinici
+                    </a>
+                </li>
+                <li>
+                    <a data-toggle="dropdown" href="#">Altele
+                        <span class="caret"></span>
+                    </a>
+
+                    <ul class="dropdown-menu">
+                        <li><a href="/Adresa">Adrese</a></li>
+                        <li><a href="/Localitate">Localitati</a></li>
+                        <li><a href="/Medicament">Medicamente</a></li>
+                        <li><a href="/Serviciu">Servicii</a></li>
+                        <li><a href="/Specializare">Specializari</a></li>
+                        <li><a href="/Factura">Facturi</a></li>
+                        <li><a href="/ProgramTemplate">Program</a></li>
+
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <!-- Content -->
+        <div id="content">
+            <nav class="navbar navbar-default">
+                <div class="container-fluid">
+                    @Html.Partial("_LoginPartial")
+                </div>
+            </nav>
+            <div class="container-fluid">
+                @RenderBody()
+>>>>>>> Stashed changes
+            </div>
+        </div>
+    </div>
+
+<<<<<<< Updated upstream
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+=======
+
+    <script src="~/dist/runtime.js"></script>
+    <script src="~/dist/vendor.js"></script>
+    <script src="~/dist/main.js"></script>
+    @Html.ReactInitJavaScript()
+
+>>>>>>> Stashed changes
 </body>
 </html>
