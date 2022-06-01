@@ -14,8 +14,10 @@ namespace Licenta2022.Controllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
+
         // GET: Programare
-        public ActionResult Index()
+
+        public ActionResult Index(int? id)
         {
             var data = db.Programari.Select(programare => new
             {
@@ -23,21 +25,37 @@ namespace Licenta2022.Controllers
 
                 Data = programare.Data,
 
-                Doctor = new { 
+                Doctor = new
+                {
                     Nume = programare.Doctor.Nume,
                     Prenume = programare.Doctor.Prenume,
                 },
 
                 NumeClinica = programare.Doctor.Clinica.Nume,
 
-                Pacient = new { 
+                Pacient = new
+                {
+                    Id = programare.Pacient.Id,
                     Nume = programare.Pacient.Nume,
                     Prenume = programare.Pacient.Prenume
                 },
                 Prezent = false // TODO: update
             });
 
-            ViewBag.Data = data;
+            if (id != null)
+            {
+                var pacient = db.Pacienti.Find(id);
+
+                if (pacient == null)
+                {
+                    return HttpNotFound();
+                }
+
+                data = data.Where(programare => programare.Pacient.Id == id);
+            }
+
+            ViewBag.Data = data.ToList();
+            ViewBag.HasId = id != null;
 
             return View();
         }

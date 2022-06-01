@@ -15,9 +15,25 @@ namespace Licenta2022.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Factura
-        public ActionResult Index()
+        public ActionResult Index(int? id)
         {
-            return View(db.Facturi.ToList());
+            var data = db.Facturi.Select(x => x);
+
+            if (id != null)
+            {
+                var pacient = db.Pacienti.Find(id);
+
+                if (pacient == null)
+                {
+                    return HttpNotFound();
+                }
+
+                data = data.Where(factura => factura.Programare.Pacient.Id == id);
+            }
+
+            ViewBag.HasId = id != null;
+
+            return View(data.ToList());
         }
 
         // GET: Factura/Details/5
@@ -51,7 +67,7 @@ namespace Licenta2022.Controllers
             {
                 IdProgramare = programare.Id
             };
-           
+
             return View(factura);
         }
 
@@ -73,10 +89,10 @@ namespace Licenta2022.Controllers
                 var sxa = asigurare.ServiciuXAsigurari;
 
                 factura.Total = 0;
-                foreach(var item in programare.TrimitereT.Servicii)
+                foreach (var item in programare.TrimitereT.Servicii)
                 {
                     var procent = 100;
-                    foreach(var s in sxa)
+                    foreach (var s in sxa)
                     {
                         if (s.Serviciu == item)
                         {

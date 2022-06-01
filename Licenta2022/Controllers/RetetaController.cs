@@ -15,9 +15,25 @@ namespace Licenta2022.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Reteta
-        public ActionResult Index()
+        public ActionResult Index(int? id)
         {
-            return View(db.Retete.ToList());
+            var data = db.Retete.Select(x => x);
+
+            if (id != null)
+            {
+                var pacient = db.Pacienti.Find(id);
+
+                if (pacient == null)
+                {
+                    return HttpNotFound();
+                }
+
+                data = data.Where(reteta => reteta.Programare.Pacient.Id == id);
+            }
+
+            ViewBag.HasId = id != null;
+
+            return View(data.ToList());
         }
 
         // GET: Reteta/Details/5

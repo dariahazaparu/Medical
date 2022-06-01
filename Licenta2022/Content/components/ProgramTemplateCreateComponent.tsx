@@ -57,7 +57,7 @@ const OldComponent = () => {
                     })}
                 </List> */}
 
-                <button type="submit">Create</button>
+                <button type="submit">Creeaza</button>
             </form>
         </div>
     )

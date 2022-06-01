@@ -4,25 +4,22 @@
     ViewBag.Title = "Details";
 }
 
-<h2>Details</h2>
+<div style="display: flex; justify-content: space-around; margin-top: 2rem;">
 
-<div>
-    <h4>Pacient</h4>
-    <hr />
     <dl class="dl-horizontal">
-        <dt>
+        <dt class="bigger-text">
             @Html.DisplayNameFor(model => model.Nume)
         </dt>
 
-        <dd>
+        <dd class="bigger-text">
             @Html.DisplayFor(model => model.Nume)
         </dd>
 
-        <dt>
+        <dt class="bigger-text">
             @Html.DisplayNameFor(model => model.Prenume)
         </dt>
 
-        <dd>
+        <dd class="bigger-text">
             @Html.DisplayFor(model => model.Prenume)
         </dd>
 
@@ -51,8 +48,19 @@
         </dd>
 
     </dl>
+
+
+    <div class="btn-group">
+        <button>
+            <a href="/Programare/Create/@Model.Id">Creeaza o programare</a>
+        </button>
+        <button><a href="/Programare/Index/@Model.Id">Vezi programari</a></button>
+        <button><a href="/Trimitere/Index/@Model.Id">Vezi trimiteri</a></button>
+        <button><a href="/Factura/Index/@Model.Id">Vezi facturi</a></button>
+        <button><a href="/Reteta/Index/@Model.Id">Vezi retete</a></button>
+    </div>
 </div>
-<p>
+@*
+    @Html.ActionLink("Vezi programari", "Index", new { id = Model.Id })
     @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>
+    @Html.ActionLink("Back to List", "Index") *@

@@ -7,3 +7,7 @@
 @Html.React("Components.TrimitereTable", new {
 data = ViewBag.Data
 })
+
+<div style='display: @(ViewBag.HasId ? "block" : "none")'>
+    <button onclick="history.back()">Inapoi</button>
+</div>

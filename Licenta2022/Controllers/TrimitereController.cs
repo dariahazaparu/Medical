@@ -9,14 +9,14 @@ using System.Web.Mvc;
 using Licenta2022.Models;
 
 namespace Licenta2022.Controllers
-    
+
 {
     public class TrimitereController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Trimiteres
-        public ActionResult Index()
+        public ActionResult Index(int? id)
         {
             var data = db.Trimiteri.Select(trimitere => new
             {
@@ -24,6 +24,7 @@ namespace Licenta2022.Controllers
 
                 Pacient = new
                 {
+                    Id = trimitere.Pacient.Id,
                     Nume = trimitere.Pacient.Nume,
                     Prenume = trimitere.Pacient.Prenume
                 },
@@ -33,6 +34,20 @@ namespace Licenta2022.Controllers
                 Specializare = trimitere.Specialitate.Denumire
             });
 
+            if (id != null)
+            {
+                var pacient = db.Pacienti.Find(id);
+
+                if (pacient == null)
+
+                {
+                    return HttpNotFound();
+                }
+
+                data = data.Where(trimitere => trimitere.Pacient.Id == id);
+            }
+
+            ViewBag.HasId = id != null;
             ViewBag.Data = data;
 
             return View();
@@ -150,7 +165,7 @@ namespace Licenta2022.Controllers
 
                 trimitere.org = false;
                 trimitere.Servicii = new List<Serviciu>();
-                for (int i = 0; i< trimitereForm.IdServicii.Count(); i++)
+                for (int i = 0; i < trimitereForm.IdServicii.Count(); i++)
                 {
                     var serviciu = db.Servicii.Find(trimitereForm.IdServicii[i]);
                     trimitere.Servicii.Add(serviciu);
