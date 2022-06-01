@@ -1,5 +1,6 @@
 import { Button, Layout, Typography } from "antd";
 import TableComponent from "./Table"
+import { TableHeader } from "./TableHeader";
 import { TableColumnsType } from "./types";
 import { addToRoute } from "./utils";
 
@@ -66,10 +67,7 @@ const columns = [
 const PacientTable: React.FC<IPacientTable> = ({ data }) => {
     return (
         <div>
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <Typography.Title level={2}>Pacienti</Typography.Title>
-                <Button type="primary" style={{ marginTop: "1rem" }} onClick={() => addToRoute("/Create")}>Create</Button>
-            </div>
+            <TableHeader title="Pacienti" />
 
             <TableComponent columns={columns} data={data.map((item, idx) => ({
                 ...item,

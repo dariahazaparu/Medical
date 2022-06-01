@@ -17,7 +17,29 @@ namespace Licenta2022.Controllers
         // GET: Programare
         public ActionResult Index()
         {
-            return View(db.Programari.ToList());
+            var data = db.Programari.Select(programare => new
+            {
+                Id = programare.Id,
+
+                Data = programare.Data,
+
+                Doctor = new { 
+                    Nume = programare.Doctor.Nume,
+                    Prenume = programare.Doctor.Prenume,
+                },
+
+                NumeClinica = programare.Doctor.Clinica.Nume,
+
+                Pacient = new { 
+                    Nume = programare.Pacient.Nume,
+                    Prenume = programare.Pacient.Prenume
+                },
+                Prezent = false // TODO: update
+            });
+
+            ViewBag.Data = data;
+
+            return View();
         }
 
         // GET: Programare/Details/5
