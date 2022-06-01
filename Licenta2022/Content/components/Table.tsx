@@ -7,6 +7,7 @@ import Highlighter from 'react-highlight-words'
 
 import get from 'lodash/get'
 import { TableColumnsType } from './types';
+import { addToRoute } from './utils';
 
 export interface ITable {
     data: any[]
@@ -180,7 +181,7 @@ const TableComponent: React.FC<ITableComponent<any>> = ({ columns, data }) => {
                         key: "edit",
                         icon: <EditOutlined />,
 
-                        onClick: () => window.location.href = window.location.href + `/Edit/${data.Id}`
+                        onClick: () => addToRoute(`/Edit/${data.Id}`)
                     },
 
                     {
@@ -188,7 +189,7 @@ const TableComponent: React.FC<ITableComponent<any>> = ({ columns, data }) => {
                         key: "details",
                         icon: <InfoOutlined />,
 
-                        onClick: () => window.location.href = window.location.href + `/Details/${data.Id}`
+                        onClick: () => addToRoute(`/Details/${data.Id}`)
                     }
                 ]}
             />}>
