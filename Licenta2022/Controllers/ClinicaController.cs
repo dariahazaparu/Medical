@@ -17,7 +17,16 @@ namespace Licenta2022.Controllers
         // GET: Clinica
         public ActionResult Index()
         {
-            return View(db.Clinici.Include("Adresa").ToList());
+            var data = db.Clinici.Select(clinica => new
+            {
+                Id = clinica.Id,
+                Nume = clinica.Nume,
+                Adresa = clinica.Adresa.Localitate.Nume + ", " + clinica.Adresa.Strada + " " + clinica.Adresa.Numar
+            });
+
+            ViewBag.Data = data;
+
+            return View();
         }
 
         // GET: Clinica/Details/5

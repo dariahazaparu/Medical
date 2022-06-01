@@ -14,6 +14,7 @@ interface DataType extends Doctor {
 interface IDoctorTable {
     data: DataType[]
 }
+
 const columns = [
     {
         title: 'Nume',
