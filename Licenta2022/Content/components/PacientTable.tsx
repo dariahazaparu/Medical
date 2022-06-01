@@ -1,3 +1,4 @@
+import { Button, Layout, Typography } from "antd";
 import TableComponent from "./Table"
 import { TableColumnsType } from "./types";
 
@@ -62,10 +63,19 @@ const columns = [
 ] as TableColumnsType<DataType>
 
 const PacientTable: React.FC<IPacientTable> = ({ data }) => {
-    return <TableComponent columns={columns} data={data.map((item, idx) => ({
-        ...item,
-        key: idx.toString()
-    }))} />
+    return (
+        <div>
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+                <Typography.Title level={2}>Pacienti</Typography.Title>
+                <Button type="primary" style={{ marginTop: "1rem" }} onClick={() => window.location.href = window.location.href + '/Create'}>Create</Button>
+            </div>
+
+            <TableComponent columns={columns} data={data.map((item, idx) => ({
+                ...item,
+                key: idx.toString()
+            }))} />
+        </div>
+    )
 }
 
 export default PacientTable

@@ -1,84 +1,10 @@
 ﻿@model IEnumerable<Licenta2022.Models.Pacient>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Pacienti";
 }
-
-<h2>Index</h2>
-
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-
 
 @Html.React("Components.PacientTable", new
 {
 data = ViewBag.Data
 })
-
-@*<table class="table">
-    <tr>
-<<<<<<< Updated upstream
-        <th>
-            @Html.DisplayNameFor(model => model.Nume)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Prenume)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.CNP)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Adresa)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Asigurare)
-        </th>
-        <th></th>
-=======
-    <th>
-    @Html.DisplayNameFor(model => model.Nume)
-    </th>
-    <th>
-    @Html.DisplayNameFor(model => model.Prenume)
-    </th>
-    <th>
-    @Html.DisplayNameFor(model => model.CNP)
-    </th>
-    <th>
-    @Html.DisplayNameFor(model => model.Adresa)
-    </th>
-    <th>
-    @Html.DisplayNameFor(model => model.Asigurare)
-    </th>
-    <th></th>
->>>>>>> Stashed changes
-    </tr>
-
-    @foreach (var item in Model)
-    {
-    <tr>
-    <td>
-    @Html.DisplayFor(modelItem => item.Nume)
-    </td>
-    <td>
-    @Html.DisplayFor(modelItem => item.Prenume)
-    </td>
-    <td>
-    @Html.DisplayFor(modelItem => item.CNP)
-    </td>
-    <td>
-    @item.Adresa.Strada @item.Adresa.Numar
-    </td>
-    <td>
-    @item.Asigurare.Denumire
-    </td>
-    <td>
-    @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-    @Html.ActionLink("Details", "Details", new { id = item.Id }) |
-    @Html.ActionLink("Delete", "Delete", new { id = item.Id })
-    </td>
-    </tr>
-    }
-
-</table>*@
