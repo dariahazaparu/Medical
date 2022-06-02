@@ -1,4 +1,4 @@
-import { Button, Form, Input, Row, Select } from "antd"
+import { Button, Form, Input, notification, Row, Select } from "antd"
 import { useForm } from "antd/lib/form/Form";
 import axios from "axios";
 import { useState } from "react";
@@ -38,10 +38,16 @@ const PacientEdit: React.FC<IPacientEdit> = ({ data, localitati, adrese, asigura
     const [form] = useForm()
 
     const onSubmit = async (formValues: any) => {
-        const response = await axios.post(`/Pacient/Edit/${data.Id}`, formValues)
+        try {
+            const response = await axios.post(`/Pacient/Edit/${data.Id}`, formValues)
 
-        if (response.status === 200) {
-            goToRoute(`/Pacient/Details/${data.Id}`)
+            if (response.status === 200) {
+                goToRoute(`/Pacient/Details/${data.Id}`)
+            }
+        }
+
+        catch (err) {
+            notification.error({ message: err.request.statusText })
         }
     }
 

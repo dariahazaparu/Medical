@@ -5,6 +5,7 @@ using System.Data.Entity;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Mvc;
 using Licenta2022.Models;
@@ -14,7 +15,35 @@ namespace Licenta2022.Controllers
 {
     public class PacientController : Controller
     {
+        private Regex regexCNP = new Regex(@"^\d{1}\d{2}(0[1-9]|1[0-2])(0[1-9]|[12]\d|3[01])(0[1-9]|[1-4]\d| 5[0-2]|99)\d{4}$");
         private ApplicationDbContext db = new ApplicationDbContext();
+
+        [NonAction]
+        private bool IsCNPValid(string CNP)
+        {
+            int bigSum = 0 ;
+
+            string control = "279146358279";
+
+            if (!this.regexCNP.IsMatch(CNP))
+            {
+                return false;
+            }
+
+            for (int i = 0; i < 12; ++i)
+            {
+                bigSum += Int32.Parse(CNP[i].ToString()) * Int32.Parse(control[i].ToString());
+            }
+
+            int controlDigit = bigSum % 11;
+
+            if (controlDigit == 10)
+            {
+                controlDigit = 1;
+            }
+
+            return controlDigit == Int32.Parse(CNP[12].ToString());
+        }
 
         // GET: Pacient
         public ActionResult Index()
@@ -103,6 +132,11 @@ namespace Licenta2022.Controllers
         {
             if (ModelState.IsValid)
             {
+                if (!this.IsCNPValid(pacientForm.CNP))
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest, "CNP-ul este invalid.");
+                }
+
                 var pacient = new Pacient()
                 {
                     Nume = pacientForm.Nume,
@@ -139,6 +173,7 @@ namespace Licenta2022.Controllers
             {
                 return HttpNotFound();
             }
+
 
             var data = db.Pacienti.Where(pacient => pacient.Id == id).Select(pacient => new
             {
@@ -187,6 +222,11 @@ namespace Licenta2022.Controllers
         {
             if (ModelState.IsValid)
             {
+                if (!this.IsCNPValid(pacientForm.CNP))
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest, "CNP-ul este invalid.");
+                }
+
                 var pacient = db.Pacienti.Find(pacientForm.Id);
 
                 pacient.Nume = pacientForm.Nume;
