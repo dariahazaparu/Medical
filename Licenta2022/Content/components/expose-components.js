@@ -5,11 +5,14 @@ import ReactDOMServer from 'react-dom/server';
 import ProgramTemplateCreateComponent from "./ProgramTemplateCreateComponent.tsx"
 import DoctorProgramTemplateCreateComponent from "./DoctorProgramTemplateCreateComponent.tsx"
 import ProgramareCreateComponent from "./ProgramareCreateComponent.tsx"
+
 import PacientTable from "./PacientTable.tsx"
 import ProgramareTable from "./ProgramareTable"
 import TrimitereTable from "./TrimitereTable"
 import DoctorTable from "./DoctorTable"
 import ClinicaTable from "./ClinicaTable"
+
+import ProgramareDetails from "./ProgramareDetails"
 
 import PacientEdit from "./PacientEdit"
 
@@ -19,5 +22,5 @@ global.ReactDOMServer = ReactDOMServer;
 
 global.Components = {
     ProgramTemplateCreateComponent, DoctorProgramTemplateCreateComponent, ProgramareCreateComponent,
-    PacientTable, ProgramareTable, TrimitereTable, DoctorTable, ClinicaTable, PacientEdit
+    PacientTable, ProgramareTable, TrimitereTable, DoctorTable, ClinicaTable, PacientEdit, ProgramareDetails
 };

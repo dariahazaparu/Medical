@@ -1,47 +1,52 @@
 ﻿@model Licenta2022.Models.Programare
 
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = "Detalii Programare";
 }
+@*
+    <h2>Details</h2>
 
-<h2>Details</h2>
-
-<div>
+    <div>
     <h4>Programare</h4>
     <hr />
     <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Data)
-        </dt>
+    <dt>
+    @Html.DisplayNameFor(model => model.Data)
+    </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Data)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Trimiteri)
-        </dt>
+    <dd>
+    @Html.DisplayFor(model => model.Data)
+    </dd>
+    <dt>
+    @Html.DisplayNameFor(model => model.Trimiteri)
+    </dt>
 
-        <dd>
-            @foreach (var item in Model.Trimiteri)
-            {
-                @item.Observatii
-            }
-        </dd>
+    <dd>
+    @foreach (var item in Model.Trimiteri)
+    {
+    @item.Observatii
+    }
+    </dd>
 
     </dl>
-</div>
+    </div>
 
-<div>
+    <div>
     @if (Model.TrimitereT != null)
     {
-        foreach (var serv in Model.TrimitereT.Servicii)
-        {
-            @serv.Denumire
-            <br /> 
-        }
+    foreach (var serv in Model.TrimitereT.Servicii)
+    {
+    @serv.Denumire
+    <br />
     }
-</div>
-<p>
+    }
+    </div> *@
+
+@Html.React("Components.ProgramareDetails", new {
+    programare = ViewBag.Data
+})
+
+@*<p>
     @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
     @Html.ActionLink("Back to List", "Index")
-</p>
+</p>*@

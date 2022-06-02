@@ -67,12 +67,49 @@ namespace Licenta2022.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Programare programare = db.Programari.Find(id);
-            if (programare == null)
+            Programare programareDb = db.Programari.Find(id);
+
+            if (programareDb == null)
             {
                 return HttpNotFound();
             }
-            return View(programare);
+
+            var data = db.Programari.Where(programare => programare.Id == id).Select(programare => new
+            {
+                Pacient = new
+                {
+                    Nume = programare.Pacient.Nume,
+                    Prenume = programare.Pacient.Prenume,
+                },
+
+                Data = programare.Data,
+
+                trimitere = new
+                {
+                    // todo: fix typo
+                    Id = programare.Trimiere != null ? programare.Trimiere.Id : -1,
+                },
+
+                Servicii = programare.TrimitereT.Servicii.Select(trimitere => new
+                {
+                    Pret = trimitere.Pret,
+                    Denumire = trimitere.Denumire,
+                }),
+
+                Retete = programare.Retete.Select(reteta => new
+                {
+                    Data = reteta.DataEmiterii,
+                    Medicamente = reteta.RetetaXMedicament.Select(rxm => new
+                    {
+                        Medicament = rxm.Medicament.Denumire,
+                        Doza = rxm.Doza
+                    })
+                })
+            }).FirstOrDefault();
+
+            ViewBag.Data = data;
+
+            return View();
         }
 
         // GET: Programare/Create
