@@ -60,91 +60,72 @@ namespace Licenta2022.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+            
             Trimitere trimitere = db.Trimiteri.Find(id);
+            
             if (trimitere == null)
             {
                 return HttpNotFound();
             }
+            
+            ViewBag.HasId = id != null;
+
             return View(trimitere);
         }
 
         // GET: Trimiteres/Create
-        public ActionResult Create(int? id, int? id2)
+        public ActionResult Create(int? id)
         {
-            if (id == null || id2 == null)
+            if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Pacient pacient = db.Pacienti.Find(id);
-            if (pacient == null)
-            {
-                return HttpNotFound();
-            }
-            Programare programare = db.Programari.Find(id2);
+         
+            Programare programare = db.Programari.Find(id);
+
             if (programare == null)
             {
                 return HttpNotFound();
             }
-            var trimitereForm = new TrimitereForm()
+
+            var specialitati = db.Specialitati.Select(specializare => new
             {
-                IdPacient = pacient.Id,
-                IdProgramare = programare.Id
-            };
-            ViewBag.Specialitati = GetAllSpecialties();
-            ViewBag.Servicii = GetAllServices();
-            return View(trimitereForm);
-        }
+                label = specializare.Denumire,
+                value = specializare.Id
+            });
 
-
-        [NonAction]
-        private IEnumerable<Specialitate> GetAllSpecialties()
-        {
-            var selectList = new List<SelectListItem>();
-
-            var specialitati = db.Specialitati.Select(x => x);
-
-            List<Serviciu> sl = new List<Serviciu>();
-            foreach (var specialitate in specialitati)
+            var servicii = db.Servicii.Select(serviciu => new
             {
-                selectList.Add(new SelectListItem
-                {
-                    Value = specialitate.Id.ToString(),
-                    Text = specialitate.Denumire.ToString()
-                });
-            }
+                label = serviciu.Denumire,
+                value = serviciu.Id,
 
-            return specialitati;
+                specializareId = serviciu.Specialitate.Id
+            });
+
+            ViewBag.Specialitati = specialitati;
+            ViewBag.Servicii = servicii;
+
+            ViewBag.IdPacient = programare.Pacient.Id;
+            ViewBag.IdProgramare = programare.Id;
+   
+            return View();
         }
-
-        [NonAction]
-        private IEnumerable<Serviciu> GetAllServices()
-        {
-            var selectList = new List<SelectListItem>();
-
-            var servicii = db.Servicii.Select(x => x);
-
-            foreach (var serviciu in servicii)
-            {
-                selectList.Add(new SelectListItem
-                {
-                    Value = serviciu.Id.ToString(),
-                    Text = serviciu.Denumire.ToString()
-                });
-            }
-
-            return servicii;
-        }
-
 
         // POST: Trimiteres/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Observatii,IdProgramare,IdPacient,IdSpecializare,IdServicii")] TrimitereForm trimitereForm)
+        public ActionResult Create([Bind(Include = "Observatii,IdProgramare,IdPacient,IdSpecializare,IdServicii")] TrimitereForm trimitereForm)
         {
             if (ModelState.IsValid)
             {
+                var programare = db.Programari.Find(trimitereForm.IdProgramare);
+
+                if (programare.Trimiere != null)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest, "Programarea are deja o trimitere.");
+                }
+
                 var trimitere = new Trimitere()
                 {
                     Observatii = trimitereForm.Observatii
@@ -157,7 +138,6 @@ namespace Licenta2022.Controllers
 
                 if (trimitereForm.IdProgramare != 0)
                 {
-                    var programare = db.Programari.Find(trimitereForm.IdProgramare);
                     trimitere.Programare = programare;
                     trimitere.ProgramareT = null;
                     programare.Trimiere = trimitere;

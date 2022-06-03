@@ -29,14 +29,21 @@
         </dt>
 
         <dd>
-            @foreach (var item in Model.Servicii){
-                @item.Denumire
+            @foreach (var item in Model.Servicii)
+            {
+                <span>@item.Denumire</span>
             }
         </dd>
 
     </dl>
 </div>
+
 <p>
     @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
     @Html.ActionLink("Back to List", "Index")
 </p>
+
+
+<div style='display: @(ViewBag.HasId ? "block" : "none")'>
+    <button onclick="history.back()">Inapoi</button>
+</div>

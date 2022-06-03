@@ -39,7 +39,8 @@ namespace Licenta2022.Controllers
                     Nume = programare.Pacient.Nume,
                     Prenume = programare.Pacient.Prenume
                 },
-                Prezent = false // TODO: update
+
+                Prezent = programare.Prezent
             });
 
             if (id != null)
@@ -67,6 +68,7 @@ namespace Licenta2022.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
             Programare programareDb = db.Programari.Find(id);
 
             if (programareDb == null)
@@ -74,8 +76,24 @@ namespace Licenta2022.Controllers
                 return HttpNotFound();
             }
 
-            var data = db.Programari.Where(programare => programare.Id == id).Select(programare => new
+            var diagnostic = db.PacientXDiagnostics.Where(pxd => pxd.IdProgramare == id).FirstOrDefault();
+
+            var diagnosticId = diagnostic == null ? -1 : diagnostic.IdDiagnostic;
+            var diagnosticDenumire = diagnostic == null ? "" : diagnostic.Diagnostic.Denumire;
+
+            var adresa = programareDb.Doctor.Clinica.Adresa;
+
+            var adresaClinica = adresa.Localitate.Nume + ", " + adresa.Strada + " " + adresa.Numar;
+
+            var trimitereT = programareDb.TrimitereT;
+
+            var trimitereTId = trimitereT != null ? trimitereT.Id : -1;
+
+            var data = db.Programari.Where(prog => prog.Id == id).Select(programare => new
             {
+                Id = programare.Id,
+                Prezent = programare.Prezent,
+
                 Pacient = new
                 {
                     Nume = programare.Pacient.Nume,
@@ -84,10 +102,24 @@ namespace Licenta2022.Controllers
 
                 Data = programare.Data,
 
-                trimitere = new
+                TrimitereId = programare.Trimiere != null ? programare.Trimiere.Id : -1,
+
+                Doctor = new
                 {
-                    // todo: fix typo
-                    Id = programare.Trimiere != null ? programare.Trimiere.Id : -1,
+                    Nume = programare.Doctor.Nume,
+                    Prenume = programare.Doctor.Prenume,
+                },
+
+                Clinica = new
+                {
+                    Nume = programare.Doctor.Clinica.Nume,
+                    Adresa = adresaClinica
+                },
+
+                Diagnostic = new
+                {
+                    Id = diagnosticId,
+                    Denumire = diagnosticDenumire
                 },
 
                 Servicii = programare.TrimitereT.Servicii.Select(trimitere => new
@@ -96,15 +128,9 @@ namespace Licenta2022.Controllers
                     Denumire = trimitere.Denumire,
                 }),
 
-                Retete = programare.Retete.Select(reteta => new
-                {
-                    Data = reteta.DataEmiterii,
-                    Medicamente = reteta.RetetaXMedicament.Select(rxm => new
-                    {
-                        Medicament = rxm.Medicament.Denumire,
-                        Doza = rxm.Doza
-                    })
-                })
+                TrimitereTId = trimitereTId,
+
+                ReteteId = programare.Retete.Select(reteta => reteta.Id)
             }).FirstOrDefault();
 
             ViewBag.Data = data;
@@ -196,6 +222,26 @@ namespace Licenta2022.Controllers
             return selectList;
         }
 
+        [HttpPost]
+        public ActionResult SetPrezent([Bind(Include = "ProgramareId, Prezent")] ProgramareUpdatePrezentForm input)
+        {
+
+            var programare = db.Programari.Find(input.ProgramareId);
+
+            if (programare == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest, "Programarea nu exista.");
+            }
+
+            programare.Prezent = input.Prezent;
+
+            db.Entry(programare).State = EntityState.Modified;
+
+            db.SaveChanges();
+
+            return new HttpStatusCodeResult(HttpStatusCode.OK);
+        }
+
         // POST: Programare/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
@@ -217,7 +263,8 @@ namespace Licenta2022.Controllers
                 {
                     Doctor = doctor,
                     Pacient = pacient,
-                    Data = data
+                    Data = data,
+                    Prezent = false
                 };
 
                 programare.Retete = new List<Reteta>();

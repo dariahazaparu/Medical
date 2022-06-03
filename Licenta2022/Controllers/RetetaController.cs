@@ -48,6 +48,9 @@ namespace Licenta2022.Controllers
             {
                 return HttpNotFound();
             }
+
+            ViewBag.HasId = id != null;
+
             return View(reteta);
         }
 
@@ -67,8 +70,15 @@ namespace Licenta2022.Controllers
             {
                 IdProgramare = programare.Id
             };
-            ViewBag.Medicamente = GetAllMedicine();
-            return View(reteta);
+
+            ViewBag.Medicamente = db.Medicamente.Select(medicament => new
+            {
+                label = medicament.Denumire,
+                value = medicament.Id
+            });
+            ViewBag.IdProgramare = programare.Id;
+
+            return View();
         }
 
 
@@ -95,10 +105,8 @@ namespace Licenta2022.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "DataEmiterii,IdProgramare,IdMedicamente,Doze")] RetetaForm retetaForm)
+        public ActionResult Create([Bind(Include = "IdProgramare,IdMedicamente,Doze")] RetetaForm retetaForm)
         {
-
             //var programare = db.Programari.Where(x => x.Id == retetaForm.IdProgramare).Select(x => x).ToList().FirstOrDefault();
             ////db.Programari.Attach(programare);
             //var reteta = new Reteta()

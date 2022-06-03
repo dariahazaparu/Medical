@@ -7,7 +7,6 @@ namespace Licenta2022.Models
 {
     public class TrimitereForm
     {
-        public int Id { get; set; }
         public string Observatii { get; set; }
         public int IdProgramare { get; set; }
         public int IdPacient { get; set; }

@@ -440,6 +440,7 @@
     <Compile Include="Models\FormModels\ProgramareCreateForm.cs" />
     <Compile Include="Models\FormModels\ProgramareForm.cs" />
     <Compile Include="Models\FormModels\ProgramareFromForm.cs" />
+    <Compile Include="Models\FormModels\ProgramareUpdatePrezentForm.cs" />
     <Compile Include="Models\FormModels\ProgramareViewCreateForm.cs" />
     <Compile Include="Models\FormModels\ProgramForm.cs" />
     <Compile Include="Models\FormModels\RetetaForm.cs" />

@@ -282,7 +282,7 @@ namespace Licenta2022.Controllers
             base.Dispose(disposing);
         }
 
-        // GET: Pacient/Create
+        // GET: Pacient/AddDiagnostic
         public ActionResult AddDiagnostic(int? id)
         {
             ViewBag.Diagnostics = GetAllDiagnoses();
@@ -291,16 +291,20 @@ namespace Licenta2022.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Pacient pacient = db.Pacienti.Find(id);
-            if (pacient == null)
+
+            var programare = db.Programari.Find(id);
+
+            if (programare == null)
             {
                 return HttpNotFound();
             }
+
             var pacientForm = new PacientAddDiagnosticForm()
             {
-                IdPacient = pacient.Id,
-                Nume = pacient.Nume,
-                Prenume = pacient.Prenume
+                IdPacient = programare.Pacient.Id,
+                IdProgramare = programare.Id,
+                Nume = programare.Pacient.Nume,
+                Prenume = programare.Pacient.Prenume
             };
 
             return View(pacientForm);
@@ -327,11 +331,12 @@ namespace Licenta2022.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult AddDiagnostic([Bind(Include = "IdPacient,IdDiagnostic")] PacientAddDiagnosticForm pacientForm)
+        public ActionResult AddDiagnostic([Bind(Include = "IdPacient,IdDiagnostic,IdProgramare")] PacientAddDiagnosticForm pacientForm)
         {
             if (ModelState.IsValid)
             {
                 var pacient = db.Pacienti.Find(pacientForm.IdPacient);
+                var programare = db.Programari.Find(pacientForm.IdProgramare);
 
                 if (pacient.PacientXDiagnostics == null)
                     pacient.PacientXDiagnostics = new List<PacientXDiagnostic>();
@@ -342,17 +347,21 @@ namespace Licenta2022.Controllers
                 {
                     IdDiagnostic = pacientForm.IdDiagnostic,
                     IdPacient = pacient.Id,
+                    IdProgramare = programare.Id,
+
                     Data = DateTime.Now,
                     Pacient = pacient,
-                    Diagnostic = diag.FirstOrDefault()
+                    Diagnostic = diag.FirstOrDefault(),
+                    Programare = programare,
                 };
+
                 pacient.PacientXDiagnostics.Add(pxd);
 
-                //db.PacientXDiagnostics.Add(pxd);
+                db.PacientXDiagnostics.Add(pxd);
                 db.Entry(pacient).State = EntityState.Modified;
 
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Details", "Programare", new { id = programare.Id });
             }
 
             return View(pacientForm);

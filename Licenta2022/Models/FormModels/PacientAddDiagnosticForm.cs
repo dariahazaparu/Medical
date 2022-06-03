@@ -11,5 +11,6 @@ namespace Licenta2022.Models
         public string Nume { get; set; }
         public string Prenume { get; set; }
         public int IdDiagnostic { get; set; }
+        public int IdProgramare { get; set; }
     }
 }

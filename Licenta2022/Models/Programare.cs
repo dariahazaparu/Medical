@@ -12,6 +12,7 @@ namespace Licenta2022.Models
         [Key]
         public int Id { get; set; }
         public DateTime Data { get; set; }
+        public bool Prezent { get; set; }
 
         public virtual Trimitere Trimiere { get; set; }
         public virtual Trimitere TrimitereT { get; set; }

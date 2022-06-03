@@ -1,80 +1,82 @@
 ﻿@model Licenta2022.Models.RetetaForm
 
 @{
-    ViewBag.Title = "Create";
+    ViewBag.Title = "Creeaza Reteta";
 }
 
-<h2>Create</h2>
+@* <h2>Create</h2>
 
-@using (Html.BeginForm())
-{
+    @using (Html.BeginForm())
+    {
     @Html.AntiForgeryToken()
 
     <script>
-        var currentDivId = 0;
+    var currentDivId = 0;
 
-        // pentru a crea un medicament de la inceput
-        window.onload = () => {
-            onCreate()
-        }
+    // pentru a crea un medicament de la inceput
+    window.onload = () => {
+    onCreate()
+    }
 
-        const onDelete = (id) => {
-            const element = document.getElementById(id);
+    const onDelete = (id) => {
+    const element = document.getElementById(id);
 
-            element.parentNode.removeChild(element);
-        }
+    element.parentNode.removeChild(element);
+    }
 
-        const onCreate = () => {
-            const divMedicamente = $("#medicamente");
+    const onCreate = () => {
+    const divMedicamente = $("#medicamente");
 
-            const randId = ++currentDivId;
+    const randId = ++currentDivId;
 
-            divMedicamente.append(`
-                <div class="element-medicament" id="${randId}">
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.IdMedicamente, "Medicament", htmlAttributes: new { @class = "control-label col-md-2" })
-                        <div class="col-md-10">
-                            @Html.DropDownListFor(model => model.IdMedicamente, new SelectList(ViewBag.Medicamente, "Value", "Text"),
-                                                    "Selecteaza un medicament", new { @class = "form-control form-title" })
+    divMedicamente.append(`
+    <div class="element-medicament" id="${randId}">
+    <div class="form-group">
+    @Html.LabelFor(model => model.IdMedicamente, "Medicament", htmlAttributes: new { @class = "control-label col-md-2" })
+    <div class="col-md-10">
+    @Html.DropDownListFor(model => model.IdMedicamente, new SelectList(ViewBag.Medicamente, "Value", "Text"),
+    "Selecteaza un medicament", new { @class = "form-control form-title" })
 
-                        </div>
-                    </div>
+    </div>
+    </div>
 
-                     <div class="form-group">
-                        @Html.LabelFor(model => model.Doze, "Doza", htmlAttributes: new { @class = "control-label col-md-2" })
-                        <div class="col-md-10">
-                            <input name="Doze" type="text" value="" />
-                        </div>
-                    </div>
+    <div class="form-group">
+    @Html.LabelFor(model => model.Doze, "Doza", htmlAttributes: new { @class = "control-label col-md-2" })
+    <div class="col-md-10">
+    <input name="Doze" type="text" value="" />
+    </div>
+    </div>
 
-                    <button style="text - align: right;" type="button" onclick="onDelete(${randId})">Delete</button>
-                </div>
+    <button style="text - align: right;" type="button" onclick="onDelete(${randId})">Delete</button>
+    </div>
     `);
-        }
+    }
     </script>
 
     <div class="form-horizontal">
+    <h4>Reteta</h4>
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.HiddenFor(model => model.IdProgramare)
+    <div id="medicamente">
 
-
-        <h4>Reteta</h4>
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        @Html.HiddenFor(model => model.Id)
-        @Html.HiddenFor(model => model.IdProgramare)
-        <div id="medicamente">
-
-        </div>
-
-        <button type="button" onclick="onCreate()">Adauga medicament</button>
-
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
-            </div>
-        </div>
     </div>
-}
 
-<div>
+    <button type="button" onclick="onCreate()">Adauga medicament</button>
+
+    <div class="form-group">
+    <div class="col-md-offset-2 col-md-10">
+    <input type="submit" value="Create" class="btn btn-default" />
+    </div>
+    </div>
+    </div>
+    }
+
+    <div>
     @Html.ActionLink("Back to List", "Index")
-</div>
+    </div> *@
+
+@Html.React("Components.RetetaCreate", new {
+medicamente = ViewBag.Medicamente,
+programareId = ViewBag.IdProgramare
+})

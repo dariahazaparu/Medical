@@ -12,9 +12,11 @@ namespace Licenta2022.Models
         public int Id { get; set; }
         public int IdPacient { get; set; }
         public int IdDiagnostic { get; set; }
+        public int IdProgramare { get; set; }
         public DateTime Data { get; set; }
 
         public virtual Diagnostic Diagnostic { get; set; }
         public virtual Pacient Pacient { get; set; }
+        public virtual Programare Programare { get; set; }
     }
 }
