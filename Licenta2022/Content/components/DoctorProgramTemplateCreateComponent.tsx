@@ -1,10 +1,11 @@
-import { Button, DatePicker, Select } from 'antd';
+import { Button, DatePicker, notification, Select } from 'antd';
 import React, { useState } from 'react'
 
 import moment, { Moment } from 'moment'
 
 import { randomBytes } from 'crypto-browserify'
 import axios from 'axios';
+import { goToRoute } from './utils';
 
 interface IDoctorProgram {
     date: Moment
@@ -21,9 +22,12 @@ interface ITemplate {
 interface IDoctorProgramTemplateCreateComponent {
     doctorId: number
     templates: ITemplate[]
+    usedDates: string[]
 }
 
 const DoctorProgramTemplateCreateComponent: React.FC<IDoctorProgramTemplateCreateComponent> = (props) => {
+    const [usedDates] = useState(props.usedDates.map(date => moment(date)))
+
     const [programe, setPrograme] = useState<IDoctorProgram[]>([])
 
     const [startOfDay] = useState(moment().startOf("day"))
@@ -68,35 +72,37 @@ const DoctorProgramTemplateCreateComponent: React.FC<IDoctorProgramTemplateCreat
     }
 
     const onCreate = async () => {
-        const response = await axios.post("/Doctor/Program", {
-            IdDoctor: doctorId,
+        try {
+            const response = await axios.post("/Doctor/Program", {
+                IdDoctor: doctorId,
 
-            Programe: programe.map(program => ({
-                Data: program.date.startOf("day").toDate(),
-                IdProgramTemplate: program.templateId
+                Programe: programe.map(program => ({
+                    Data: program.date.startOf("day").toDate(),
+                    IdProgramTemplate: program.templateId
+                })
+                )
             })
-            )
-        })
 
-        console.log({ response })
+            if (response.status === 200) {
+                goToRoute(`/Doctor/Details/${doctorId}`)
+            }
+        }
 
-        // if (response.status === 200) {
-        //     window.location.href = `/mai-tarziu`
-        // }
+        catch (err) {
+            notification.error({ message: err.request.statusText })
+        }
     }
-
-    console.log({ templates })
 
     return (
         <div>
-            {programe.length === 0 ? <h6>Nu ai niciun program creat. :D</h6> : null}
+            {programe.length === 0 ? <h6>Nu ai niciun program creat, încă.</h6> : null}
 
             <div style={{ marginBottom: "2rem" }}>
                 {programe.map((program, programIndex) => {
                     return (
                         <div key={program.id} style={{ marginTop: "2rem" }}>
                             <div style={{ marginTop: "1rem" }}>
-                                <DatePicker disabledDate={date => programe.some(program => program.date?.isSame(date, "day"))} onChange={(date) => updateProgramDate(programIndex, date)} />
+                                <DatePicker disabledDate={date => usedDates.some(d => d.isSame(date, "day")) || programe.some(program => program.date?.isSame(date, "day"))} onChange={(date) => updateProgramDate(programIndex, date)} />
                             </div>
 
                             <div style={{ marginTop: "1rem" }}>

@@ -46,9 +46,11 @@ const columns = [
     {
         title: "Data",
         key: "data",
+        dataIndex: "Data",
+
         width: "20%",
 
-        render: data => moment(data).format("dddd Do MMMM gggg"),
+        render: data => moment(data).format("dddd Do MMMM gggg HH:mm"),
 
         sorter: (a, b) => moment(a.Data).diff(b.Data)
     },

@@ -134,9 +134,6 @@ namespace Licenta2022.Controllers
                     DataEmiterii = DateTime.Now,
                     RetetaXMedicament = new List<RetetaXMedicament>()
                 };
-                var programare = db.Programari.Find(retetaForm.IdProgramare);
-                reteta.Programare = programare;
-
 
                 for (int i = 0; i < retetaForm.IdMedicamente.Count; i++)
                 {
@@ -153,6 +150,10 @@ namespace Licenta2022.Controllers
                     };
                     reteta.RetetaXMedicament.Add(rxm);
                 }
+
+                var programare = db.Programari.Find(retetaForm.IdProgramare);
+
+                programare.Reteta = reteta;
 
                 db.Retete.Add(reteta);
                 db.SaveChanges();

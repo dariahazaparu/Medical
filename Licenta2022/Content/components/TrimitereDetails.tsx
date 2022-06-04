@@ -3,9 +3,13 @@ import { Person } from "./types";
 import { goToRoute } from "./utils";
 
 interface Trimitere {
+    Id: number;
+
     Observatii: string;
 
-    Pacient: Person;
+    Pacient: Person & {
+        Id: number;
+    }
 
     ProgramareId: number;
     ProgramareTId: number;
@@ -31,12 +35,16 @@ const TrimitereDetails: React.FC<ITrimitereDetails> = ({ trimitere }) => {
     )
 }
 
-const ButtonsComponent: React.FC<ITrimitereDetails> = ({ trimitere: { ProgramareId, ProgramareTId } }) => <Card style={{ display: "flex", flexDirection: "column" }}>
+const ButtonsComponent: React.FC<ITrimitereDetails> = ({ trimitere: { Pacient, Id, ProgramareId, ProgramareTId } }) => <Card style={{ display: "flex", flexDirection: "column" }}>
     <div style={{ display: "flex", justifyContent: "center" }}>
         <Button type="primary" onClick={() => goToRoute(`/Programare/Details/${ProgramareId}`)}>Vezi programare</Button>
     </div>
-    {ProgramareTId != -1 && <div style={{ marginTop: "2rem" }}>
-        <Button type="primary" onClick={() => goToRoute(`/Programare/Details/${ProgramareTId}`)}>Vezi programarea pe baza trimiterii</Button></div>}
+
+    <div style={{ marginTop: "2rem" }}>
+        {ProgramareTId === -1 ? <Button type="primary" onClick={() => goToRoute(`/Programare/Create/${Pacient.Id}/${Id}`)}>Creeaza programare pe baza trimiterii</Button> :
+            <Button type="primary" onClick={() => goToRoute(`/Programare/Details/${ProgramareTId}`)}>Vezi programarea pe baza trimiterii</Button>}
+
+    </div>
 </Card>
 
 export default TrimitereDetails

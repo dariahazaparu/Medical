@@ -35,7 +35,7 @@ interface Programare {
         Denumire: string
     }[]
 
-    ReteteId: number[]
+    RetetaId: number
 }
 
 interface IProgramareDetails {
@@ -43,9 +43,8 @@ interface IProgramareDetails {
 }
 
 const ProgramareDetails: React.FC<IProgramareDetails> = ({ programare }) => {
-    const { Data, TrimitereId, Id, Diagnostic: { Id: DiagnosticId, Denumire: DenumireDiagnostic }, Doctor, Clinica, Servicii, TrimitereTId } = programare
-    // TODO: fix 1-1 relation
-    const retetaId = programare.ReteteId[0] || -1
+    const { Data, TrimitereId, RetetaId, Id, Diagnostic: { Id: DiagnosticId, Denumire: DenumireDiagnostic }, Doctor, Clinica, Servicii, TrimitereTId, Pacient } = programare
+
     const [prezent, setPrezent] = useState(programare.Prezent)
 
     const onChangePrezent = async (val: boolean) => {
@@ -88,7 +87,7 @@ const ProgramareDetails: React.FC<IProgramareDetails> = ({ programare }) => {
 
                             {DiagnosticId === -1 ? null : (
                                 <div>
-                                    {retetaId !== -1 ? <Button type="primary" onClick={() => goToRoute(`/Reteta/Details/${retetaId}`)}>Vezi reteta</Button> : <Button type="primary" onClick={() => goToRoute(`/Reteta/Create/${Id}`)}>Creeaza reteta</Button>}
+                                    {RetetaId !== -1 ? <Button type="primary" onClick={() => goToRoute(`/Reteta/Details/${RetetaId}`)}>Vezi reteta</Button> : <Button type="primary" onClick={() => goToRoute(`/Reteta/Create/${Id}`)}>Creeaza reteta</Button>}
                                 </div>
                             )}
 
@@ -107,13 +106,19 @@ const ProgramareDetails: React.FC<IProgramareDetails> = ({ programare }) => {
 
 
                 <div>
-                    <b>Data</b>: {moment(Data).format("dddd Do MMMM gggg")}
+                    <b>Data</b>: {moment(Data).format("dddd Do MMMM gggg HH:mm")}
                 </div>
 
                 <hr />
 
                 <div>
                     <b>Doctor</b>: {Doctor.Nume} {Doctor.Prenume}
+                </div>
+
+                <hr />
+
+                <div>
+                    <b>Pacient</b>: {Pacient.Nume} {Pacient.Prenume}
                 </div>
 
                 <hr />

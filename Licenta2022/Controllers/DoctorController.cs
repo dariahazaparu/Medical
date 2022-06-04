@@ -24,7 +24,7 @@ namespace Licenta2022.Controllers
                 Prenume = doctor.Prenume,
                 Specializare = doctor.Specialitate.Denumire,
                 Clinica = doctor.Clinica.Nume
-            }) ;
+            });
 
             ViewBag.Data = data;
 
@@ -206,10 +206,11 @@ namespace Licenta2022.Controllers
 
             var programForm = new DoctorProgramForm()
             {
-               IdDoctor  = doctor.Id,
+                IdDoctor = doctor.Id,
             };
 
             ViewBag.Templates = db.ProgramTemplates.Select(x => x).ToList();
+            ViewBag.UsedDates = doctor.DoctorXProgramTemplates.Select(dxt => dxt.Data);
 
             return View(programForm);
         }
@@ -221,6 +222,16 @@ namespace Licenta2022.Controllers
             if (ModelState.IsValid)
             {
                 var doctor = db.Doctori.Find(programForm.IdDoctor);
+
+                foreach (var program in programForm.Programe)
+                {
+                    var existentProgram = doctor.DoctorXProgramTemplates.Where(dxt => dxt.IdDoctor == doctor.Id).Where(dxt => dxt.Data.CompareTo(program.Data) == 0).FirstOrDefault();
+
+                    if (existentProgram != null)
+                    {
+                        return new HttpStatusCodeResult(HttpStatusCode.BadRequest, "Exista deja un program pentru data aleasa.");
+                    }
+                }
 
                 foreach (var program in programForm.Programe)
                 {

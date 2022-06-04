@@ -30,12 +30,16 @@ interface Program {
 interface IProgramareCreateComponent {
     specialitati: Specialitate[]
     idPacient: number
+    idSpecializare: number;
+    idTrimitere: number;
 }
 
 const ProgramareCreateComponent: React.FC<IProgramareCreateComponent> = (props) => {
-    const { specialitati, idPacient } = props
+    const { specialitati, idPacient, idTrimitere, idSpecializare } = props
 
-    const [specializareId, setSpecializareId] = useState(null)
+    console.log(props)
+
+    const [specializareId, setSpecializareId] = useState(idSpecializare === -1 ? null : idSpecializare)
     const [doctorId, setDoctorId] = useState(null)
     const [startFromDate, setStartFromDate] = useState(null)
 
@@ -73,7 +77,8 @@ const ProgramareCreateComponent: React.FC<IProgramareCreateComponent> = (props) 
             IdDoctor: doctorId,
             IdProgram: programId,
             ProgramIntervalIndex: programIntervalIndex,
-            IdPacient: idPacient
+            IdPacient: idPacient,
+            IdTrimitere: idTrimitere
         })
 
         if (response.status === 200) {
@@ -86,8 +91,8 @@ const ProgramareCreateComponent: React.FC<IProgramareCreateComponent> = (props) 
     return (
         <div>
             <div>
-                <h5>Salu2t</h5>
-                <Select value={specializareId} style={{ minWidth: "250px" }} placeholder="Selecteaza specializarea" onChange={updateSpecializare}>
+                <h6>Specializare</h6>
+                <Select disabled={props.idSpecializare !== -1} value={specializareId} style={{ minWidth: "250px" }} placeholder="Selecteaza" onChange={updateSpecializare}>
                     {specialitati.map((specializare, idx) => (
                         <Select.Option value={specializare.Id}>{specializare.Nume}</Select.Option>
                     ))}
@@ -95,8 +100,9 @@ const ProgramareCreateComponent: React.FC<IProgramareCreateComponent> = (props) 
             </div>
 
             {specializare ? (
-                <div style={{ marginTop: "1rem" }}>
-                    <Select value={doctorId} style={{ minWidth: "250px" }} placeholder="Selecteaza doctorul" onChange={updateDoctor}>
+                <div style={{ marginTop: "2rem" }}>
+                    <h6>Doctor</h6>
+                    <Select value={doctorId} style={{ minWidth: "250px" }} placeholder="Selecteaza" onChange={updateDoctor}>
                         {specializare.Doctori.map((doctor, idx) => (
                             <Select.Option value={doctor.Id}>{doctor.Nume} {doctor.Prenume}</Select.Option>
                         ))}

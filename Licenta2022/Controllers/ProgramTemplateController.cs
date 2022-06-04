@@ -58,10 +58,10 @@ namespace Licenta2022.Controllers
                 db.ProgramTemplates.Add(programTemplate);
                 db.SaveChanges();
 
-                return RedirectToAction("Index");
+                return RedirectToAction("Doctor", "Program");
             }
 
-            return View(programTemplateForm);
+            return View();
         }
 
         // GET: ProgramTemplate/Edit/5

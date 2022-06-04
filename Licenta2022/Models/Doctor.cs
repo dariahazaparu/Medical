@@ -14,8 +14,10 @@ namespace Licenta2022.Models
         public string Nume { get; set; }
         [Required]
         public string Prenume { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}")]
         public DateTime DataAngajarii { get; set; }
-        
+
         public virtual Specialitate Specialitate { get; set; }
         public virtual Clinica Clinica { get; set; }
 

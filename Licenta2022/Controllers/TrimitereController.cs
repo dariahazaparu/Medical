@@ -71,12 +71,15 @@ namespace Licenta2022.Controllers
             ViewBag.HasId = id != null;
             ViewBag.Data = trimitere.Select(trim => new
             {
+                Id = trim.Id,
+
                 Observatii = trim.Observatii,
 
                 Pacient = new
                 {
-                    Nume = trim.Pacient.Nume,
-                    Prenume = trim.Pacient.Prenume
+                    Id = trim.Programare.Pacient.Id,
+                    Nume = trim.Programare.Pacient.Nume,
+                    Prenume = trim.Programare.Pacient.Prenume
                 },
 
                 ProgramareId = trim.Programare.Id,
@@ -137,7 +140,7 @@ namespace Licenta2022.Controllers
             {
                 var programare = db.Programari.Find(trimitereForm.IdProgramare);
 
-                if (programare.Trimiere != null)
+                if (programare.Trimitere != null)
                 {
                     return new HttpStatusCodeResult(HttpStatusCode.BadRequest, "Programarea are deja o trimitere.");
                 }
@@ -156,7 +159,7 @@ namespace Licenta2022.Controllers
                 {
                     trimitere.Programare = programare;
                     trimitere.ProgramareT = null;
-                    programare.Trimiere = trimitere;
+                    programare.Trimitere = trimitere;
                 }
 
                 trimitere.Servicii = new List<Serviciu>();

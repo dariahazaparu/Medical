@@ -1,4 +1,5 @@
 ﻿using System.Data.Entity;
+using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
@@ -49,12 +50,17 @@ namespace Licenta2022.Models
         public DbSet<ProgramTemplate> ProgramTemplates { get; set; }
         public DbSet<DoctorXProgramTemplate> DoctorXProgramTemplates { get; set; }
 
-
         public static ApplicationDbContext Create()
         {
             return new ApplicationDbContext();
         }
 
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
+        }
         public System.Data.Entity.DbSet<Licenta2022.Models.ProgramareFromForm> ProgramareFromForms { get; set; }
     }
 }

@@ -14,11 +14,11 @@ namespace Licenta2022.Models
         public DateTime Data { get; set; }
         public bool Prezent { get; set; }
 
-        public virtual Trimitere Trimiere { get; set; }
+        public virtual Trimitere Trimitere { get; set; }
         public virtual Trimitere TrimitereT { get; set; }
-        public virtual ICollection<Trimitere> Trimiteri { get; set; }
         public virtual Pacient Pacient { get; set; }
         public virtual Doctor Doctor { get; set; }
-        public virtual ICollection<Reteta> Retete { get; set; }
+        public virtual Reteta Reteta { get; set; }
+        public virtual Factura Factura { get; set; }
     }
 }

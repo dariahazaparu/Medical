@@ -69,7 +69,7 @@ const RetetaCreate: React.FC<IRetetaCreate> = ({ medicamente, programareId }) =>
                                         </Form.Item>
 
                                         <Form.Item rules={[{ required: true, message: "Campul trebuie completat." }]} name={[index, "doza"]}>
-                                            <Input placeholder="Doza" type="number" />
+                                            <Input placeholder="Doza" />
                                         </Form.Item>
 
                                         {fields.length > 1 && <Button style={{ marginBottom: "1rem" }} onClick={() => remove(index)}>Sterge</Button>}

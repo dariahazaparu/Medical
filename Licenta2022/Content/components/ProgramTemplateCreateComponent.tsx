@@ -96,17 +96,19 @@ const ProgramTemplateCreateComponent = (props: any) => {
             config = new Array(96).fill(null).map((_, idx) => Number((idx >= startIndex && idx < endIndex))).join("")
         }
 
-        const response = await axios.post("/ProgramTemplate/Create", {
-            Config: config,
-        })
+        try {
+            const response = await axios.post("/ProgramTemplate/Create", {
+                Config: config,
+            })
 
-        if (response.status === 200) {
-            window.location.href = "/ProgramTemplate"
+            if (response.status === 200) {
+                window.location.href = "/ProgramTemplate"
+            }
         }
 
-        // else {
-        //     notification.info({message: response.})
-        // }
+        catch (err) {
+            notification.info({ message: err.request.statusText })
+        }
     };
 
     return (

@@ -15,7 +15,7 @@ namespace Licenta2022.Models
         public int Numar { get; set; }
         
         public virtual ICollection<Pacient> Pacienti { get; set; }
-        public virtual ICollection<Clinica> Clinici { get; set; }
+        public virtual Clinica Clinica { get; set; }
         public virtual Localitate Localitate { get; set; }
     }
 }

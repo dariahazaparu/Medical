@@ -170,14 +170,14 @@ const TableComponent: React.FC<ITableComponent<any>> = ({ columns, data }) => {
         ...column,
     })).concat(
         {
-            title: 'Action',
+            title: 'Actiune',
             key: 'operation',
             fixed: 'right',
             width: 100,
             render: (data: any) => <Dropdown overlay={<Menu
                 items={[
                     {
-                        label: "Edit",
+                        label: "Editare",
                         key: "edit",
                         icon: <EditOutlined />,
 
@@ -185,7 +185,7 @@ const TableComponent: React.FC<ITableComponent<any>> = ({ columns, data }) => {
                     },
 
                     {
-                        label: "Details",
+                        label: "Detalii",
                         key: "details",
                         icon: <InfoOutlined />,
 

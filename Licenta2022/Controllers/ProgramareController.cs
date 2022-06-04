@@ -54,7 +54,7 @@ namespace Licenta2022.Controllers
 
                 data = data.Where(programare => programare.Pacient.Id == id);
             }
-            
+
             ViewBag.Data = data.ToList();
             ViewBag.data.Reverse();
             ViewBag.HasId = id != null;
@@ -103,7 +103,7 @@ namespace Licenta2022.Controllers
 
                 Data = programare.Data,
 
-                TrimitereId = programare.Trimiere != null ? programare.Trimiere.Id : -1,
+                TrimitereId = programare.Trimitere != null ? programare.Trimitere.Id : -1,
 
                 Doctor = new
                 {
@@ -131,7 +131,7 @@ namespace Licenta2022.Controllers
 
                 TrimitereTId = trimitereTId,
 
-                ReteteId = programare.Retete.Select(reteta => reteta.Id)
+                RetetaId = programare.Reteta != null ? programare.Reteta.Id : -1
             }).FirstOrDefault();
 
             ViewBag.Data = data;
@@ -140,16 +140,32 @@ namespace Licenta2022.Controllers
         }
 
         // GET: Programare/Create
-        public ActionResult Create(int? id)
+        public ActionResult Create(int? id, int? id2)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             Pacient pacient = db.Pacienti.Find(id);
+
             if (pacient == null)
             {
                 return HttpNotFound();
+            }
+
+            if (id2 != null)
+            {
+                var trimitere = db.Trimiteri.Find(id2);
+
+                if (trimitere == null)
+                {
+                    return HttpNotFound();
+                }
+                if (trimitere.Programare.Pacient.Id != id)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+
             }
 
             var programareViewSpecialitati = new List<ProgramareViewSpecialitate>();
@@ -198,8 +214,11 @@ namespace Licenta2022.Controllers
                 programareViewSpecialitati.Add(programareViewSpecialitate);
             }
 
+
             ViewBag.Specialitati = programareViewSpecialitati;
             ViewBag.IdPacient = id;
+            ViewBag.IdTrimitere = id2 == null ? -1 : id2;
+            ViewBag.IdSpecializare = id2 == null ? -1 : db.Trimiteri.Find(id2).Specialitate.Id;
 
             return View();
         }
@@ -247,15 +266,21 @@ namespace Licenta2022.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        public ActionResult Create([Bind(Include = "IdDoctor,IdProgram,ProgramIntervalIndex,IdPacient")] ProgramareCreateForm programareCreateForm)
+        public ActionResult Create([Bind(Include = "IdDoctor,IdProgram,ProgramIntervalIndex,IdPacient,IdTrimitere")] ProgramareCreateForm programareCreateForm)
         {
             if (ModelState.IsValid)
             {
+                #region initializari
                 var doctor = db.Doctori.Find(programareCreateForm.IdDoctor);
 
                 var pacient = db.Pacienti.Find(programareCreateForm.IdPacient);
 
                 var program = db.DoctorXProgramTemplates.Find(programareCreateForm.IdProgram);
+
+                var trimitereT = db.Trimiteri.Find(programareCreateForm.IdTrimitere);
+
+                #endregion
+
                 var newConfig = program.Config.Substring(0, programareCreateForm.ProgramIntervalIndex) + '0' + program.Config.Substring(programareCreateForm.ProgramIntervalIndex + 1);
                 program.Config = newConfig;
 
@@ -265,12 +290,16 @@ namespace Licenta2022.Controllers
                     Doctor = doctor,
                     Pacient = pacient,
                     Data = data,
-                    Prezent = false
+                    Prezent = false,
+                    Trimitere = null,
+                    TrimitereT = trimitereT,
+                    Reteta = null
                 };
 
-                programare.Retete = new List<Reteta>();
-                programare.Trimiere = null;
-                programare.TrimitereT = null;
+                if (trimitereT != null)
+                {
+                    trimitereT.ProgramareT = programare;
+                }
 
                 db.Programari.Add(programare);
                 db.SaveChanges();
@@ -395,7 +424,7 @@ namespace Licenta2022.Controllers
                 trimitere.ProgramareT = programare;
                 programare.TrimitereT = trimitere;
 
-                programare.Retete = new List<Reteta>();
+                programare.Reteta = null;
 
                 db.Programari.Add(programare);
                 db.SaveChanges();
