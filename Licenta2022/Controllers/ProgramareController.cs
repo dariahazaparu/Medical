@@ -54,8 +54,9 @@ namespace Licenta2022.Controllers
 
                 data = data.Where(programare => programare.Pacient.Id == id);
             }
-
+            
             ViewBag.Data = data.ToList();
+            ViewBag.data.Reverse();
             ViewBag.HasId = id != null;
 
             return View();
@@ -391,7 +392,6 @@ namespace Licenta2022.Controllers
                 programare.Pacient = pacient.FirstOrDefault();
 
                 var trimitere = db.Trimiteri.Where(x => x.Id == form.IdTrimitere).Select(x => x).ToList().FirstOrDefault();
-                trimitere.org = true;
                 trimitere.ProgramareT = programare;
                 programare.TrimitereT = trimitere;
 

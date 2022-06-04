@@ -16,6 +16,7 @@ import TrimitereCreate from "./TrimitereCreate"
 import RetetaCreate from "./RetetaCreate"
 
 import ProgramareDetails from "./ProgramareDetails"
+import TrimitereDetails from "./TrimitereDetails"
 
 import PacientEdit from "./PacientEdit"
 
@@ -26,6 +27,6 @@ global.ReactDOMServer = ReactDOMServer;
 global.Components = {
     ProgramTemplateCreateComponent, DoctorProgramTemplateCreateComponent, ProgramareCreateComponent,
     PacientTable, ProgramareTable, TrimitereTable, DoctorTable, ClinicaTable, PacientEdit, ProgramareDetails,
-    TrimitereCreate, RetetaCreate
+    TrimitereCreate, RetetaCreate, TrimitereDetails
 };
 

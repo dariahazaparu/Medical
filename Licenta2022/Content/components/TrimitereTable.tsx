@@ -51,7 +51,6 @@ const columns = [
 ] as TableColumnsType<Trimitere>
 
 const TrimitereTable: React.FC<ITrimitereTable> = ({ data }) => {
-    console.log({ Ceplm: true })
     return (
         <div>
             <TableHeader title="Trimiteri" omitCreate />

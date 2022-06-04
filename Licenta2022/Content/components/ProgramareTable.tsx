@@ -1,4 +1,5 @@
 import { Checkbox } from "antd";
+import moment from "moment";
 import TableComponent from "./Table"
 import { TableHeader } from "./TableHeader";
 import { TableColumnsType } from "./types"
@@ -40,6 +41,16 @@ const columns = [
         render: (_, record) => record.Pacient.Nume + " " + record.Pacient.Prenume,
 
         sorter: (a, b) => a.Pacient.Nume.localeCompare(b.Pacient.Nume)
+    },
+
+    {
+        title: "Data",
+        key: "data",
+        width: "20%",
+
+        render: data => moment(data).format("dddd Do MMMM gggg"),
+
+        sorter: (a, b) => moment(a.Data).diff(b.Data)
     },
 
     {

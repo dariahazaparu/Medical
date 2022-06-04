@@ -24,9 +24,9 @@ namespace Licenta2022.Controllers
 
                 Pacient = new
                 {
-                    Id = trimitere.Pacient.Id,
-                    Nume = trimitere.Pacient.Nume,
-                    Prenume = trimitere.Pacient.Prenume
+                    Id = trimitere.Programare.Pacient.Id,
+                    Nume = trimitere.Programare.Pacient.Nume,
+                    Prenume = trimitere.Programare.Pacient.Prenume
                 },
 
                 DataProgramare = trimitere.Programare.Data,
@@ -60,8 +60,8 @@ namespace Licenta2022.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            
-            Trimitere trimitere = db.Trimiteri.Find(id);
+
+            var trimitere = db.Trimiteri.Where(trim => trim.Id == id);
             
             if (trimitere == null)
             {
@@ -69,8 +69,24 @@ namespace Licenta2022.Controllers
             }
             
             ViewBag.HasId = id != null;
+            ViewBag.Data = trimitere.Select(trim => new
+            {
+                Observatii = trim.Observatii,
 
-            return View(trimitere);
+                Pacient = new
+                {
+                    Nume = trim.Pacient.Nume,
+                    Prenume = trim.Pacient.Prenume
+                },
+
+                ProgramareId = trim.Programare.Id,
+                ProgramareTId = trim.ProgramareT != null ? trim.ProgramareT.Id : -1,
+
+                Servicii = trim.Servicii.Select(s => s.Denumire),
+                Specializare = trim.Specialitate.Denumire
+            }).FirstOrDefault();
+
+            return View();
         }
 
         // GET: Trimiteres/Create
@@ -130,8 +146,8 @@ namespace Licenta2022.Controllers
                 {
                     Observatii = trimitereForm.Observatii
                 };
-                var pacient = db.Pacienti.Find(trimitereForm.IdPacient);
-                trimitere.Pacient = pacient;
+                //var pacient = db.Pacienti.Find(trimitereForm.IdPacient);
+                //trimitere.Pacient = pacient;
 
                 var specialitate = db.Specialitati.Find(trimitereForm.IdSpecializare);
                 trimitere.Specialitate = specialitate;
@@ -143,7 +159,6 @@ namespace Licenta2022.Controllers
                     programare.Trimiere = trimitere;
                 }
 
-                trimitere.org = false;
                 trimitere.Servicii = new List<Serviciu>();
                 for (int i = 0; i < trimitereForm.IdServicii.Count(); i++)
                 {
