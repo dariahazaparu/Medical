@@ -6,7 +6,7 @@ using System.Web;
 namespace Licenta2022.Models
 {
 
-    public class ProgramareViewSpecialitate
+    public class ProgramareViewSpecializare
     {
         public int Id { get; set; }
         public string Nume { get; set; }

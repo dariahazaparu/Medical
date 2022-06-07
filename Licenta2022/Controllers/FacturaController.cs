@@ -75,13 +75,16 @@ namespace Licenta2022.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "IdProgramare")] FacturaForm facturaForm)
         {
             if (ModelState.IsValid)
             {
                 Factura factura = new Factura();
                 var programare = db.Programari.Find(facturaForm.IdProgramare);
+                if (programare.Factura != null)
+                {
+                    return RedirectToAction("Details", new { id = programare.Factura.Id });
+                } 
                 factura.Programare = programare;
 
                 var pacient = programare.Pacient;
@@ -89,23 +92,49 @@ namespace Licenta2022.Controllers
                 var sxa = asigurare.ServiciuXAsigurari;
 
                 factura.Total = 0;
-                foreach (var item in programare.TrimitereT.Servicii)
+
+                if (programare.Serviciu == null)
                 {
-                    var procent = 100;
+                    foreach (var item in programare.TrimitereParinte.Servicii)
+                    {
+                        var procent = 0;
+                        foreach (var s in sxa)
+                        {
+                            if (s.Serviciu == item)
+                            {
+                                procent = s.ProcentReducere;
+                                break;
+                            }
+                        }
+                        factura.Total += item.Pret * (100 - procent);
+                    }
+                }
+                else
+                {
+                    var procent = 0;
+
                     foreach (var s in sxa)
                     {
-                        if (s.Serviciu == item)
+
+                        if (s.Serviciu == programare.Serviciu)
                         {
                             procent = s.ProcentReducere;
+                            break;
+
                         }
                     }
-                    factura.Total += item.Pret * (100 - procent);
+                    factura.Total = programare.Serviciu.Pret * (100 - procent);
                 }
+
                 factura.Total /= 100;
 
                 db.Facturi.Add(factura);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+
+                return Json(new
+                {
+                    FacturaId = factura.Id
+                });
             }
 
             return View(facturaForm);

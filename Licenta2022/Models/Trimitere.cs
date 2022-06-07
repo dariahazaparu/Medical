@@ -11,10 +11,9 @@ namespace Licenta2022.Models
         [Key]
         public int Id { get; set; }
         public string Observatii { get; set; }
-        public virtual Programare Programare { get; set; } 
-        public virtual Programare ProgramareT { get; set; } 
-        public virtual Pacient Pacient { get; set; }
-        public virtual Specialitate Specialitate { get; set; }
+        public virtual Programare Programare { get; set; }
+        public virtual Programare ProgramareParinte { get; set; }
+        public virtual Specializare Specializare { get; set; }
         public virtual ICollection<Serviciu> Servicii { get; set; }
 
     }

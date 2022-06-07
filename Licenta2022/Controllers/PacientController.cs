@@ -142,7 +142,7 @@ namespace Licenta2022.Controllers
                     Nume = pacientForm.Nume,
                     Prenume = pacientForm.Prenume,
                     CNP = pacientForm.CNP,
-                    PacientXDiagnostics = new List<PacientXDiagnostic>()
+                    PacientXDiagnosticXProgramare = new List<PacientXDiagnosticXProgramare>()
                 };
 
                 var adresa = db.Adrese.Where(x => x.Id == pacientForm.IdAdresa).Select(x => x).ToList();
@@ -338,12 +338,12 @@ namespace Licenta2022.Controllers
                 var pacient = db.Pacienti.Find(pacientForm.IdPacient);
                 var programare = db.Programari.Find(pacientForm.IdProgramare);
 
-                if (pacient.PacientXDiagnostics == null)
-                    pacient.PacientXDiagnostics = new List<PacientXDiagnostic>();
+                if (pacient.PacientXDiagnosticXProgramare == null)
+                    pacient.PacientXDiagnosticXProgramare = new List<PacientXDiagnosticXProgramare>();
                 
                 var diag = db.Diagnostics.Where(x => x.Id == pacientForm.IdDiagnostic).Select(x => x).ToList();
 
-                var pxd = new PacientXDiagnostic()
+                var pxd = new PacientXDiagnosticXProgramare()
                 {
                     IdDiagnostic = pacientForm.IdDiagnostic,
                     IdPacient = pacient.Id,
@@ -355,9 +355,9 @@ namespace Licenta2022.Controllers
                     Programare = programare,
                 };
 
-                pacient.PacientXDiagnostics.Add(pxd);
+                pacient.PacientXDiagnosticXProgramare.Add(pxd);
 
-                db.PacientXDiagnostics.Add(pxd);
+                db.PacientXDiagnosticXProgramares.Add(pxd);
                 db.Entry(pacient).State = EntityState.Modified;
 
                 db.SaveChanges();

@@ -19,7 +19,7 @@ namespace Licenta2022.Models
 
         public virtual Adresa Adresa { get; set; }
         public virtual Asigurare Asigurare { get; set; }
-        public virtual ICollection<PacientXDiagnostic> PacientXDiagnostics { get; set; }
+        public virtual ICollection<PacientXDiagnosticXProgramare> PacientXDiagnosticXProgramare { get; set; }
         public virtual ICollection<Programare> Programari { get; set; }
     }
 }

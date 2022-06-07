@@ -70,14 +70,15 @@ namespace Licenta2022.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            Programare programareDb = db.Programari.Find(id);
+            var programareCursor = db.Programari.Where(prog => prog.Id == id);
+            var programareDb = programareCursor.FirstOrDefault();
 
             if (programareDb == null)
             {
                 return HttpNotFound();
             }
 
-            var diagnostic = db.PacientXDiagnostics.Where(pxd => pxd.IdProgramare == id).FirstOrDefault();
+            var diagnostic = db.PacientXDiagnosticXProgramares.Where(pxd => pxd.IdProgramare == id).FirstOrDefault();
 
             var diagnosticId = diagnostic == null ? -1 : diagnostic.IdDiagnostic;
             var diagnosticDenumire = diagnostic == null ? "" : diagnostic.Diagnostic.Denumire;
@@ -86,11 +87,11 @@ namespace Licenta2022.Controllers
 
             var adresaClinica = adresa.Localitate.Nume + ", " + adresa.Strada + " " + adresa.Numar;
 
-            var trimitereT = programareDb.TrimitereT;
+            var trimitereT = programareDb.TrimitereParinte;
 
             var trimitereTId = trimitereT != null ? trimitereT.Id : -1;
 
-            var data = db.Programari.Where(prog => prog.Id == id).Select(programare => new
+            var data = programareCursor.Select(programare => new
             {
                 Id = programare.Id,
                 Prezent = programare.Prezent,
@@ -123,18 +124,31 @@ namespace Licenta2022.Controllers
                     Denumire = diagnosticDenumire
                 },
 
-                Servicii = programare.TrimitereT.Servicii.Select(trimitere => new
+                Servicii = programare.TrimitereParinte.Servicii.Select(serviciu => new
                 {
-                    Pret = trimitere.Pret,
-                    Denumire = trimitere.Denumire,
+                    Pret = serviciu.Pret,
+                    Denumire = serviciu.Denumire,
                 }),
 
                 TrimitereTId = trimitereTId,
 
-                RetetaId = programare.Reteta != null ? programare.Reteta.Id : -1
+                RetetaId = programare.Reteta != null ? programare.Reteta.Id : -1,
+
+                FacturaId = programare.Factura != null ? programare.Factura.Id : -1
             }).FirstOrDefault();
 
+            var servicii = data.Servicii;
+
+            if (programareDb.Serviciu != null)
+            {
+                 servicii = data.Servicii.Append(new {
+                    Pret = programareDb.Serviciu.Pret,
+                    Denumire = programareDb.Serviciu.Denumire
+                });
+            }
+
             ViewBag.Data = data;
+            ViewBag.Servicii = servicii;
 
             return View();
         }
@@ -168,19 +182,19 @@ namespace Licenta2022.Controllers
 
             }
 
-            var programareViewSpecialitati = new List<ProgramareViewSpecialitate>();
+            var programareViewSpecialitati = new List<ProgramareViewSpecializare>();
 
             var specialitati = db.Specialitati.Select(x => x).ToList();
 
-            foreach (var specialitate in specialitati)
+            foreach (var Specializare in specialitati)
             {
-                var programareViewSpecialitate = new ProgramareViewSpecialitate
+                var programareViewSpecializare = new ProgramareViewSpecializare
                 {
-                    Id = specialitate.Id,
-                    Nume = specialitate.Denumire
+                    Id = Specializare.Id,
+                    Nume = Specializare.Denumire
                 };
 
-                var doctoriDb = db.Doctori.Where(doctor => doctor.Specialitate.Id == specialitate.Id).ToList();
+                var doctoriDb = db.Doctori.Where(doctor => doctor.Specializare.Id == Specializare.Id).ToList();
 
                 var doctori = new List<ProgramareViewDoctor>();
 
@@ -209,16 +223,16 @@ namespace Licenta2022.Controllers
                     doctori.Add(doctor);
                 }
 
-                programareViewSpecialitate.Doctori = doctori;
+                programareViewSpecializare.Doctori = doctori;
 
-                programareViewSpecialitati.Add(programareViewSpecialitate);
+                programareViewSpecialitati.Add(programareViewSpecializare);
             }
 
 
             ViewBag.Specialitati = programareViewSpecialitati;
             ViewBag.IdPacient = id;
             ViewBag.IdTrimitere = id2 == null ? -1 : id2;
-            ViewBag.IdSpecializare = id2 == null ? -1 : db.Trimiteri.Find(id2).Specialitate.Id;
+            ViewBag.IdSpecializare = id2 == null ? -1 : db.Trimiteri.Find(id2).Specializare.Id;
 
             return View();
         }
@@ -292,13 +306,20 @@ namespace Licenta2022.Controllers
                     Data = data,
                     Prezent = false,
                     Trimitere = null,
-                    TrimitereT = trimitereT,
-                    Reteta = null
+                    TrimitereParinte = trimitereT,
+                    Reteta = null, 
+                    Serviciu = null
                 };
 
                 if (trimitereT != null)
                 {
-                    trimitereT.ProgramareT = programare;
+                    trimitereT.ProgramareParinte = programare;
+                } else
+                {
+                    programare.Serviciu = db.Servicii
+                        .Where(serv => serv.Specializare.Id == doctor.Specializare.Id)
+                        .Where(serv => serv.Denumire.Contains("Consultatie"))
+                        .FirstOrDefault();
                 }
 
                 db.Programari.Add(programare);
@@ -386,7 +407,7 @@ namespace Licenta2022.Controllers
             {
                 return HttpNotFound();
             }
-            Pacient pacient = db.Pacienti.Find(trimitere.Pacient.Id);
+            Pacient pacient = db.Pacienti.Find(trimitere.Programare.Pacient.Id);
             if (pacient == null)
             {
                 return HttpNotFound();
@@ -421,8 +442,8 @@ namespace Licenta2022.Controllers
                 programare.Pacient = pacient.FirstOrDefault();
 
                 var trimitere = db.Trimiteri.Where(x => x.Id == form.IdTrimitere).Select(x => x).ToList().FirstOrDefault();
-                trimitere.ProgramareT = programare;
-                programare.TrimitereT = trimitere;
+                trimitere.ProgramareParinte = programare;
+                programare.TrimitereParinte = trimitere;
 
                 programare.Reteta = null;
 

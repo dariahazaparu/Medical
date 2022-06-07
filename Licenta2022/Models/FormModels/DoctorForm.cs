@@ -11,7 +11,7 @@ namespace Licenta2022.Models
         public string Nume { get; set; }
         public string Prenume { get; set; }
         public DateTime DataAngajarii { get; set; }
-        public int IdSpecialitate { get; set; }
+        public int IdSpecializare { get; set; }
         public int IdClinica { get; set; }
     }
 }

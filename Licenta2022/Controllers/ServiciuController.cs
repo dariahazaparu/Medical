@@ -17,7 +17,7 @@ namespace Licenta2022.Controllers
         // GET: Serviciu
         public ActionResult Index()
         {
-            return View(db.Servicii.Include("Specialitate").ToList());
+            return View(db.Servicii.Include("Specializare").ToList());
         }
 
         // GET: Serviciu/Details/5
@@ -49,12 +49,12 @@ namespace Licenta2022.Controllers
 
             var specialitati = db.Specialitati.Select(x => x);
 
-            foreach (var specialitate in specialitati)
+            foreach (var Specializare in specialitati)
             {
                 selectList.Add(new SelectListItem
                 {
-                    Value = specialitate.Id.ToString(),
-                    Text = specialitate.Denumire.ToString()
+                    Value = Specializare.Id.ToString(),
+                    Text = Specializare.Denumire.ToString()
                 });
             }
 
@@ -66,7 +66,7 @@ namespace Licenta2022.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Denumire,Pret,IdSpecialitate")] ServiciuForm serviciuForm)
+        public ActionResult Create([Bind(Include = "Id,Denumire,Pret,IdSpecializare")] ServiciuForm serviciuForm)
         {
             if (ModelState.IsValid)
             {
@@ -76,8 +76,8 @@ namespace Licenta2022.Controllers
                     Pret = serviciuForm.Pret
                 };
 
-                var specialitate = db.Specialitati.Where(x => x.Id == serviciuForm.IdSpecialitate).Select(x => x).ToList();
-                serviciu.Specialitate = specialitate.FirstOrDefault();
+                var Specializare = db.Specialitati.Where(x => x.Id == serviciuForm.IdSpecializare).Select(x => x).ToList();
+                serviciu.Specializare = Specializare.FirstOrDefault();
 
                 db.Servicii.Add(serviciu);
                 db.SaveChanges();
@@ -107,7 +107,7 @@ namespace Licenta2022.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Denumire,IdSpecialitate")] Serviciu serviciu)
+        public ActionResult Edit([Bind(Include = "Id,Denumire,IdSpecializare")] Serviciu serviciu)
         {
             if (ModelState.IsValid)
             {

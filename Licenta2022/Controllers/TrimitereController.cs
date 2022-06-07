@@ -31,7 +31,7 @@ namespace Licenta2022.Controllers
 
                 DataProgramare = trimitere.Programare.Data,
 
-                Specializare = trimitere.Specialitate.Denumire
+                Specializare = trimitere.Specializare.Denumire
             });
 
             if (id != null)
@@ -83,10 +83,10 @@ namespace Licenta2022.Controllers
                 },
 
                 ProgramareId = trim.Programare.Id,
-                ProgramareTId = trim.ProgramareT != null ? trim.ProgramareT.Id : -1,
+                ProgramareTId = trim.ProgramareParinte != null ? trim.ProgramareParinte.Id : -1,
 
                 Servicii = trim.Servicii.Select(s => s.Denumire),
-                Specializare = trim.Specialitate.Denumire
+                Specializare = trim.Specializare.Denumire
             }).FirstOrDefault();
 
             return View();
@@ -118,7 +118,7 @@ namespace Licenta2022.Controllers
                 label = serviciu.Denumire,
                 value = serviciu.Id,
 
-                specializareId = serviciu.Specialitate.Id
+                specializareId = serviciu.Specializare.Id
             });
 
             ViewBag.Specialitati = specialitati;
@@ -152,13 +152,13 @@ namespace Licenta2022.Controllers
                 //var pacient = db.Pacienti.Find(trimitereForm.IdPacient);
                 //trimitere.Pacient = pacient;
 
-                var specialitate = db.Specialitati.Find(trimitereForm.IdSpecializare);
-                trimitere.Specialitate = specialitate;
+                var Specializare = db.Specialitati.Find(trimitereForm.IdSpecializare);
+                trimitere.Specializare = Specializare;
 
                 if (trimitereForm.IdProgramare != 0)
                 {
                     trimitere.Programare = programare;
-                    trimitere.ProgramareT = null;
+                    trimitere.ProgramareParinte = null;
                     programare.Trimitere = trimitere;
                 }
 

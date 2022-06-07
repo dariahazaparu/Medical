@@ -22,7 +22,7 @@ namespace Licenta2022.Controllers
                 Id = doctor.Id,
                 Nume = doctor.Nume,
                 Prenume = doctor.Prenume,
-                Specializare = doctor.Specialitate.Denumire,
+                Specializare = doctor.Specializare.Denumire,
                 Clinica = doctor.Clinica.Nume
             });
 
@@ -59,7 +59,7 @@ namespace Licenta2022.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Nume,Prenume,DataAngajarii,IdSpecialitate,IdClinica")] DoctorForm doctorForm)
+        public ActionResult Create([Bind(Include = "Id,Nume,Prenume,DataAngajarii,IdSpecializare,IdClinica")] DoctorForm doctorForm)
         {
             if (ModelState.IsValid)
             {
@@ -70,8 +70,8 @@ namespace Licenta2022.Controllers
                     DataAngajarii = doctorForm.DataAngajarii
                 };
 
-                var specialitate = db.Specialitati.Where(x => x.Id == doctorForm.IdSpecialitate).Select(x => x).ToList();
-                doctor.Specialitate = specialitate.FirstOrDefault();
+                var Specializare = db.Specialitati.Where(x => x.Id == doctorForm.IdSpecializare).Select(x => x).ToList();
+                doctor.Specializare = Specializare.FirstOrDefault();
 
                 var clinica = db.Clinici.Where(x => x.Id == doctorForm.IdClinica).Select(x => x).ToList();
                 doctor.Clinica = clinica.FirstOrDefault();
@@ -104,7 +104,7 @@ namespace Licenta2022.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Nume,Prenume,DataAngajarii,IdSpecialitate,IdClinica")] Doctor doctor)
+        public ActionResult Edit([Bind(Include = "Id,Nume,Prenume,DataAngajarii,IdSpecializare,IdClinica")] Doctor doctor)
         {
             if (ModelState.IsValid)
             {
@@ -158,12 +158,12 @@ namespace Licenta2022.Controllers
 
             var specialitati = db.Specialitati.Select(x => x);
 
-            foreach (var specialitate in specialitati)
+            foreach (var Specializare in specialitati)
             {
                 selectList.Add(new SelectListItem
                 {
-                    Value = specialitate.Id.ToString(),
-                    Text = specialitate.Denumire.ToString()
+                    Value = Specializare.Id.ToString(),
+                    Text = Specializare.Denumire.ToString()
                 });
             }
 

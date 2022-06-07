@@ -15,6 +15,6 @@ namespace Licenta2022.Models
         [Required]
         public string Descriere { get; set; }
 
-        public virtual ICollection<PacientXDiagnostic> PacientXDiagnostics { get; set; }
+        public virtual ICollection<PacientXDiagnosticXProgramare> PacientXDiagnosticXProgramare { get; set; }
     }
 }

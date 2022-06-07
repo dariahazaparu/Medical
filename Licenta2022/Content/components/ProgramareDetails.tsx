@@ -30,20 +30,22 @@ interface Programare {
         Adresa: string;
     }
 
-    Servicii: {
-        Pret: number;
-        Denumire: string
-    }[]
-
     RetetaId: number
+    FacturaId: number;
 }
 
 interface IProgramareDetails {
-    programare: Programare
+    programare: Programare;
+    servicii: {
+        Pret: number;
+        Denumire: string
+    }[]
 }
 
-const ProgramareDetails: React.FC<IProgramareDetails> = ({ programare }) => {
-    const { Data, TrimitereId, RetetaId, Id, Diagnostic: { Id: DiagnosticId, Denumire: DenumireDiagnostic }, Doctor, Clinica, Servicii, TrimitereTId, Pacient } = programare
+const ProgramareDetails: React.FC<IProgramareDetails> = ({ programare, servicii }) => {
+    const { Data, TrimitereId, RetetaId, FacturaId, Id, Diagnostic: { Id: DiagnosticId, Denumire: DenumireDiagnostic }, Doctor, Clinica, TrimitereTId, Pacient } = programare
+
+    const [facturaId, setFacturaId] = useState(FacturaId)
 
     const [prezent, setPrezent] = useState(programare.Prezent)
 
@@ -66,6 +68,22 @@ const ProgramareDetails: React.FC<IProgramareDetails> = ({ programare }) => {
         }
     }
 
+    const onCreateFactura = async () => {
+        try {
+            const response = await axios.post("/Factura/Create", {
+                IdProgramare: Id
+            })
+
+            notification.success({ message: "Ai generat factura cu success!" })
+
+            setFacturaId(response.data.FacturaId)
+        }
+
+        catch (err) {
+            notification.error({ message: err.request.statusText })
+        }
+    }
+
     return (
         <div>
             <div >
@@ -79,6 +97,10 @@ const ProgramareDetails: React.FC<IProgramareDetails> = ({ programare }) => {
                         <div style={{ display: "flex", justifyContent: "space-around" }}>
                             <div>
                                 {TrimitereId !== -1 ? <Button type="primary" onClick={() => goToRoute(`/Trimitere/Details/${TrimitereId}`)}>Vezi trimitere</Button> : <Button type="primary" onClick={() => goToRoute(`/Trimitere/Create/${Id}`)}>Creeaza o trimitere</Button>}
+                            </div>
+
+                            <div>
+                                {facturaId === -1 ? <Button type="primary" onClick={onCreateFactura}>Genereaza factura</Button> : <Button type="primary" onClick={() => goToRoute(`/Factura/Details/${facturaId}`)}>Vezi factura</Button>}
                             </div>
 
                             <div>
@@ -131,11 +153,11 @@ const ProgramareDetails: React.FC<IProgramareDetails> = ({ programare }) => {
                     </div>
                 </div>
 
-                {Servicii.length > 0 && (
+                {servicii.length > 0 && (
                     <div>
                         <hr />
 
-                        <b>Servicii</b>:  {Servicii.map(serviciu => serviciu.Denumire).join(", ")}
+                        <b>Servicii</b>:  {servicii.map(serviciu => serviciu.Denumire).join(", ")}
                     </div>
                 )}
 

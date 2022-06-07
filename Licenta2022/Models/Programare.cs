@@ -15,10 +15,12 @@ namespace Licenta2022.Models
         public bool Prezent { get; set; }
 
         public virtual Trimitere Trimitere { get; set; }
-        public virtual Trimitere TrimitereT { get; set; }
+        public virtual Trimitere TrimitereParinte { get; set; }
+        public virtual ICollection<PacientXDiagnosticXProgramare> PacientXDiagnosticXProgramare { get; set; }
         public virtual Pacient Pacient { get; set; }
         public virtual Doctor Doctor { get; set; }
         public virtual Reteta Reteta { get; set; }
         public virtual Factura Factura { get; set; }
+        public virtual Serviciu Serviciu { get; set; }
     }
 }

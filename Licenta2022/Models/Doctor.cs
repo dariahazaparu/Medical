@@ -18,7 +18,7 @@ namespace Licenta2022.Models
         [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}")]
         public DateTime DataAngajarii { get; set; }
 
-        public virtual Specialitate Specialitate { get; set; }
+        public virtual Specializare Specializare { get; set; }
         public virtual Clinica Clinica { get; set; }
 
         public virtual ICollection<DoctorXProgramTemplate> DoctorXProgramTemplates { get; set; }

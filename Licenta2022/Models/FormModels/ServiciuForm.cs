@@ -10,6 +10,6 @@ namespace Licenta2022.Models
     {
         public string Denumire { get; set; }
         public float Pret { get; set; }
-        public int IdSpecialitate { get; set; }
+        public int IdSpecializare { get; set; }
     }
 }

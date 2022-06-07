@@ -15,8 +15,9 @@ namespace Licenta2022.Models
         [Required]
         public float Pret { get; set; }
 
-        public virtual Specialitate Specialitate { get; set; }
+        public virtual Specializare Specializare { get; set; }
         public virtual ICollection<ServiciuXAsigurare> ServiciuXAsigurari { get; set; }
         public virtual ICollection<Trimitere> Trimiteri { get; set; }
+        public virtual ICollection<Programare> Programari { get; set; }
     }
 }

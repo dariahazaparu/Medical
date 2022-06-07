@@ -30,7 +30,7 @@ namespace Licenta2022.Models
             Licenta2022.Migrations.Configuration>("DefaultConnection"));
         }
 
-        public DbSet<Specialitate> Specialitati { get; set; }
+        public DbSet<Specializare> Specialitati { get; set; }
         public DbSet<Doctor> Doctori { get; set; }
         public DbSet<Clinica> Clinici { get; set; }
         public DbSet<Adresa> Adrese { get; set; }
@@ -42,7 +42,7 @@ namespace Licenta2022.Models
         public DbSet<Medicament> Medicamente { get; set; }
         public DbSet<RetetaXMedicament> RetetaXMedicaments { get; set; }
         public DbSet<Diagnostic> Diagnostics { get; set; }
-        public DbSet<PacientXDiagnostic> PacientXDiagnostics { get; set; }
+        public DbSet<PacientXDiagnosticXProgramare> PacientXDiagnosticXProgramares { get; set; }
         public DbSet<ServiciuXAsigurare> ServiciuXAsigurari { get; set; }
         public DbSet<Programare> Programari { get; set; }
         public DbSet<Trimitere> Trimiteri { get; set; }
