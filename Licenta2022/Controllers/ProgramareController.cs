@@ -16,7 +16,7 @@ namespace Licenta2022.Controllers
 
 
         // GET: Programare
-
+        [Authorize(Roles = "Doctor")]
         public ActionResult Index(int? id)
         {
             var data = db.Programari.Select(programare => new

@@ -9,6 +9,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Licenta2022.Models;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace Licenta2022.Controllers
 {
@@ -155,6 +156,18 @@ namespace Licenta2022.Controllers
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
+                    switch (model.RoleId)
+                    {
+                        case 1:
+                            UserManager.AddToRole(user.Id, "Doctor");
+                            break;
+                        case 2:
+                            UserManager.AddToRole(user.Id, "Pacient");
+                            break;
+                        case 3:
+                            UserManager.AddToRole(user.Id, "Receptie");
+                            break;
+                    }
                     await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
                     
                     // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
