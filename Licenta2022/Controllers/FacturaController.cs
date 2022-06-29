@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using Licenta2022.Models;
+using Microsoft.AspNet.Identity;
 
 namespace Licenta2022.Controllers
 {
@@ -29,6 +30,13 @@ namespace Licenta2022.Controllers
                 }
 
                 data = data.Where(factura => factura.Programare.Pacient.Id == id);
+
+            }
+
+            if (User.IsInRole("Pacient"))
+            {
+                var userId = User.Identity.GetUserId();
+                data = data.Where(fact => fact.Programare.Pacient.UserId == userId);
             }
 
             ViewBag.HasId = id != null;
@@ -52,6 +60,12 @@ namespace Licenta2022.Controllers
             if (factura == null)
             {
                 return HttpNotFound();
+            }
+
+            var pacient = factura.Programare.Pacient;
+            if (pacient.UserId != User.Identity.GetUserId() && User.IsInRole("Pacient"))
+            {
+                return View("NonAccess");
             }
 
             var servicii = new List<Serviciu>();
@@ -103,29 +117,9 @@ namespace Licenta2022.Controllers
             return View(factura);
         }
 
-        [Authorize(Roles = "Admin, Doctor")]
-        public ActionResult Create(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Programare programare = db.Programari.Find(id);
-            if (programare == null)
-            {
-                return HttpNotFound();
-            }
-            FacturaForm factura = new FacturaForm()
-            {
-                IdProgramare = programare.Id
-            };
-
-            return View(factura);
-        }
-
         [HttpPost]
         [Authorize(Roles = "Admin, Doctor")]
-        public ActionResult Create([Bind(Include = "IdProgramare")] FacturaForm facturaForm)
+        public ActionResult Create([Bind(Include = "IdProgramare")] FacturaInput facturaForm)
         {
             if (ModelState.IsValid)
             {

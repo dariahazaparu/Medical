@@ -17,6 +17,7 @@ namespace Licenta2022.Controllers
         [Authorize(Roles = "Admin,Receptie,Doctor,Pacient")]
         public ActionResult Index()
         {
+            ViewBag.IsAdmin = User.IsInRole("Admin");
             return View(db.Localitati.ToList());
         }
 
@@ -32,6 +33,8 @@ namespace Licenta2022.Controllers
             {
                 return HttpNotFound();
             }
+            ViewBag.IsAdmin = User.IsInRole("Admin");
+
             return View(localitate);
         }
 

@@ -5,7 +5,7 @@ using System.Web;
 
 namespace Licenta2022.Models
 {
-    public class TrimitereForm
+    public class TrimitereInput
     {
         public string Observatii { get; set; }
         public int IdProgramare { get; set; }

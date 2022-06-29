@@ -4,7 +4,7 @@
     ViewBag.Title = "Delete";
 }
 
-<h2>Delete</h2>
+<h2>Șterge</h2>
 
 <h3>Doriți să ștergeți programarea?</h3>
 <div>
@@ -22,12 +22,13 @@
         </dt>
 
         <dd>
-            @Model.Doctor.Nume + 
+            @Model.Doctor.Nume +
             @Model.Doctor.Prenume
         </dd>
     </dl>
 
-    @using (Html.BeginForm()) {
+    @using (Html.BeginForm())
+    {
         @Html.AntiForgeryToken()
 
         <div class="form-actions no-color">

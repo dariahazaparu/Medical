@@ -19,11 +19,11 @@ namespace Licenta2022.Controllers
         [Authorize(Roles = "Admin,Receptie,Doctor,Pacient")]
         public ActionResult Index(int? id)
         {
-            var data = db.Trimiteri.Select(trimitere => new
+            var data = db.Trimiteri.Select(trimitere => new TrimitereIndexView
             {
                 Id = trimitere.Id,
 
-                Pacient = new
+                Pacient = new PacientUserView
                 {
                     Id = trimitere.Programare.Pacient.Id,
                     Nume = trimitere.Programare.Pacient.Nume,
@@ -56,7 +56,8 @@ namespace Licenta2022.Controllers
             }
 
             ViewBag.HasId = id != null;
-            ViewBag.Data = data;
+            ViewBag.Data = data.ToList();
+            ViewBag.Data.Reverse();
 
             return View();
         }
@@ -80,21 +81,21 @@ namespace Licenta2022.Controllers
                 return View("NonAccess");
 
             ViewBag.HasId = id != null;
-            var data = trimitere.Select(trim => new
+            var data = trimitere.Select(trim => new TrimitereView()
             {
                 Id = trim.Id,
 
                 Observatii = trim.Observatii,
 
-                Pacient = new
+                Pacient = new IdDictionaryItem()
                 {
                     Id = trim.Programare.Pacient.Id,
                     Nume = trim.Programare.Pacient.Nume,
                     Prenume = trim.Programare.Pacient.Prenume
                 },
 
-                ProgramareId = trim.Programare.Id,
-                ProgramareTId = trim.ProgramareParinte != null ? trim.ProgramareParinte.Id : -1,
+                IdProgramare = trim.Programare.Id,
+                IdProgramareParinte = trim.ProgramareParinte != null ? trim.ProgramareParinte.Id : -1,
 
                 Servicii = trim.Servicii.Select(s => s.Denumire),
                 Specializare = trim.Specializare.Denumire
@@ -144,7 +145,7 @@ namespace Licenta2022.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Admin,Doctor")]
-        public ActionResult Create([Bind(Include = "Observatii,IdProgramare,IdPacient,IdSpecializare,IdServicii")] TrimitereForm trimitereForm)
+        public ActionResult Create([Bind(Include = "Observatii,IdProgramare,IdPacient,IdSpecializare,IdServicii")] TrimitereInput trimitereForm)
         {
             if (ModelState.IsValid)
             {
@@ -209,6 +210,8 @@ namespace Licenta2022.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             Trimitere trimitere = db.Trimiteri.Find(id);
+            var programare = trimitere.Programare;
+            programare.Trimitere = null;
             db.Trimiteri.Remove(trimitere);
             db.SaveChanges();
             return RedirectToAction("Index");

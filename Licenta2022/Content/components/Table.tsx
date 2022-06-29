@@ -33,58 +33,11 @@ interface ITableComponent<T> {
         omitEdit?: boolean;
         omitDetails?: boolean;
     }
+
+    onDetailsClick?: (id: string) => void;
 }
 
-const exampleColumns: TableColumnsType<DataType> = [
-    {
-        title: 'Name',
-        dataIndex: 'name',
-        key: 'name',
-        width: '30%',
-    },
-    {
-        title: 'Age',
-        dataIndex: 'age',
-        key: 'age',
-        width: '20%',
-    },
-    {
-        title: 'Address',
-        dataIndex: 'address',
-        key: 'address',
-        sorter: (a, b) => a.address.length - b.address.length,
-        sortDirections: ['descend', 'ascend'],
-    },
-];
-
-const exampleData: DataType[] = [
-    {
-        key: '1',
-        name: 'John Brown',
-        age: 32,
-        address: 'New York No. 1 Lake Park',
-    },
-    {
-        key: '2',
-        name: 'Joe Black',
-        age: 42,
-        address: 'London No. 1 Lake Park',
-    },
-    {
-        key: '3',
-        name: 'Jim Green',
-        age: 32,
-        address: 'Sidney No. 1 Lake Park',
-    },
-    {
-        key: '4',
-        name: 'Jim Red',
-        age: 32,
-        address: 'London No. 2 Lake Park',
-    },
-];
-
-const TableComponent: React.FC<ITableComponent<any>> = ({ columns, data, omitActions, actions = { omitDetails: false, omitEdit: false } }) => {
+const TableComponent: React.FC<ITableComponent<any>> = ({ columns, data, omitActions, onDetailsClick, actions = { omitDetails: false, omitEdit: false } }) => {
     const [searchText, setSearchText] = useState('');
     const [searchedColumn, setSearchedColumn] = useState('');
     const searchInput = useRef<InputRef>(null);
@@ -197,7 +150,7 @@ const TableComponent: React.FC<ITableComponent<any>> = ({ columns, data, omitAct
                             key: "details",
                             icon: <InfoOutlined />,
 
-                            onClick: () => addToRoute(`/Details/${data.Id}`)
+                            onClick: onDetailsClick ? () => onDetailsClick(data.Id) : () => addToRoute(`/Details/${data.Id}`)
                         }
                     ].filter(Boolean)}
                 />}>

@@ -1,18 +1,17 @@
 ﻿@model IEnumerable<Licenta2022.Models.Factura>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Facturi";
 }
+<h2>Facturi</h2>
 
-<h2>Index</h2>
-
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.Total)
+            @Html.DisplayNameFor(model => model.Programare.Data)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Programare.Pacient)
         </th>
         <th></th>
     </tr>
@@ -21,19 +20,18 @@
     {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Total)
+                @Html.DisplayFor(modelItem => item.Programare.Data)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-                @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-                @Html.ActionLink("Delete", "Delete", new { id=item.Id })
+                @(item.Programare.Pacient.Nume + " " + item.Programare.Pacient.Prenume)
+            </td>
+            <td>
+                <div class="btn-group">
+                    <button><a href="/Factura/Details/@item.Id">Detalii</a></button>
+                </div>
             </td>
         </tr>
     }
 
 </table>
 
-
-<div style='display: @(ViewBag.HasId ? "block" : "none")'>
-    <button onclick="history.back()">Inapoi</button>
-</div>

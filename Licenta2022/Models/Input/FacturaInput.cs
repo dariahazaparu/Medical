@@ -5,7 +5,7 @@ using System.Web;
 
 namespace Licenta2022.Models
 {
-    public class FacturaForm
+    public class FacturaInput
     {
         public int IdProgramare { get; set; }
     }

@@ -50,7 +50,7 @@ namespace Licenta2022.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Admin,Receptie")]
-        public ActionResult Create([Bind(Include = "Config")] ProgramForm programTemplateForm)
+        public ActionResult Create([Bind(Include = "Config")] ProgramInput programTemplateForm)
         {
             if (ModelState.IsValid)
             {

@@ -21,7 +21,6 @@ const AbonamentCreate: React.FC<IAbonamentCreate> = ({ servicii }) => {
     const [form] = useForm()
 
     const onSubmit = async (data: any) => {
-        console.log(data)
 
         const { nume } = data
 
@@ -29,12 +28,13 @@ const AbonamentCreate: React.FC<IAbonamentCreate> = ({ servicii }) => {
             procentDiscount: Number(serviciu.procentDiscount),
             serviciuId: servicii.find(serv => serv.nume === serviciu.serviciuId).id
         }))
+        console.log(formServicii)
 
         try {
             const response = await axios.post("/Abonament/Create", {
                 Nume: nume,
                 IdServicii: formServicii.map(serviciu => serviciu.serviciuId),
-                ProcenteDiscount: formServicii.map(serviciu => serviciu.procentDiscount)
+                ProcenteReducere: formServicii.map(serviciu => serviciu.procentDiscount)
             })
 
             if (response.status === 200) {
@@ -89,7 +89,7 @@ const AbonamentCreate: React.FC<IAbonamentCreate> = ({ servicii }) => {
 
                                 <Divider />
 
-                                <Button style={{ justifyContent: "center" }} disabled={usedServices.length === servicii.length || form.getFieldValue("servicii").some(field => field.serviciuId == null)} onClick={onAdd}>Adaugă inca un serviciu</Button>
+                                <Button style={{ justifyContent: "center" }} disabled={usedServices.length === servicii.length || form.getFieldValue("servicii").some(field => field.serviciuId == null)} onClick={onAdd}>Adaugă încă un serviciu</Button>
 
                             </div>
                         )

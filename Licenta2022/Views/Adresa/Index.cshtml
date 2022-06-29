@@ -1,14 +1,17 @@
 ﻿@model IEnumerable<Licenta2022.Models.Adresa>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Adrese";
 }
 
-<h2>Index</h2>
+<h2>Adrese</h2>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
+@if (ViewBag.IsAdmin)
+{
+    <div class="btn-group">
+        <button><a href="/Adresa/Create">Creează</a></button>
+    </div>
+}
 <table class="table">
     <tr>
         <th>
@@ -23,23 +26,24 @@
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Strada)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Numar)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Localitate.Nume)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
-        </td>
-    </tr>
-}
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Strada)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Numar)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Localitate.Nume)
+            </td>
+            <td>
+                <div class="btn-group">
+                    <button><a href="/Adresa/Details/@item.Id">Detalii</a></button>
+                </div>
+            </td>
+        </tr>
+    }
 
 </table>

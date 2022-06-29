@@ -6,7 +6,7 @@ using System.Web;
 
 namespace Licenta2022.Models
 {
-    public class AdresaForm
+    public class AdresaInput
     {
         public string Strada { get; set; }
         public int Numar { get; set; }

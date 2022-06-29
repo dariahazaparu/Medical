@@ -6,7 +6,7 @@ using System.Web;
 
 namespace Licenta2022.Models
 {
-    public class RetetaForm
+    public class RetetaInput
     {
         public int IdProgramare { get; set; }
         public List<int> IdMedicamente { get; set; }

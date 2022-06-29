@@ -17,6 +17,7 @@ namespace Licenta2022.Controllers
         [Authorize(Roles = "Admin, Receptie, Doctor, Pacient")]
         public ActionResult Index()
         {
+            ViewBag.IsAdmin = User.IsInRole("Admin");
             return View(db.Abonamente.ToList());
         }
 
@@ -32,7 +33,22 @@ namespace Licenta2022.Controllers
             {
                 return HttpNotFound();
             }
-            return View(abonament);
+            AbonamentView abonamentView = new AbonamentView()
+            {
+                Id = abonament.Id,
+                Denumire = abonament.Denumire,
+                Servicii = new List<ServiciuReducereView>()
+            };
+            foreach (var sxa in abonament.ServiciuXAbonamente)
+            {
+                abonamentView.Servicii.Add(new ServiciuReducereView()
+                {
+                    DenumireServiciu = sxa.Serviciu.Denumire,
+                    Procent = sxa.ProcentReducere
+                });
+            }
+            ViewBag.IsAdmin = User.IsInRole("Admin");
+            return View(abonamentView);
         }
 
         [Authorize(Roles = "Admin")]
@@ -48,18 +64,35 @@ namespace Licenta2022.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]
-        public ActionResult Create([Bind(Include = "Id,Denumire")] Abonament abonament)
+        public ActionResult Create([Bind(Include = "Nume,IdServicii,ProcenteReducere")] AbonamentInput abonamentInput)
         {
             if (ModelState.IsValid)
             {
+                var abonament = new Abonament()
+                {
+                    Denumire = abonamentInput.Nume,
+                    ServiciuXAbonamente = new List<ServiciuXAbonament>()
+                };
+                for (int i = 0; i < abonamentInput.IdServicii.Count; i++)
+                {
+                    var serviciu = db.Servicii.Find(abonamentInput.IdServicii[i]);
+                    abonament.ServiciuXAbonamente.Add(new ServiciuXAbonament()
+                    {
+                        IdServiciu = abonamentInput.IdServicii[i],
+                        Serviciu = serviciu,
+                        IdAbonament = abonament.Id,
+                        Abonament = abonament,
+                        ProcentReducere = abonamentInput.ProcenteReducere[i],
+                    });
+                }
+
                 db.Abonamente.Add(abonament);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            return View(abonament);
+            return View(abonamentInput);
         }
 
         [Authorize(Roles = "Admin")]
@@ -161,6 +194,6 @@ namespace Licenta2022.Controllers
 
             return selectList;
         }
-       
+
     }
 }

@@ -86,12 +86,16 @@ const ProgramareDetails: React.FC<IProgramareDetails> = ({ programare, servicii,
         }
     }
 
+    const onDeleteProgramare = async () => {
+        goToRoute(`/Programare/Delete/${programare.Id}`)
+    }
+
     return (
         <div>
             <h3>Detalii</h3>
             <div >
                 <div>
-                    <b>Prezent</b>: <Input disabled={isPacient} title="Prezent" type="checkbox" checked={prezent} onChange={e => onChangePrezent(e.target.checked)} />
+                    <b>Prezent</b>: <Input disabled={isPacient || prezent} title="Prezent" type="checkbox" checked={prezent} onChange={e => onChangePrezent(e.target.checked)} />
                 </div>
 
                 {prezent && (
@@ -168,9 +172,11 @@ const ProgramareDetails: React.FC<IProgramareDetails> = ({ programare, servicii,
                     <div>
                         <hr />
 
-                        <Button onClick={() => goToRoute(`/Trimitere/Details/${TrimitereTId}`)}>Vezi trimiterea părinte</Button>
+                        <Button style={{ marginBottom: "1rem" }} onClick={() => goToRoute(`/Trimitere/Details/${TrimitereTId}`)}>Vezi trimiterea pe baza căreia a fost creată programarea</Button>
                     </div>
                 )}
+
+                <Button disabled={prezent} onClick={onDeleteProgramare}>Șterge programarea</Button>
             </div>
         </div>
     )

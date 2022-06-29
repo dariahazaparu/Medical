@@ -2,7 +2,7 @@ import { Button, Layout, Typography } from "antd";
 import TableComponent from "./Table"
 import { TableHeader } from "./TableHeader";
 import { Pacient, Person, TableColumnsType } from "./types";
-import { addToRoute } from "./utils";
+import { addToRoute, goToRoute } from "./utils";
 
 
 
@@ -64,7 +64,7 @@ const PacientTable: React.FC<IPacientTable> = ({ data, omitCreate }) => {
             <TableComponent columns={columns} data={data.map((item, idx) => ({
                 ...item,
                 key: idx.toString()
-            }))} />
+            }))} actions={{ omitEdit: omitCreate }} />
         </div>
     )
 }

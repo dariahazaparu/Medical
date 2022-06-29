@@ -22,7 +22,7 @@ namespace Licenta2022.Controllers
         [NonAction]
         private bool IsCNPValid(string CNP)
         {
-            int bigSum = 0 ;
+            int bigSum = 0;
 
             string control = "279146358279";
 
@@ -49,13 +49,17 @@ namespace Licenta2022.Controllers
         [Authorize(Roles = "Admin,Receptie,Doctor,Pacient")]
         public ActionResult Index()
         {
-            var data = db.Pacienti.Include("Adresa").Include("Abonament").Select(p => new { 
+            var data = db.Pacienti.Include("Adresa").Include("Abonament").Select(p => new PacientView
+            {
                 Id = p.Id,
                 Nume = p.Nume,
                 Prenume = p.Prenume,
-                Adresa = new {  Localitate = p.Adresa.Localitate.Nume,
-                                Strada = p.Adresa.Strada,
-                                Numar = p.Adresa.Numar },
+                Adresa = new AdresaView
+                {
+                    Localitate = p.Adresa.Localitate.Nume,
+                    Strada = p.Adresa.Strada,
+                    Numar = p.Adresa.Numar
+                },
                 UserId = p.UserId
             });
             if (User.IsInRole("Pacient"))
@@ -63,7 +67,7 @@ namespace Licenta2022.Controllers
                 var userId = User.Identity.GetUserId();
                 data = data.Where(pacient => pacient.UserId == userId);
             }
-            
+
             ViewBag.Data = data.ToList();
             ViewBag.OmitCreate = User.IsInRole("Pacient") && User.Identity.IsAuthenticated && User.Identity.GetUserId() == data.FirstOrDefault().UserId;
 
@@ -99,8 +103,13 @@ namespace Licenta2022.Controllers
             {
                 return HttpNotFound();
             }
+
+            var programari = db.Programari.Where(programare => programare.Pacient.Id == pacient.Id).ToList();
+            ViewBag.IsDeletable = (programari.Count() == 0) && (User.IsInRole("Admin") || User.IsInRole("Receptie"));
+
             if (!User.IsInRole("Pacient") || User.Identity.GetUserId() == pacient.UserId)
             {
+
                 return View(pacient);
             }
             return View("NonAccess");
@@ -171,11 +180,11 @@ namespace Licenta2022.Controllers
 
             return selectList;
         }
-        
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin,Receptie,Pacient")]
-        public ActionResult Create([Bind(Include = "Id,Nume,Prenume,CNP,IdAdresa,IdAbonament")] PacientForm pacientForm)
+        public ActionResult Create([Bind(Include = "Id,Nume,Prenume,CNP,IdAdresa,IdAbonament")] PacientInput pacientForm)
         {
             if (ModelState.IsValid)
             {
@@ -204,7 +213,7 @@ namespace Licenta2022.Controllers
 
                 db.Pacienti.Add(pacient);
                 db.SaveChanges();
-                return RedirectToAction("Index", new { id = pacient.Id });
+                return RedirectToAction("/");
             }
 
             return View(pacientForm);
@@ -219,7 +228,7 @@ namespace Licenta2022.Controllers
             }
 
             Pacient dbPacient = db.Pacienti.Find(id);
-            
+
             if (dbPacient == null)
             {
                 return HttpNotFound();
@@ -293,7 +302,7 @@ namespace Licenta2022.Controllers
                 db.SaveChanges();
             }
 
-            return View();  
+            return View();
         }
 
         [Authorize(Roles = "Admin,Receptie")]
@@ -390,7 +399,7 @@ namespace Licenta2022.Controllers
 
                 if (pacient.PacientXDiagnosticXProgramare == null)
                     pacient.PacientXDiagnosticXProgramare = new List<PacientXDiagnosticXProgramare>();
-                
+
                 var diag = db.Diagnostics.Where(x => x.Id == pacientForm.IdDiagnostic).Select(x => x).ToList();
 
                 var pxd = new PacientXDiagnosticXProgramare()

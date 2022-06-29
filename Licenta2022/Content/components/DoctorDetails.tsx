@@ -19,9 +19,10 @@ interface Doctor {
 
 interface IDoctorDetails {
     doctor: Doctor
+    isDeletable: boolean
 }
 
-const DoctorDetails: React.FC<IDoctorDetails> = ({ doctor }) => {
+const DoctorDetails: React.FC<IDoctorDetails> = ({ doctor, isDeletable }) => {
     const { Id, Nume, Prenume, Specializare, Clinica, Configuratii } = doctor
 
     const [startOfDay] = useState(moment().startOf("day"))
@@ -67,7 +68,8 @@ const DoctorDetails: React.FC<IDoctorDetails> = ({ doctor }) => {
                         </div>
                     </div>
                 )}
-                <Button onClick={() => goToRoute(`/Doctor/Program/${Id}`)}>Adaugă program</Button>
+                <Button type="primary" onClick={() => goToRoute(`/Doctor/Program/${Id}`)}>Adaugă program</Button>
+                <Button disabled={!isDeletable} style={{ marginLeft: "1rem" }} onClick={() => goToRoute(`/Doctor/Delete/${Id}`)}>Șterge doctor</Button>
             </div>
         </div>
     )

@@ -27,14 +27,20 @@
     <div>
         @foreach (var pxdxp in Model.PacientXDiagnosticXProgramare)
         {
-            <div>
-                Diagnostic: @pxdxp.Diagnostic.Denumire
+            <div style="font-size:3rem">
+                <b>Diagnostic:</b>
+                <span>@pxdxp.Diagnostic.Denumire</span>
+                <br />
                 <span>@pxdxp.Diagnostic.Descriere</span>
+                <br />
+                <b>Data:</b> @pxdxp.Data
+                <br />
+            </div>
 
-                Data: @pxdxp.Data
-
+            <div class="btn-group">
                 <button><a href="/Programare/Details/@pxdxp.Programare.Id">Vezi programarea</a></button>
             </div>
+            <hr />
         }
 
     </div>

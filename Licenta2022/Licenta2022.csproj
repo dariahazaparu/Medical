@@ -414,6 +414,7 @@
     <Compile Include="Controllers\ProgramTemplateController.cs" />
     <Compile Include="Controllers\RetetaController.cs" />
     <Compile Include="Controllers\ServiciuController.cs" />
+    <Compile Include="Controllers\SpecializareController.cs" />
     <Compile Include="Controllers\TrimitereController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -427,27 +428,27 @@
     <Compile Include="Models\Adresa.cs" />
     <Compile Include="Models\Factura.cs" />
     <Compile Include="Models\Input\AbonamentInput.cs" />
-    <Compile Include="Models\Input\AdresaForm.cs" />
+    <Compile Include="Models\Input\AdresaInput.cs" />
     <Compile Include="Models\Abonament.cs" />
     <Compile Include="Models\Clinica.cs" />
     <Compile Include="Models\Diagnostic.cs" />
     <Compile Include="Models\Doctor.cs" />
     <Compile Include="Models\Input\DoctorProgramForm.cs" />
-    <Compile Include="Models\Input\ClinicaForm.cs" />
-    <Compile Include="Models\Input\FacturaForm.cs" />
+    <Compile Include="Models\Input\ClinicaInput.cs" />
+    <Compile Include="Models\Input\FacturaInput.cs" />
     <Compile Include="Models\Input\PacientAddDiagnosticForm.cs" />
-    <Compile Include="Models\Input\DoctorForm.cs" />
+    <Compile Include="Models\Input\DoctorInput.cs" />
     <Compile Include="Models\Input\PacientEditForm.cs" />
-    <Compile Include="Models\Input\PacientForm.cs" />
-    <Compile Include="Models\Input\ProgramareCreateForm.cs" />
+    <Compile Include="Models\Input\PacientInput.cs" />
+    <Compile Include="Models\Input\ProgramareInput.cs" />
     <Compile Include="Models\Input\ProgramareForm.cs" />
     <Compile Include="Models\Input\ProgramareFromForm.cs" />
-    <Compile Include="Models\Input\ProgramareUpdatePrezentForm.cs" />
-    <Compile Include="Models\Input\ProgramareViewCreateForm.cs" />
-    <Compile Include="Models\Input\ProgramForm.cs" />
-    <Compile Include="Models\Input\RetetaForm.cs" />
-    <Compile Include="Models\Input\ServiciuForm.cs" />
-    <Compile Include="Models\Input\TrimitereForm.cs" />
+    <Compile Include="Models\Input\ProgramareUpdatePrezentInput.cs" />
+    <Compile Include="Models\Input\ProgramareViewCreate.cs" />
+    <Compile Include="Models\Input\ProgramInput.cs" />
+    <Compile Include="Models\Input\RetetaInput.cs" />
+    <Compile Include="Models\Input\ServiciuInput.cs" />
+    <Compile Include="Models\Input\TrimitereInput.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\JoiningModels\DoctorXProgramTemplate.cs" />
     <Compile Include="Models\Localitate.cs" />
@@ -463,6 +464,13 @@
     <Compile Include="Models\JoiningModels\ServiciuXAbonament.cs" />
     <Compile Include="Models\Specializare.cs" />
     <Compile Include="Models\Trimitere.cs" />
+    <Compile Include="Models\View\AbonamentView.cs" />
+    <Compile Include="Models\View\ClinicaView.cs" />
+    <Compile Include="Models\View\DoctorView.cs" />
+    <Compile Include="Models\View\IdDictionaryItem.cs" />
+    <Compile Include="Models\View\PacientView.cs" />
+    <Compile Include="Models\View\ProgramareView.cs" />
+    <Compile Include="Models\View\TrimitereView.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -603,6 +611,12 @@
     <Content Include="Views\ProgramTemplate\Index.cshtml" />
     <Content Include="Views\Doctor\Program.cshtml" />
     <Content Include="Views\Shared\NonAccess.cshtml" />
+    <Content Include="Views\Pacient\IstoricDiagnostic.cshtml" />
+    <Content Include="Views\Specializare\Create.cshtml" />
+    <Content Include="Views\Specializare\Delete.cshtml" />
+    <Content Include="Views\Specializare\Details.cshtml" />
+    <Content Include="Views\Specializare\Edit.cshtml" />
+    <Content Include="Views\Specializare\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
@@ -617,9 +631,7 @@
     <Content Include="Scripts\jquery-3.3.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.3.1.min.map" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Models\View\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <EmbeddedResource Include="Migrations\202206112011078_Initial.resx">
       <DependentUpon>202206112011078_Initial.cs</DependentUpon>

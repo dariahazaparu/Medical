@@ -1,15 +1,12 @@
 ﻿@model Licenta2022.Models.Adresa
 
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = "Adresa";
 }
 
-<h2>Details</h2>
-
-@*@Html.React("Test", new { strada = @Json.Encode(Model.Localitate) })*@
+<h2>Adresa</h2>
 
 <div>
-    <h4>Adresa</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
@@ -39,6 +36,10 @@
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
+    @if (ViewBag.IsAdmin) {     
+        <div class="btn-group">
+            <button><a href="/Adresa/Edit/@Model.Id">Editeaza</a></button>
+        </div>
+    }
+
 </p>

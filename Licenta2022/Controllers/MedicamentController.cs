@@ -16,6 +16,8 @@ namespace Licenta2022.Controllers
 
         public ActionResult Index()
         {
+            ViewBag.IsAdmin = User.IsInRole("Admin");
+
             return View(db.Medicamente.ToList());
         }
 
@@ -30,6 +32,8 @@ namespace Licenta2022.Controllers
             {
                 return HttpNotFound();
             }
+            ViewBag.IsAdmin = User.IsInRole("Admin");
+
             return View(medicament);
         }
 

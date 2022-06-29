@@ -7,7 +7,7 @@ namespace Licenta2022.Models
 {
     public class AbonamentInput
     {
-        public string Denumire { get; set; }
+        public string Nume { get; set; }
         public List<int> IdServicii { get; set; }
         public List<int> ProcenteReducere { get; set; }
 

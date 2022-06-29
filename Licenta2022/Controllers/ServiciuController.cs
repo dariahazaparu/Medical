@@ -16,6 +16,8 @@ namespace Licenta2022.Controllers
 
         public ActionResult Index()
         {
+            ViewBag.IsAdmin = User.Identity.IsAuthenticated && User.IsInRole("Admin");
+
             return View(db.Servicii.Include("Specializare").ToList());
         }
 
@@ -30,6 +32,8 @@ namespace Licenta2022.Controllers
             {
                 return HttpNotFound();
             }
+            ViewBag.IsAdmin = User.Identity.IsAuthenticated && User.IsInRole("Admin");
+
             return View(serviciu);
         }
 
@@ -62,7 +66,7 @@ namespace Licenta2022.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]
-        public ActionResult Create([Bind(Include = "Id,Denumire,Pret,IdSpecializare")] ServiciuForm serviciuForm)
+        public ActionResult Create([Bind(Include = "Id,Denumire,Pret,IdSpecializare")] ServiciuInput serviciuForm)
         {
             if (ModelState.IsValid)
             {
@@ -95,6 +99,7 @@ namespace Licenta2022.Controllers
             {
                 return HttpNotFound();
             }
+            ViewBag.Specializari = GetAllSpecialties();
             return View(serviciu);
         }
 
@@ -102,7 +107,7 @@ namespace Licenta2022.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]
-        public ActionResult Edit([Bind(Include = "Id,Denumire,IdSpecializare")] Serviciu serviciu)
+        public ActionResult Edit([Bind(Include = "Id,Denumire,IdSpecializare,Pret")] Serviciu serviciu)
         {
             if (ModelState.IsValid)
             {

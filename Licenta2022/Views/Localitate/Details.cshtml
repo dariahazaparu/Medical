@@ -1,13 +1,12 @@
 ﻿@model Licenta2022.Models.Localitate
 
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = "Localitate";
 }
 
-<h2>Details</h2>
+<h2>Localitate</h2>
 
 <div>
-    <h4>Localitate</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
@@ -21,6 +20,10 @@
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
+    @if (ViewBag.IsAdmin)
+    {
+        <div class="btn-group">
+            <button><a href="/Localitate/Edit/@Model.Id">Editeaza</a></button>
+        </div>
+    }
 </p>

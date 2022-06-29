@@ -5,7 +5,7 @@ using System.Web;
 
 namespace Licenta2022.Models
 {
-    public class ProgramareCreateForm
+    public class ProgramareInput
     {
         public int IdDoctor { get; set; }
         public int IdProgram { get; set; }

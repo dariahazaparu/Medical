@@ -6,12 +6,12 @@ using System.Web;
 
 namespace Licenta2022.Models
 {
-    public class DoctorForm
+    public class PacientInput
     {
         public string Nume { get; set; }
         public string Prenume { get; set; }
-        public DateTime DataAngajarii { get; set; }
-        public int IdSpecializare { get; set; }
-        public int IdClinica { get; set; }
+        public string CNP { get; set; }
+        public int IdAdresa { get; set; }
+        public int? IdAbonament { get; set; }
     }
 }

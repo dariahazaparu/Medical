@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using Licenta2022.Models;
+using Microsoft.AspNet.Identity;
 
 namespace Licenta2022.Controllers
 {
@@ -31,6 +32,12 @@ namespace Licenta2022.Controllers
                 data = data.Where(reteta => reteta.Programare.Pacient.Id == id);
             }
 
+            if (User.IsInRole("Pacient"))
+            {
+                var userId = User.Identity.GetUserId();
+                data = data.Where(reteta => reteta.Programare.Pacient.UserId == userId);
+            }
+
             ViewBag.HasId = id != null;
 
             return View(data.ToList());
@@ -49,6 +56,11 @@ namespace Licenta2022.Controllers
                 return HttpNotFound();
             }
 
+            var pacient = reteta.Programare.Pacient;
+            if (pacient.UserId != User.Identity.GetUserId() && User.IsInRole("Pacient"))
+            {
+                return View("NonAccess");
+            }
             ViewBag.HasId = id != null;
 
             return View(reteta);
@@ -66,7 +78,7 @@ namespace Licenta2022.Controllers
             {
                 return HttpNotFound();
             }
-            RetetaForm reteta = new RetetaForm()
+            RetetaInput reteta = new RetetaInput()
             {
                 IdProgramare = programare.Id
             };
@@ -103,7 +115,7 @@ namespace Licenta2022.Controllers
         [Authorize(Roles = "Admin,Doctor")]
 
         [HttpPost]
-        public ActionResult Create([Bind(Include = "IdProgramare,IdMedicamente,Doze")] RetetaForm retetaForm)
+        public ActionResult Create([Bind(Include = "IdProgramare,IdMedicamente,Doze")] RetetaInput retetaForm)
         {
             if (ModelState.IsValid)
             {

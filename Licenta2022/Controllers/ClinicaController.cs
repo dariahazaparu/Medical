@@ -40,12 +40,24 @@ namespace Licenta2022.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.Doctori = new List<string>();
-            foreach(var doc in clinica.Doctori)
+            ClinicaView clinicaView = new ClinicaView()
             {
-                ViewBag.Doctori.Add(doc.Nume + " " + doc.Prenume + ", " + doc.Specializare.Denumire);
+                Id = clinica.Id,
+                Denumire = clinica.Nume,
+                AdresaComplet = clinica.Adresa.Strada + " " + clinica.Adresa.Numar + ", " + clinica.Adresa.Localitate.Nume,
+                Doctori = new List<DoctorClinicaView> ()
+            };
+            foreach(var doctor in clinica.Doctori)
+            {
+                clinicaView.Doctori.Add(new DoctorClinicaView()
+                {
+                    NumeComplet = doctor.Nume + " " + doctor.Prenume,
+                    Specializare = doctor.Specializare.Denumire
+                });
             }
-            return View(clinica);
+            ViewBag.IsAdmin = User.Identity.IsAuthenticated && User.IsInRole("Admin");
+            
+            return View(clinicaView);
         }
 
         [Authorize(Roles = "Admin")]
@@ -98,7 +110,7 @@ namespace Licenta2022.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]
-        public ActionResult Create([Bind(Include = "Id,Nume,IdAdresa")] ClinicaForm clinicaForm)
+        public ActionResult Create([Bind(Include = "Id,Nume,IdLocalitate,IdAdresa")] ClinicaInput clinicaForm)
         {
             if (ModelState.IsValid)
             {

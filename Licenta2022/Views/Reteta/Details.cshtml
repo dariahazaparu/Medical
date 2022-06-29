@@ -4,10 +4,9 @@
     ViewBag.Title = "Details";
 }
 
-<h2>Details</h2>
+<h2>Rețeta</h2>
 
 <div>
-    <h4>Reteta</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
@@ -17,26 +16,26 @@
         <dd>
             @Html.DisplayFor(model => model.DataEmiterii)
         </dd>
+        <dt>
+            <label>Medicamente</label>
+        </dt>
+
+        <dd>
+            @foreach (var item in Model.RetetaXMedicament)
+            {
+                @(item.Medicament.Denumire + " - " + item.Doza)
+                <hr />
+
+            }
+        </dd>
 
     </dl>
+    
 </div>
-
-<div>
-    @foreach (var item in Model.RetetaXMedicament)
-    {
-        @item.Medicament.Denumire
-        <br />
-        @item.Doza
-        <hr />
-
-    }
-</div>
-
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>
 
-<div style='display: @(ViewBag.HasId ? "block" : "none")'>
-    <button onclick="history.back()">Inapoi</button>
-</div>
+    <div class="btn-group">
+        <button><a href="/Programare/Details/@Model.Programare.Id">Vezi programarea</a></button>
+    </div>
+
+</p>

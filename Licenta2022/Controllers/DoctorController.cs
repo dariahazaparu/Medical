@@ -44,14 +44,14 @@ namespace Licenta2022.Controllers
                 return HttpNotFound();
             }
 
-            var data = db.Doctori.Where(d => d.Id == id).Select(doctor => new
+            var data = db.Doctori.Where(d => d.Id == id).Select(doctor => new DoctorView()
             {
                 Id = doctor.Id,
                 Nume = doctor.Nume,
                 Prenume = doctor.Prenume,
                 Specializare = doctor.Specializare.Denumire,
                 Clinica = doctor.Clinica.Nume,
-                Configuratii = doctor.DoctorXProgramTemplates.Select(dxpt => new
+                Configuratii = doctor.DoctorXProgramTemplates.Select(dxpt => new ProgramDoctorView()
                 {
                     Config = dxpt.Config,
                     Data = dxpt.Data
@@ -59,6 +59,9 @@ namespace Licenta2022.Controllers
             }).FirstOrDefault();
 
             ViewBag.Data = data;
+            var programari = db.Programari.Where(programare => programare.Doctor.Id == data.Id).ToList();
+            var programe = db.DoctorXProgramTemplates.Where(dxp => dxp.Doctor.Id == data.Id).ToList();
+            ViewBag.IsDeletable = (programari.Count() == 0 && programe.Count() == 0) && (User.IsInRole("Admin") || User.IsInRole("Receptie"));
 
             return View();
         }
@@ -74,7 +77,7 @@ namespace Licenta2022.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin,Receptie,Doctor")]
-        public ActionResult Create([Bind(Include = "Id,Nume,Prenume,DataAngajarii,IdSpecializare,IdClinica")] DoctorForm doctorForm)
+        public ActionResult Create([Bind(Include = "Id,Nume,Prenume,DataAngajarii,IdSpecializare,IdClinica")] DoctorInput doctorForm)
         {
             if (ModelState.IsValid)
             {

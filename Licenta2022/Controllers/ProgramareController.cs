@@ -18,13 +18,13 @@ namespace Licenta2022.Controllers
         [Authorize(Roles = "Admin,Receptie,Doctor,Pacient")]
         public ActionResult Index(int? id)
         {
-            var data = db.Programari.Select(programare => new
+            var data = db.Programari.Select(programare => new ProgramareIndexView
             {
                 Id = programare.Id,
 
                 Data = programare.Data,
 
-                Doctor = new
+                Doctor = new IdDictionaryItem
                 {
                     Nume = programare.Doctor.Nume,
                     Prenume = programare.Doctor.Prenume,
@@ -32,7 +32,7 @@ namespace Licenta2022.Controllers
 
                 NumeClinica = programare.Doctor.Clinica.Nume,
 
-                Pacient = new
+                Pacient = new PacientUserView
                 {
                     Id = programare.Pacient.Id,
                     Nume = programare.Pacient.Nume,
@@ -62,7 +62,7 @@ namespace Licenta2022.Controllers
             }
 
             ViewBag.Data = data.ToList();
-            ViewBag.data.Reverse();
+            ViewBag.Data.Reverse();
             ViewBag.HasId = id != null;
 
             return View();
@@ -100,12 +100,12 @@ namespace Licenta2022.Controllers
 
             var trimitereTId = trimitereT != null ? trimitereT.Id : -1;
 
-            var data = programareCursor.Select(programare => new
+            var data = programareCursor.Select(programare => new ProgramareDetailsView()
             {
                 Id = programare.Id,
                 Prezent = programare.Prezent,
 
-                Pacient = new
+                Pacient = new IdDictionaryItem()
                 {
                     Nume = programare.Pacient.Nume,
                     Prenume = programare.Pacient.Prenume
@@ -115,25 +115,25 @@ namespace Licenta2022.Controllers
 
                 TrimitereId = programare.Trimitere != null ? programare.Trimitere.Id : -1,
 
-                Doctor = new
+                Doctor = new IdDictionaryItem()
                 {
                     Nume = programare.Doctor.Nume,
                     Prenume = programare.Doctor.Prenume
                 },
 
-                Clinica = new
+                Clinica = new ClinicaProgramareView
                 {
                     Nume = programare.Doctor.Clinica.Nume,
                     Adresa = adresaClinica
                 },
 
-                Diagnostic = new
+                Diagnostic = new DiagnosticView
                 {
                     Id = diagnosticId,
                     Denumire = diagnosticDenumire
                 },
 
-                Servicii = programare.TrimitereParinte.Servicii.Select(serviciu => new
+                Servicii = programare.TrimitereParinte.Servicii.Select(serviciu => new ServiciuProgramareView
                 {
                     Pret = serviciu.Pret,
                     Denumire = serviciu.Denumire,
@@ -150,7 +150,7 @@ namespace Licenta2022.Controllers
 
             if (programareDb.Serviciu != null)
             {
-                servicii = data.Servicii.Append(new
+                servicii = data.Servicii.Append(new ServiciuProgramareView
                 {
                     Pret = programareDb.Serviciu.Pret,
                     Denumire = programareDb.Serviciu.Denumire
@@ -272,7 +272,7 @@ namespace Licenta2022.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Admin,Receptie,Doctor")]
-        public ActionResult SetPrezent([Bind(Include = "ProgramareId, Prezent")] ProgramareUpdatePrezentForm input)
+        public ActionResult SetPrezent([Bind(Include = "ProgramareId, Prezent")] ProgramareUpdatePrezentInput input)
         {
 
             var programare = db.Programari.Find(input.ProgramareId);
@@ -293,7 +293,7 @@ namespace Licenta2022.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Admin,Receptie,Doctor,Pacient")]
-        public ActionResult Create([Bind(Include = "IdDoctor,IdProgram,ProgramIntervalIndex,IdPacient,IdTrimitere")] ProgramareCreateForm programareCreateForm)
+        public ActionResult Create([Bind(Include = "IdDoctor,IdProgram,ProgramIntervalIndex,IdPacient,IdTrimitere")] ProgramareInput programareCreateForm)
         {
             if (ModelState.IsValid)
             {

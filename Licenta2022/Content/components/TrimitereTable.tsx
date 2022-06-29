@@ -2,6 +2,7 @@ import moment from "moment";
 import TableComponent from "./Table";
 import { TableHeader } from "./TableHeader";
 import { Person, TableColumnsType } from "./types";
+import { goToRoute } from "./utils";
 
 interface Trimitere {
     Id: string;
@@ -55,7 +56,7 @@ const TrimitereTable: React.FC<ITrimitereTable> = ({ data }) => {
         <div>
             <TableHeader title="Trimiteri" omitCreate />
 
-            <TableComponent columns={columns} data={data.map((item, idx) => ({
+            <TableComponent onDetailsClick={(id) => goToRoute(`/Trimitere/Details/${id}`)} actions={{ omitEdit: true }} columns={columns} data={data.map((item, idx) => ({
                 ...item,
                 key: idx.toString()
             }))} />

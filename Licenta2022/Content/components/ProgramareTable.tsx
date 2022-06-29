@@ -3,6 +3,7 @@ import moment from "moment";
 import TableComponent from "./Table"
 import { TableHeader } from "./TableHeader";
 import { TableColumnsType } from "./types"
+import { goToRoute } from "./utils";
 
 interface Programare {
     Id: string;
@@ -92,7 +93,7 @@ const ProgramareTable: React.FC<IProgramareTable> = ({ data }) => {
         <div>
             <TableHeader title="Programări" omitCreate />
 
-            <TableComponent data={data.map((item, index) => ({
+            <TableComponent onDetailsClick={(id) => goToRoute(`/Programare/Details/${id}`)} data={data.map((item, index) => ({
                 ...item,
                 key: index.toString()
             }))} columns={columns} actions={{ omitEdit: true }} />

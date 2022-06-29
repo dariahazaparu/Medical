@@ -75,7 +75,9 @@ const RetetaCreate: React.FC<IRetetaCreate> = ({ medicamente, programareId }) =>
                                     </div>
                                 })}
 
-                                <Button disabled={usedMedicines.length === medicamente.length || form.getFieldValue("medicamente").some(field => field.medicamentId === null)} onClick={onAdd}>Adaugă inca un medicament</Button>
+                                <Divider />
+
+                                <Button disabled={usedMedicines.length === medicamente.length || form.getFieldValue("medicamente").some(field => field.medicamentId === null)} onClick={onAdd}>Adaugă încă un medicament</Button>
                             </div>
                         )
                     }}

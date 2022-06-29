@@ -6,9 +6,10 @@ using System.Web;
 
 namespace Licenta2022.Models
 {
-    public class ClinicaForm
+    public class ServiciuInput
     {
-        public string Nume { get; set; }
-        public int IdAdresa { get; set; }
+        public string Denumire { get; set; }
+        public float Pret { get; set; }
+        public int IdSpecializare { get; set; }
     }
 }

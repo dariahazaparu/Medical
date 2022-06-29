@@ -14,18 +14,9 @@
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         @Html.HiddenFor(model => model.IdPacient)
         @Html.HiddenFor(model => model.IdProgramare)
-        <dl>
-            <dt>
-                @Html.DisplayNameFor(model => model.Nume)
-            </dt>
-
-            <dd>
-                @Html.DisplayFor(model => model.Prenume)
-            </dd>
-        </dl>
 
         <div class="form-group">
-            <label class="col-md-2">Diagnostic</label>
+            <label class="col-md-2"></label>
             <div class="col-md-10">
                 @Html.DropDownListFor(model => model.IdDiagnostic, new SelectList(ViewBag.Diagnostics, "Value", "Text"),
             "Diagnostic", new { @class = "form-control form-title" })
@@ -36,7 +27,7 @@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Add" class="btn btn-default" />
+                <input type="submit" value="Adaugă" class="btn btn-default" />
             </div>
         </div>
 

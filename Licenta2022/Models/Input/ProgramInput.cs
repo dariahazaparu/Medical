@@ -2,7 +2,7 @@
 
 namespace Licenta2022.Models
 {
-    public class ProgramForm
+    public class ProgramInput
     {     
         public String Config { get; set; }
     }

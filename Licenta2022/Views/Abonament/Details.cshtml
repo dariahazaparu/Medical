@@ -1,13 +1,12 @@
-﻿@model Licenta2022.Models.Abonament
+﻿@model Licenta2022.Models.AbonamentView
 
 @{
     ViewBag.Title = "Details";
 }
 
-<h2>Details</h2>
+<h2>Abonament</h2>
 
 <div>
-    <h4>Abonament</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
@@ -21,15 +20,25 @@
             Servicii
         </dt>
         <dd>
-            @foreach( var serv in Model.ServiciuXAbonamente)
+            @foreach( var serv in Model.Servicii)
             {
-               @serv.IdServiciu
+               @(serv.DenumireServiciu + " ")
+
+               @(serv.Procent.ToString() + "%")
+                <hr />
+
             }
         </dd>
 
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
+    <div class="btn-group">
+        @if (ViewBag.IsAdmin == true)
+        {
+            <button><a href="/Abonament/Edit/@Model.Id">Editează</a></button>
+            <button><a href="/Abonament/Delete/@Model.Id">Sterge</a></button>
+
+        }
+    </div>
 </p>

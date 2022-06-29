@@ -17,6 +17,7 @@ namespace Licenta2022.Controllers
         [Authorize(Roles = "Admin,Receptie,Doctor,Pacient")]
         public ActionResult Index()
         {
+            ViewBag.IsAdmin = User.IsInRole("Admin");
             return View(db.Adrese.Include("Localitate").ToList());
         }
 
@@ -32,6 +33,8 @@ namespace Licenta2022.Controllers
             {
                 return HttpNotFound();
             }
+            ViewBag.IsAdmin = User.IsInRole("Admin");
+
             return View(adresa);
         }
 
@@ -64,7 +67,7 @@ namespace Licenta2022.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]
-        public ActionResult Create([Bind(Include = "Id,Strada,Numar,IdLocalitate")] AdresaForm adresaForm)
+        public ActionResult Create([Bind(Include = "Id,Strada,Numar,IdLocalitate")] AdresaInput adresaForm)
         {
             if (ModelState.IsValid)
             {
@@ -97,6 +100,7 @@ namespace Licenta2022.Controllers
             {
                 return HttpNotFound();
             }
+            ViewBag.Localitati = GetAllCities();
             return View(adresa);
         }
 

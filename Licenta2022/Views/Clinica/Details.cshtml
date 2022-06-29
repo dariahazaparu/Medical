@@ -1,7 +1,7 @@
-﻿@model Licenta2022.Models.Clinica
+﻿@model Licenta2022.Models.ClinicaView
 
 @{
-    ViewBag.Title = "Clinica " + Model.Nume;
+    ViewBag.Title = "Clinica " + Model.Denumire;
 }
 
 
@@ -10,40 +10,40 @@
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.Nume)
+            @Html.DisplayNameFor(model => model.Denumire)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Nume)
+            @Html.DisplayFor(model => model.Denumire)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Adresa)
+            <label>Adresa</label>
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Adresa.Strada)
-            @Model.Adresa.Numar,
-            @Model.Adresa.Localitate.Nume
+            @Html.DisplayFor(model => model.AdresaComplet)
         </dd>
 
         <dt>
             <label>Doctori</label>
         </dt>
         <dd>
-            @foreach(var doc in ViewBag.Doctori)
+            @foreach (var doc in Model.Doctori)
             {
-                @doc
-                <br />
-
+                @(doc.NumeComplet + ", " + doc.Specializare)
+                <hr />
             }
         </dd>
     </dl>
 </div>
 
-
+@if (ViewBag.IsAdmin)
+{
     <div class="btn-group">
         <button>
             <a href="/Clinica/Edit/@Model.Id">Editare</a>
         </button>
     </div>
+
+}

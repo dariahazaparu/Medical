@@ -1,4 +1,4 @@
-﻿@model Licenta2022.Models.ClinicaForm
+﻿@model Licenta2022.Models.ClinicaInput
 
 @{
     ViewBag.Title = "Create";
@@ -24,7 +24,7 @@
     <div class="form-group">
         <label class="control-label col-md-2">Localitate</label>
         <div class="col-md-10">
-            @Html.DropDownListFor(model => model.IdAdresa, new SelectList(ViewBag.Localitati, "Value", "Text"),
+            @Html.DropDownListFor(model => model.IdLocalitate, new SelectList(ViewBag.Localitati, "Value", "Text"),
         "Selectează localitatea", new { @class = "form-control form-title" })
             @Html.ValidationMessage("IdAdresa", null, new { @class = "text-danger" })
         </div>
@@ -47,6 +47,3 @@
 </div>
 }
 
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>

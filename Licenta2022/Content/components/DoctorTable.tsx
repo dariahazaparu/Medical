@@ -56,8 +56,6 @@ const columns = [
 ] as TableColumnsType<DataType>
 
 const DoctorTable: React.FC<IDoctorTable> = ({ data, omitCreate }) => {
-
-    console.log(omitCreate)
     return (<div>
 
         <TableHeader title="Doctori" {...{ omitCreate }} />
@@ -65,7 +63,7 @@ const DoctorTable: React.FC<IDoctorTable> = ({ data, omitCreate }) => {
         <TableComponent columns={columns} data={data.map((item, idx) => ({
             ...item,
             key: idx.toString()
-        }))} />
+        }))} actions={{ omitEdit: true }} />
     </div>)
 }
 

@@ -5,7 +5,7 @@ using System.Web;
 
 namespace Licenta2022.Models
 {
-    public class ProgramareUpdatePrezentForm
+    public class ProgramareUpdatePrezentInput
     {
         public int ProgramareId { get; set; }
         public bool Prezent { get; set; }

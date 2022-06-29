@@ -58,9 +58,9 @@
         <button><a href="/Factura/Index/@Model.Id">Vezi facturi</a></button>
         <button><a href="/Reteta/Index/@Model.Id">Vezi retete</a></button>
         <button><a href="/Pacient/IstoricDiagnostic/@Model.Id">Vezi istoric diagnostice</a></button>
+        @if (ViewBag.IsDeletable)
+        {
+            <button><a href="/Pacient/Delete/@Model.Id">Șterge pacient</a></button>
+        }
     </div>
 </div>
-@*
-    @Html.ActionLink("Vezi programari", "Index", new { id = Model.Id })
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "Index") *@

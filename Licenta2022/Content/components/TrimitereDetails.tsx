@@ -11,8 +11,8 @@ interface Trimitere {
         Id: number;
     }
 
-    ProgramareId: number;
-    ProgramareTId: number;
+    IdProgramare: number;
+    IdProgramareParinte: number;
 
     Servicii: string[];
     Specializare: string;
@@ -35,16 +35,25 @@ const TrimitereDetails: React.FC<ITrimitereDetails> = ({ trimitere }) => {
     )
 }
 
-const ButtonsComponent: React.FC<ITrimitereDetails> = ({ trimitere: { Pacient, Id, ProgramareId, ProgramareTId } }) => <Card style={{ display: "flex", flexDirection: "column" }}>
-    <div style={{ display: "flex", justifyContent: "center" }}>
-        <Button type="primary" onClick={() => goToRoute(`/Programare/Details/${ProgramareId}`)}>Vezi programare</Button>
-    </div>
+const ButtonsComponent: React.FC<ITrimitereDetails> = ({ trimitere: { Pacient, Id, IdProgramare, IdProgramareParinte } }) => {
+    console.log({ IdProgramare, IdProgramareParinte })
 
-    <div style={{ marginTop: "2rem" }}>
-        {ProgramareTId === -1 ? <Button type="primary" onClick={() => goToRoute(`/Programare/Create/${Pacient.Id}/${Id}`)}>Creează programare pe baza trimiterii</Button> :
-            <Button type="primary" onClick={() => goToRoute(`/Programare/Details/${ProgramareTId}`)}>Vezi programarea pe baza trimiterii</Button>}
+    return <Card style={{ display: "flex", flexDirection: "column" }}>
+        <div style={{ display: "flex", justifyContent: "center" }}>
+            <Button type="primary" onClick={() => goToRoute(`/Programare/Details/${IdProgramare}`)}>Vezi programare</Button>
+        </div>
 
-    </div>
-</Card>
+        <div style={{ marginTop: "2rem" }}>
+            {IdProgramareParinte === -1 ? <Button type="primary" onClick={() => goToRoute(`/Programare/Create/${Pacient.Id}/${Id}`)}>Creează programare pe baza trimiterii</Button> :
+                <Button type="primary" onClick={() => goToRoute(`/Programare/Details/${IdProgramareParinte}`)}>Vezi programarea pe baza trimiterii</Button>}
+
+        </div>
+
+        <div style={{ marginTop: "2rem", display: "flex", justifyContent: "center" }}>
+            <Button disabled={(IdProgramareParinte !== -1)} onClick={() => goToRoute(`/Trimitere/Delete/${Id}`)} type="primary">Șterge trimiterea</Button>
+        </div>
+    </Card>
+}
+
 
 export default TrimitereDetails
