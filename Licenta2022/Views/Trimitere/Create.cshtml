@@ -1,8 +1,10 @@
 ﻿@model Licenta2022.Models.TrimitereForm
 
 @{
-    ViewBag.Title = "Creeaza trimitere";
+    ViewBag.Title = "Creează trimitere";
 }
+
+<h2>Creează o trimitere pentru @ViewBag.NumePacient</h2>
 
 @Html.React("Components.TrimitereCreate", new {
 specialitati = ViewBag.Specialitati,

@@ -14,13 +14,20 @@ namespace Licenta2022.Controllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
-        // GET: ProgramTemplate
+        [Authorize(Roles = "Admin,Receptie,Doctor")]
         public ActionResult Index()
         {
-            return View(db.ProgramTemplates.ToList());
+            var Data = db.ProgramTemplates.Select(t => new
+            {
+                Config = t.Config
+            });
+
+            ViewBag.Data = Data;
+
+            return View();
         }
 
-        // GET: ProgramTemplate/Details/5
+        [Authorize(Roles = "Admin,Receptie,Doctor")]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -35,21 +42,25 @@ namespace Licenta2022.Controllers
             return View(programTemplate);
         }
 
-        // GET: ProgramTemplate/Create
+        [Authorize(Roles = "Admin,Receptie")]
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: ProgramTemplate/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        //[ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,Receptie")]
         public ActionResult Create([Bind(Include = "Config")] ProgramForm programTemplateForm)
         {
             if (ModelState.IsValid)
             {
+                var programeTemplateBd = db.ProgramTemplates.Where(pt => pt.Config.Equals(programTemplateForm.Config)).FirstOrDefault();
+
+                if (programeTemplateBd != null)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest, "Aceasta configuratie exista deja.");
+                }
+
                 ProgramTemplate programTemplate = new ProgramTemplate()
                 {
                     Config = programTemplateForm.Config
@@ -58,44 +69,14 @@ namespace Licenta2022.Controllers
                 db.ProgramTemplates.Add(programTemplate);
                 db.SaveChanges();
 
-                return RedirectToAction("Doctor", "Program");
+                return new HttpStatusCodeResult(HttpStatusCode.OK);
             }
 
-            return View();
+            return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
         }
 
-        // GET: ProgramTemplate/Edit/5
-        public ActionResult Edit(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            ProgramTemplate programTemplate = db.ProgramTemplates.Find(id);
-            if (programTemplate == null)
-            {
-                return HttpNotFound();
-            }
-            return View(programTemplate);
-        }
 
-        // POST: ProgramTemplate/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Data,Config")] ProgramTemplate programTemplate)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Entry(programTemplate).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            return View(programTemplate);
-        }
-
-        // GET: ProgramTemplate/Delete/5
+        [Authorize(Roles = "Admin")]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -110,9 +91,10 @@ namespace Licenta2022.Controllers
             return View(programTemplate);
         }
 
-        // POST: ProgramTemplate/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
+
         public ActionResult DeleteConfirmed(int id)
         {
             ProgramTemplate programTemplate = db.ProgramTemplates.Find(id);

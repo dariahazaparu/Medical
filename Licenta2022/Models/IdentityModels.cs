@@ -35,7 +35,7 @@ namespace Licenta2022.Models
         public DbSet<Clinica> Clinici { get; set; }
         public DbSet<Adresa> Adrese { get; set; }
         public DbSet<Localitate> Localitati { get; set; }
-        public DbSet<Asigurare> Asigurari { get; set; }
+        public DbSet<Abonament> Abonamente { get; set; }
         public DbSet<Pacient> Pacienti { get; set; }
         public DbSet<Serviciu> Servicii { get; set; }
         public DbSet<Reteta> Retete { get; set; }
@@ -43,7 +43,7 @@ namespace Licenta2022.Models
         public DbSet<RetetaXMedicament> RetetaXMedicaments { get; set; }
         public DbSet<Diagnostic> Diagnostics { get; set; }
         public DbSet<PacientXDiagnosticXProgramare> PacientXDiagnosticXProgramares { get; set; }
-        public DbSet<ServiciuXAsigurare> ServiciuXAsigurari { get; set; }
+        public DbSet<ServiciuXAbonament> ServiciuXAbonamente { get; set; }
         public DbSet<Programare> Programari { get; set; }
         public DbSet<Trimitere> Trimiteri { get; set; }
         public DbSet<Factura> Facturi { get; set; }
@@ -60,7 +60,12 @@ namespace Licenta2022.Models
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
+
+            modelBuilder.Conventions.Remove<OneToManyCascadeDeleteConvention>();
+
+            //modelBuilder.Conventions.Remove<StoreMo>();
+
+            modelBuilder.Entity<Specializare>().HasMany(d => d.Doctori).WithOptional().WillCascadeOnDelete(false);
         }
-        public System.Data.Entity.DbSet<Licenta2022.Models.ProgramareFromForm> ProgramareFromForms { get; set; }
     }
 }

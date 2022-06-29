@@ -90,12 +90,12 @@ const columns = [
 const ProgramareTable: React.FC<IProgramareTable> = ({ data }) => {
     return (
         <div>
-            <TableHeader title="Programari" omitCreate />
+            <TableHeader title="Programări" omitCreate />
 
             <TableComponent data={data.map((item, index) => ({
                 ...item,
                 key: index.toString()
-            }))} columns={columns} />
+            }))} columns={columns} actions={{ omitEdit: true }} />
         </div>
     )
 }

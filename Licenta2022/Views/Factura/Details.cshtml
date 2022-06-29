@@ -4,13 +4,26 @@
     ViewBag.Title = "Details";
 }
 
-<h2>Details</h2>
+<h2>Factura pentru @ViewBag.NumePacient</h2>
 
 <div>
-    <h4>Factura</h4>
+    <h4></h4>
     <hr />
     <dl class="dl-horizontal">
-        <dt>
+        @foreach (var serviciu in ViewBag.Servicii)
+        {
+            <dt style="width:50rem; padding-right:2rem">
+                @serviciu.nume
+            </dt>
+
+            <dd>
+                @serviciu.pret
+            </dd>
+        }
+
+
+
+        <dt style="width:50rem; padding-right:2rem">
             @Html.DisplayNameFor(model => model.Total)
         </dt>
 
@@ -20,7 +33,4 @@
 
     </dl>
 </div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>
+

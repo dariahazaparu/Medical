@@ -8,7 +8,6 @@ namespace Licenta2022.Models
 {
     public class ProgramareForm
     {
-        [Key]
         public int Id { get; set; }
         public DateTime Data { get; set; }
         public int IdPacient { get; set; }

@@ -1,4 +1,4 @@
-﻿@model Licenta2022.Models.Asigurare
+﻿@model Licenta2022.Models.Abonament
 
 @{
     ViewBag.Title = "Details";
@@ -7,24 +7,23 @@
 <h2>Details</h2>
 
 <div>
-    <h4>Asigurare</h4>
+    <h4>Abonament</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
             @Html.DisplayNameFor(model => model.Denumire)
         </dt>
-
         <dd>
             @Html.DisplayFor(model => model.Denumire)
         </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.IdServicii)
-        </dt>
 
+        <dt>
+            Servicii
+        </dt>
         <dd>
-            @foreach( var serv in Model.ServiciuXAsigurari)
+            @foreach( var serv in Model.ServiciuXAbonamente)
             {
-                @serv.Serviciu.Denumire
+               @serv.IdServiciu
             }
         </dd>
 

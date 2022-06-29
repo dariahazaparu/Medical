@@ -12,6 +12,7 @@ interface DataType extends Pacient {
 
 interface IPacientTable {
     data: DataType[]
+    omitCreate: boolean
 }
 
 const columns = [
@@ -41,7 +42,7 @@ const columns = [
         sorter: (a, b) => a.Adresa.Localitate.localeCompare(b.Adresa.Localitate)
     },
     {
-        title: "Adresa",
+        title: "Adresă",
         key: "strada",
         dataIndex: ["Adresa", "Strada"],
         width: "20%",
@@ -55,10 +56,10 @@ const columns = [
 
 ] as TableColumnsType<DataType>
 
-const PacientTable: React.FC<IPacientTable> = ({ data }) => {
+const PacientTable: React.FC<IPacientTable> = ({ data, omitCreate }) => {
     return (
         <div>
-            <TableHeader title="Pacienti" />
+            <TableHeader title="Pacienți" {...{ omitCreate }} />
 
             <TableComponent columns={columns} data={data.map((item, idx) => ({
                 ...item,

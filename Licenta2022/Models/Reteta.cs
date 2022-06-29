@@ -11,9 +11,10 @@ namespace Licenta2022.Models
     {
         [Key, ForeignKey("Programare")]
         public int Id { get; set; }
+        public virtual Programare Programare { get; set; }
+
         [Required]
         public DateTime DataEmiterii { get; set; }
-        public virtual Programare Programare { get; set; }
         public virtual ICollection<RetetaXMedicament> RetetaXMedicament { get; set; }
     }
 }

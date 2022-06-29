@@ -14,13 +14,11 @@ namespace Licenta2022.Controllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
-        // GET: Medicament
         public ActionResult Index()
         {
             return View(db.Medicamente.ToList());
         }
 
-        // GET: Medicament/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -35,17 +33,15 @@ namespace Licenta2022.Controllers
             return View(medicament);
         }
 
-        // GET: Medicament/Create
+        [Authorize(Roles = "Admin")]
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: Medicament/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public ActionResult Create([Bind(Include = "Id,Denumire,Observatii")] Medicament medicament)
         {
             if (ModelState.IsValid)
@@ -58,7 +54,7 @@ namespace Licenta2022.Controllers
             return View(medicament);
         }
 
-        // GET: Medicament/Edit/5
+        [Authorize(Roles = "Admin")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -73,11 +69,9 @@ namespace Licenta2022.Controllers
             return View(medicament);
         }
 
-        // POST: Medicament/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public ActionResult Edit([Bind(Include = "Id,Denumire,Observatii")] Medicament medicament)
         {
             if (ModelState.IsValid)
@@ -89,7 +83,7 @@ namespace Licenta2022.Controllers
             return View(medicament);
         }
 
-        // GET: Medicament/Delete/5
+        [Authorize(Roles = "Admin")]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -104,9 +98,9 @@ namespace Licenta2022.Controllers
             return View(medicament);
         }
 
-        // POST: Medicament/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public ActionResult DeleteConfirmed(int id)
         {
             Medicament medicament = db.Medicamente.Find(id);

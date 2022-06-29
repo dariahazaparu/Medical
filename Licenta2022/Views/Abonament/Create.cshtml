@@ -1,17 +1,22 @@
-﻿@model Licenta2022.Models.Asigurare
+﻿@model Licenta2022.Models.Abonament
 
 @{
-    ViewBag.Title = "Create";
+    ViewBag.Title = "Creeaza abonament";
 }
 
-<h2>Create</h2>
+@Html.React("Components.AbonamentCreate", new
+{
+    servicii = ViewBag.Servicii
+})
+
+@*<h2>Create</h2>
 
 @using (Html.BeginForm()) 
 {
     @Html.AntiForgeryToken()
     
     <div class="form-horizontal">
-        <h4>Asigurare</h4>
+        <h4>Abonament</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="form-group">
@@ -32,4 +37,4 @@
 
 <div>
     @Html.ActionLink("Back to List", "Index")
-</div>
+</div>*@

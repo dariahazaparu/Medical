@@ -15,13 +15,19 @@ const OldComponent = () => {
     const onSubmit = async (e: any) => {
         e.preventDefault()
 
-        const response = await axios.post("/ProgramTemplate/Create", {
-            Config: config,
-            Data: date,
-        })
+        try {
+            const response = await axios.post("/ProgramTemplate/Create", {
+                Config: config,
+                Data: date,
+            })
 
-        if (response.status === 200) {
-            window.location.href = "/ProgramTemplate"
+            if (response.status === 200) {
+                window.location.href = "/ProgramTemplate"
+            }
+        }
+
+        catch (err) {
+            notification.error({ message: err.request.statusText })
         }
     }
 
@@ -57,7 +63,7 @@ const OldComponent = () => {
                     })}
                 </List> */}
 
-                <button type="submit">Creeaza</button>
+                <button type="submit">Creează</button>
             </form>
         </div>
     )
@@ -90,7 +96,7 @@ const ProgramTemplateCreateComponent = (props: any) => {
 
         else {
             const startIndex =
-                (startHour.get("hours") * 60 + startHour.get("minutes")) / 15;
+                (startHour.get("hours") * 60 + startHour.get("minutes")) / 15 - 1;
             const endIndex = (endHour.get("hours") * 60 + endHour.get("minutes")) / 15;
 
             config = new Array(96).fill(null).map((_, idx) => Number((idx >= startIndex && idx < endIndex))).join("")
@@ -114,7 +120,7 @@ const ProgramTemplateCreateComponent = (props: any) => {
     return (
         <div className="App">
             <div style={{ marginTop: "1rem" }}>
-                <label>Whole day?</label>
+                <label>Toată ziua?</label>
                 <input
                     style={{ marginLeft: "1rem" }}
                     type="checkbox"

@@ -9,6 +9,7 @@ using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Mvc;
 using Licenta2022.Models;
+using Microsoft.AspNet.Identity;
 using Newtonsoft.Json;
 
 namespace Licenta2022.Controllers
@@ -45,24 +46,48 @@ namespace Licenta2022.Controllers
             return controlDigit == Int32.Parse(CNP[12].ToString());
         }
 
-        // GET: Pacient
+        [Authorize(Roles = "Admin,Receptie,Doctor,Pacient")]
         public ActionResult Index()
         {
-            var data = db.Pacienti.Include("Adresa").Include("Asigurare").Select(p => new { 
+            var data = db.Pacienti.Include("Adresa").Include("Abonament").Select(p => new { 
                 Id = p.Id,
                 Nume = p.Nume,
                 Prenume = p.Prenume,
                 Adresa = new {  Localitate = p.Adresa.Localitate.Nume,
                                 Strada = p.Adresa.Strada,
-                                Numar = p.Adresa.Numar } 
-            }).ToList();
+                                Numar = p.Adresa.Numar },
+                UserId = p.UserId
+            });
+            if (User.IsInRole("Pacient"))
+            {
+                var userId = User.Identity.GetUserId();
+                data = data.Where(pacient => pacient.UserId == userId);
+            }
             
-            ViewBag.Data = data;
+            ViewBag.Data = data.ToList();
+            ViewBag.OmitCreate = User.IsInRole("Pacient") && User.Identity.IsAuthenticated && User.Identity.GetUserId() == data.FirstOrDefault().UserId;
 
             return View();
         }
 
-        // GET: Pacient/Details/5
+        public ActionResult IstoricDiagnostic(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            Pacient pacient = db.Pacienti.Find(id);
+
+            if (pacient == null)
+            {
+                return HttpNotFound();
+            }
+
+            return View(pacient);
+        }
+
+        [Authorize(Roles = "Admin,Receptie,Doctor,Pacient")]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -74,15 +99,39 @@ namespace Licenta2022.Controllers
             {
                 return HttpNotFound();
             }
-            return View(pacient);
+            if (!User.IsInRole("Pacient") || User.Identity.GetUserId() == pacient.UserId)
+            {
+                return View(pacient);
+            }
+            return View("NonAccess");
         }
 
-        // GET: Pacient/Create
+        [Authorize(Roles = "Admin,Receptie,Pacient")]
         public ActionResult Create()
         {
             ViewBag.Adrese = GetAllAddresses();
-            ViewBag.Asigurari = GetAllAsigurari();
+            ViewBag.Abonamente = GetAllAbonamente();
+            ViewBag.Localitati = GetAllCities();
             return View();
+        }
+
+        [NonAction]
+        private IEnumerable<SelectListItem> GetAllCities()
+        {
+            var selectList = new List<SelectListItem>();
+
+            var localitati = db.Localitati.Select(x => x);
+
+            foreach (var localitate in localitati)
+            {
+                selectList.Add(new SelectListItem
+                {
+                    Value = localitate.Id.ToString(),
+                    Text = localitate.Nume.ToString()
+                });
+            }
+
+            return selectList;
         }
 
         [NonAction]
@@ -97,7 +146,7 @@ namespace Licenta2022.Controllers
                 selectList.Add(new SelectListItem
                 {
                     Value = adresa.Id.ToString(),
-                    Text = adresa.Strada.ToString()
+                    Text = adresa.Strada.ToString() + ", " + adresa.Numar.ToString()
                 });
             }
 
@@ -105,30 +154,28 @@ namespace Licenta2022.Controllers
         }
 
         [NonAction]
-        private IEnumerable<SelectListItem> GetAllAsigurari()
+        private IEnumerable<SelectListItem> GetAllAbonamente()
         {
             var selectList = new List<SelectListItem>();
 
-            var asigurari = db.Asigurari.Select(x => x);
+            var abonamente = db.Abonamente.Select(x => x);
 
-            foreach (var asigurare in asigurari)
+            foreach (var abonament in abonamente)
             {
                 selectList.Add(new SelectListItem
                 {
-                    Value = asigurare.Id.ToString(),
-                    Text = asigurare.Denumire.ToString()
+                    Value = abonament.Id.ToString(),
+                    Text = abonament.Denumire.ToString()
                 });
             }
 
             return selectList;
         }
-
-        // POST: Pacient/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Nume,Prenume,CNP,IdAdresa,IdAsigurare")] PacientForm pacientForm)
+        [Authorize(Roles = "Admin,Receptie,Pacient")]
+        public ActionResult Create([Bind(Include = "Id,Nume,Prenume,CNP,IdAdresa,IdAbonament")] PacientForm pacientForm)
         {
             if (ModelState.IsValid)
             {
@@ -142,24 +189,28 @@ namespace Licenta2022.Controllers
                     Nume = pacientForm.Nume,
                     Prenume = pacientForm.Prenume,
                     CNP = pacientForm.CNP,
-                    PacientXDiagnosticXProgramare = new List<PacientXDiagnosticXProgramare>()
+                    PacientXDiagnosticXProgramare = new List<PacientXDiagnosticXProgramare>(),
+                    UserId = null
                 };
 
                 var adresa = db.Adrese.Where(x => x.Id == pacientForm.IdAdresa).Select(x => x).ToList();
                 pacient.Adresa = adresa.FirstOrDefault();
 
-                var asigurare = db.Asigurari.Where(x => x.Id == pacientForm.IdAsigurare).Select(x => x).ToList();
-                pacient.Asigurare = asigurare.FirstOrDefault();
+                var abonament = db.Abonamente.Where(x => x.Id == pacientForm.IdAbonament).Select(x => x).ToList();
+                pacient.Abonament = abonament.FirstOrDefault();
+
+                if (User.Identity.IsAuthenticated && User.IsInRole("Pacient"))
+                    pacient.UserId = User.Identity.GetUserId();
 
                 db.Pacienti.Add(pacient);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", new { id = pacient.Id });
             }
 
             return View(pacientForm);
         }
 
-        // GET: Pacient/Edit/5
+        [Authorize(Roles = "Admin,Receptie")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -184,7 +235,7 @@ namespace Licenta2022.Controllers
 
                 IdAdresa = pacient.Adresa.Id,
                 IdLocalitate = pacient.Adresa.Localitate.Id,
-                IdAsigurare = pacient.Asigurare.Id
+                IdAbonament = pacient.Abonament != null ? pacient.Abonament.Id : -1
             }).FirstOrDefault();
 
             var adrese = db.Adrese.Select(adresa => new
@@ -200,25 +251,23 @@ namespace Licenta2022.Controllers
                 label = localitate.Nume
             }).ToList();
 
-            var asigurari = db.Asigurari.Select(asigurare => new
+            var abonamente = db.Abonamente.Select(abonament => new
             {
-                value = asigurare.Id,
-                label = asigurare.Denumire
+                value = abonament.Id,
+                label = abonament.Denumire
             });
 
             ViewBag.Data = data;
             ViewBag.Adrese = adrese;
             ViewBag.Localitati = localitati;
-            ViewBag.Asigurari = asigurari;
+            ViewBag.Abonamente = abonamente;
 
             return View();
         }
 
-        // POST: Pacient/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        public ActionResult Edit([Bind(Include = "Id,Nume,Prenume,CNP,IdAdresa,IdAsigurare")] PacientEditForm pacientForm)
+        [Authorize(Roles = "Admin,Receptie")]
+        public ActionResult Edit([Bind(Include = "Id,Nume,Prenume,CNP,IdAdresa,IdAbonament")] PacientEditForm pacientForm)
         {
             if (ModelState.IsValid)
             {
@@ -234,12 +283,12 @@ namespace Licenta2022.Controllers
                 pacient.CNP = pacientForm.CNP;
 
                 pacient.Adresa = db.Adrese.Where(adresa => adresa.Id == pacientForm.IdAdresa).FirstOrDefault();
-                pacient.Asigurare = db.Asigurari.Where(asigurare => asigurare.Id == pacientForm.IdAsigurare).FirstOrDefault();
+                pacient.Abonament = db.Abonamente.Where(abonament => abonament.Id == pacientForm.IdAbonament).FirstOrDefault();
 
                 db.Entry(pacient).State = EntityState.Modified;
 
                 db.Entry(pacient.Adresa).State = EntityState.Modified;
-                db.Entry(pacient.Asigurare).State = EntityState.Modified;
+                db.Entry(pacient.Abonament).State = EntityState.Modified;
 
                 db.SaveChanges();
             }
@@ -247,7 +296,7 @@ namespace Licenta2022.Controllers
             return View();  
         }
 
-        // GET: Pacient/Delete/5
+        [Authorize(Roles = "Admin,Receptie")]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -262,9 +311,9 @@ namespace Licenta2022.Controllers
             return View(pacient);
         }
 
-        // POST: Pacient/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,Receptie")]
         public ActionResult DeleteConfirmed(int id)
         {
             Pacient pacient = db.Pacienti.Find(id);
@@ -282,7 +331,7 @@ namespace Licenta2022.Controllers
             base.Dispose(disposing);
         }
 
-        // GET: Pacient/AddDiagnostic
+        [Authorize(Roles = "Admin,Doctor")]
         public ActionResult AddDiagnostic(int? id)
         {
             ViewBag.Diagnostics = GetAllDiagnoses();
@@ -306,7 +355,7 @@ namespace Licenta2022.Controllers
                 Nume = programare.Pacient.Nume,
                 Prenume = programare.Pacient.Prenume
             };
-
+            ViewBag.NumePacient = programare.Pacient.Nume + " " + programare.Pacient.Prenume;
             return View(pacientForm);
         }
 
@@ -331,6 +380,7 @@ namespace Licenta2022.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,Doctor")]
         public ActionResult AddDiagnostic([Bind(Include = "IdPacient,IdDiagnostic,IdProgramare")] PacientAddDiagnosticForm pacientForm)
         {
             if (ModelState.IsValid)

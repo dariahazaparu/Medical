@@ -1,11 +1,11 @@
 ﻿@model Licenta2022.Models.RetetaForm
 
 @{
-    ViewBag.Title = "Creeaza Reteta";
+    ViewBag.Title = "Creează Reteta";
 }
 
-@* <h2>Create</h2>
-
+<h2>Creează rețetă pentru @ViewBag.NumePacient</h2>
+@*
     @using (Html.BeginForm())
     {
     @Html.AntiForgeryToken()
@@ -62,7 +62,7 @@
 
     </div>
 
-    <button type="button" onclick="onCreate()">Adauga medicament</button>
+    <button type="button" onclick="onCreate()">Adaugă medicament</button>
 
     <div class="form-group">
     <div class="col-md-offset-2 col-md-10">
@@ -76,7 +76,8 @@
     @Html.ActionLink("Back to List", "Index")
     </div> *@
 
-@Html.React("Components.RetetaCreate", new {
+@Html.React("Components.RetetaCreate", new
+{
 medicamente = ViewBag.Medicamente,
 programareId = ViewBag.IdProgramare
 })

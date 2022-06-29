@@ -14,13 +14,11 @@ namespace Licenta2022.Controllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
-        // GET: Serviciu
         public ActionResult Index()
         {
             return View(db.Servicii.Include("Specializare").ToList());
         }
 
-        // GET: Serviciu/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -35,7 +33,7 @@ namespace Licenta2022.Controllers
             return View(serviciu);
         }
 
-        // GET: Serviciu/Create
+        [Authorize(Roles = "Admin")]
         public ActionResult Create()
         {
             ViewBag.Specialitati = GetAllSpecialties();
@@ -61,11 +59,9 @@ namespace Licenta2022.Controllers
             return selectList;
         }
 
-        // POST: Serviciu/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public ActionResult Create([Bind(Include = "Id,Denumire,Pret,IdSpecializare")] ServiciuForm serviciuForm)
         {
             if (ModelState.IsValid)
@@ -87,7 +83,7 @@ namespace Licenta2022.Controllers
             return View(serviciuForm);
         }
 
-        // GET: Serviciu/Edit/5
+        [Authorize(Roles = "Admin")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -102,11 +98,10 @@ namespace Licenta2022.Controllers
             return View(serviciu);
         }
 
-        // POST: Serviciu/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public ActionResult Edit([Bind(Include = "Id,Denumire,IdSpecializare")] Serviciu serviciu)
         {
             if (ModelState.IsValid)
@@ -118,7 +113,7 @@ namespace Licenta2022.Controllers
             return View(serviciu);
         }
 
-        // GET: Serviciu/Delete/5
+        [Authorize(Roles = "Admin")]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -133,9 +128,9 @@ namespace Licenta2022.Controllers
             return View(serviciu);
         }
 
-        // POST: Serviciu/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public ActionResult DeleteConfirmed(int id)
         {
             Serviciu serviciu = db.Servicii.Find(id);

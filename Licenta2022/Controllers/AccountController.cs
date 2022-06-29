@@ -169,14 +169,22 @@ namespace Licenta2022.Controllers
                             break;
                     }
                     await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
-                    
+
                     // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link
                     // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
                     // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
-
-                    return RedirectToAction("Index", "Home");
+                    switch (model.RoleId)
+                    {
+                        case 1:
+                            UserManager.AddToRole(user.Id, "Doctor");
+                            return RedirectToAction("Create", "Doctor");
+                        case 2:
+                            UserManager.AddToRole(user.Id, "Pacient");
+                            return RedirectToAction("Create", "Pacient");
+                    }
+                    return RedirectToAction("Index", "Pacient");
                 }
                 AddErrors(result);
             }

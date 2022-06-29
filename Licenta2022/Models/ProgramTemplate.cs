@@ -11,6 +11,6 @@ namespace Licenta2022.Models
         [Key]
         public int Id { get; set; }
         public string Config { get; set; }
-        public virtual ICollection<Doctor> Doctori { get; set; }
+        public virtual ICollection<DoctorXProgramTemplate> DoctorXProgramTemplates { get; set; }
     }
 }

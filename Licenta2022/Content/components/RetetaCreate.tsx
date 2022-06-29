@@ -44,7 +44,6 @@ const RetetaCreate: React.FC<IRetetaCreate> = ({ medicamente, programareId }) =>
     return (
         <div>
             <Form onValuesChange={(_, values) => {
-                console.log(values)
                 setUsedMedicines(values.medicamente.map(item => item.medicamentId))
             }} form={form} onFinish={onSubmit}>
                 <Form.List initialValue={[{ medicamentId: null, doza: null }]} name="medicamente">
@@ -72,17 +71,17 @@ const RetetaCreate: React.FC<IRetetaCreate> = ({ medicamente, programareId }) =>
                                             <Input placeholder="Doza" />
                                         </Form.Item>
 
-                                        {fields.length > 1 && <Button style={{ marginBottom: "1rem" }} onClick={() => remove(index)}>Sterge</Button>}
+                                        {fields.length > 1 && <Button style={{ marginBottom: "1rem" }} onClick={() => remove(index)}>Șterge</Button>}
                                     </div>
                                 })}
 
-                                <Button disabled={usedMedicines.length === medicamente.length || form.getFieldValue("medicamente").some(field => field.medicamentId === null)} onClick={onAdd}>Adauga inca un medicament</Button>
+                                <Button disabled={usedMedicines.length === medicamente.length || form.getFieldValue("medicamente").some(field => field.medicamentId === null)} onClick={onAdd}>Adaugă inca un medicament</Button>
                             </div>
                         )
                     }}
                 </Form.List>
 
-                <Button style={{ marginTop: "1rem" }} type="primary" htmlType="submit">Creeaza</Button>
+                <Button style={{ marginTop: "1rem" }} type="primary" htmlType="submit">Creează</Button>
             </Form>
         </div>
     )

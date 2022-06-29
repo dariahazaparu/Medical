@@ -4,14 +4,13 @@
     ViewBag.Title = "Create";
 }
 
-<h2>Create</h2>
+<h2>Creează pacient</h2>
 
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
 
     <div class="form-horizontal">
-        <h4>Pacient</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="form-group">
@@ -39,10 +38,19 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.IdAdresa, htmlAttributes: new { @class = "control-label col-md-2" })
+            <label class= "control-label col-md-2">Localitate</label> 
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.IdAdresa, new SelectList(ViewBag.Localitati, "Value", "Text"),
+            "Selectează localitatea", new { @class = "form-control form-title" })
+                @Html.ValidationMessage("IdAdresa", null, new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class= "control-label col-md-2">Adresa</label> 
             <div class="col-md-10">
                 @Html.DropDownListFor(model => model.IdAdresa, new SelectList(ViewBag.Adrese, "Value", "Text"),
-            "Adresa", new { @class = "form-control form-title" })
+            "Selectează adresa", new { @class = "form-control form-title" })
                 @Html.ValidationMessage("IdAdresa", null, new { @class = "text-danger" })
             </div>
         </div>
@@ -50,11 +58,11 @@
 
 
         <div class="form-group">
-            @Html.LabelFor(model => model.IdAsigurare, htmlAttributes: new { @class = "control-label col-md-2" })
+            <label class="control-label col-md-2">Abonament (opțional)</label>
             <div class="col-md-10">
-                @Html.DropDownListFor(model => model.IdAsigurare, new SelectList(ViewBag.Asigurari, "Value", "Text"),
-            "Asigurare", new { @class = "form-control form-title" })
-                @Html.ValidationMessage("IdAsigurare", null, new { @class = "text-danger" })
+                @Html.DropDownListFor(model => model.IdAbonament, new SelectList(ViewBag.Abonamente, "Value", "Text"),
+            "Selectează abonament", new { @class = "form-control form-title" })
+                @Html.ValidationMessage("IdAbonament", null, new { @class = "text-danger" })
             </div>
         </div>
 
@@ -65,7 +73,3 @@
         </div>
     </div>
 }
-
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>

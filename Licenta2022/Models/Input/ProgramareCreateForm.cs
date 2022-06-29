@@ -11,7 +11,6 @@ namespace Licenta2022.Models
         public int IdProgram { get; set; }
         public int ProgramIntervalIndex { get; set; }
         public int IdPacient { get; set; }
-
         public int? IdTrimitere { get; set; }
     }
 }

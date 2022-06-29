@@ -12,7 +12,7 @@ interface Pacient extends Person {
 
     IdAdresa: number;
     IdLocalitate: number;
-    IdAsigurare: number;
+    IdAbonament: number;
 }
 
 interface Adresa {
@@ -27,10 +27,10 @@ interface IPacientEdit {
 
     localitati: DropdownItem[];
     adrese: Adresa[];
-    asigurari: DropdownItem[];
+    abonamente: DropdownItem[];
 }
 
-const PacientEdit: React.FC<IPacientEdit> = ({ data, localitati, adrese, asigurari }) => {
+const PacientEdit: React.FC<IPacientEdit> = ({ data, localitati, adrese, abonamente }) => {
     if (!data) return null;
 
     const [localitateId, setLocalitateId] = useState(data?.IdLocalitate)
@@ -61,8 +61,7 @@ const PacientEdit: React.FC<IPacientEdit> = ({ data, localitati, adrese, asigura
     }
 
     return (
-        <Form labelCol={{ span: 2 }} wrapperCol={{ span: 12 }} colon={false} form={form} initialValues={data} onFinish={onSubmit}>
-
+        <Form labelCol={{ span: 4, style: { marginRight: "1rem" } }} wrapperCol={{ span: 12 }} colon={false} form={form} initialValues={data} onFinish={onSubmit}>
             <Form.Item label="Nume" name="Nume">
                 <Input />
             </Form.Item>
@@ -87,8 +86,8 @@ const PacientEdit: React.FC<IPacientEdit> = ({ data, localitati, adrese, asigura
                 </Select>
             </Form.Item>
 
-            <Form.Item label="Asigurare" name="IdAsigurare">
-                <Select options={asigurari} />
+            <Form.Item label="Abonament" name="IdAbonament">
+                <Select options={abonamente} />
             </Form.Item>
 
             <Button htmlType="submit" type="primary">Editeaza</Button>

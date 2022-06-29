@@ -102,7 +102,7 @@ const DoctorProgramTemplateCreateComponent: React.FC<IDoctorProgramTemplateCreat
                     return (
                         <div key={program.id} style={{ marginTop: "2rem" }}>
                             <div style={{ marginTop: "1rem" }}>
-                                <DatePicker disabledDate={date => usedDates.some(d => d.isSame(date, "day")) || programe.some(program => program.date?.isSame(date, "day"))} onChange={(date) => updateProgramDate(programIndex, date)} />
+                                <DatePicker disabledDate={date => usedDates.some(d => d.isSame(date, "day")) || programe.some(program => program.date?.isSame(date, "day")) || date.isBefore(startOfDay)} onChange={(date) => updateProgramDate(programIndex, date)} />
                             </div>
 
                             <div style={{ marginTop: "1rem" }}>
@@ -114,7 +114,7 @@ const DoctorProgramTemplateCreateComponent: React.FC<IDoctorProgramTemplateCreat
                                         let text = ""
 
                                         if (endIndex - startIndex == 96) {
-                                            text = "Whole day"
+                                            text = "Toată ziua"
                                         }
 
                                         else {
@@ -130,7 +130,7 @@ const DoctorProgramTemplateCreateComponent: React.FC<IDoctorProgramTemplateCreat
                             </div>
 
                             <div style={{ marginTop: "1rem" }}>
-                                <Button onClick={() => stergeProgram(programIndex)}>Sterge</Button>
+                                <Button onClick={() => stergeProgram(programIndex)}>Șterge</Button>
                             </div>
                         </div>
                     )
@@ -138,10 +138,10 @@ const DoctorProgramTemplateCreateComponent: React.FC<IDoctorProgramTemplateCreat
             </div>
 
             <div style={{ marginBottom: "2rem" }}>
-                <Button onClick={addProgram}>Adauga program</Button>
+                <Button onClick={addProgram}>Adaugă program</Button>
             </div>
 
-            <Button disabled={programe.length === 0} onClick={onCreate}>Creeaza</Button>
+            <Button disabled={programe.length === 0} onClick={onCreate}>Creează</Button>
         </div>
     )
 }

@@ -5,7 +5,6 @@
 }
 
 <div style="display: flex; justify-content: space-around; margin-top: 2rem;">
-
     <dl class="dl-horizontal">
         <dt class="bigger-text">
             @Html.DisplayNameFor(model => model.Nume)
@@ -41,24 +40,24 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Asigurare)
+            @Html.DisplayNameFor(model => model.Abonament)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Asigurare.Denumire)
+            @Html.DisplayFor(model => model.Abonament.Denumire)
         </dd>
-
     </dl>
 
 
     <div class="btn-group">
         <button>
-            <a href="/Programare/Create/@Model.Id">Creeaza o programare</a>
+            <a href="/Programare/Create/@Model.Id">Creează o programare</a>
         </button>
         <button><a href="/Programare/Index/@Model.Id">Vezi programari</a></button>
         <button><a href="/Trimitere/Index/@Model.Id">Vezi trimiteri</a></button>
         <button><a href="/Factura/Index/@Model.Id">Vezi facturi</a></button>
         <button><a href="/Reteta/Index/@Model.Id">Vezi retete</a></button>
+        <button><a href="/Pacient/IstoricDiagnostic/@Model.Id">Vezi istoric diagnostice</a></button>
     </div>
 </div>
 @*

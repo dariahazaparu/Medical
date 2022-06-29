@@ -26,6 +26,13 @@ type DataIndex = keyof DataType;
 interface ITableComponent<T> {
     columns: TableColumnsType<T>
     data: T[]
+
+    omitActions?: boolean
+
+    actions?: {
+        omitEdit?: boolean;
+        omitDetails?: boolean;
+    }
 }
 
 const exampleColumns: TableColumnsType<DataType> = [
@@ -77,7 +84,7 @@ const exampleData: DataType[] = [
     },
 ];
 
-const TableComponent: React.FC<ITableComponent<any>> = ({ columns, data }) => {
+const TableComponent: React.FC<ITableComponent<any>> = ({ columns, data, omitActions, actions = { omitDetails: false, omitEdit: false } }) => {
     const [searchText, setSearchText] = useState('');
     const [searchedColumn, setSearchedColumn] = useState('');
     const searchInput = useRef<InputRef>(null);
@@ -169,38 +176,39 @@ const TableComponent: React.FC<ITableComponent<any>> = ({ columns, data }) => {
         ...((column as any).omitSearch ? {} : getColumnSearchProps((column as any).dataIndex)),
         ...column,
     })).concat(
-        {
-            title: 'Actiune',
-            key: 'operation',
-            fixed: 'right',
-            width: 100,
-            render: (data: any) => <Dropdown overlay={<Menu
-                items={[
-                    {
-                        label: "Editare",
-                        key: "edit",
-                        icon: <EditOutlined />,
+        omitActions ? {} :
+            {
+                title: 'Acțiune',
+                key: 'operation',
+                fixed: 'right',
+                width: 100,
+                render: (data: any) => <Dropdown overlay={<Menu
+                    items={[
+                        actions.omitEdit === true ? null : {
+                            label: "Editare",
+                            key: "edit",
+                            icon: <EditOutlined />,
 
-                        onClick: () => addToRoute(`/Edit/${data.Id}`)
-                    },
+                            onClick: () => addToRoute(`/Edit/${data.Id}`)
+                        },
 
-                    {
-                        label: "Detalii",
-                        key: "details",
-                        icon: <InfoOutlined />,
+                        actions.omitDetails === true ? null : {
+                            label: "Detalii",
+                            key: "details",
+                            icon: <InfoOutlined />,
 
-                        onClick: () => addToRoute(`/Details/${data.Id}`)
-                    }
-                ]}
-            />}>
-                <Button>
-                    <Space>
-                        Action
-                        <DownOutlined />
-                    </Space>
-                </Button>
-            </Dropdown>
-        },
+                            onClick: () => addToRoute(`/Details/${data.Id}`)
+                        }
+                    ].filter(Boolean)}
+                />}>
+                    <Button>
+                        <Space>
+                            Action
+                            <DownOutlined />
+                        </Space>
+                    </Button>
+                </Dropdown>
+            },
     )
 
     return <Table columns={tableColumns} dataSource={data} />;

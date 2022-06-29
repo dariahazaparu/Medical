@@ -11,10 +11,11 @@ namespace Licenta2022.Models
     {
         [Key, ForeignKey("Adresa")]
         public int Id { get; set; }
+        public virtual Adresa Adresa { get; set; }
+
         [Required]
         public string Nume { get; set; }
 
         public virtual ICollection<Doctor> Doctori { get; set; }
-        public virtual Adresa Adresa { get; set; }
     }
 }

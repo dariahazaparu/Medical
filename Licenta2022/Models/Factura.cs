@@ -11,7 +11,8 @@ namespace Licenta2022.Models
     {
         [Key, ForeignKey("Programare")]
         public int Id { get; set; }
-        public float Total { get; set; }
         public virtual Programare Programare { get; set; }
+        public float Total { get; set; }
+
     }
 }

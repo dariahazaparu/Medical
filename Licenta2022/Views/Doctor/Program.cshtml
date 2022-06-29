@@ -4,7 +4,7 @@
     ViewBag.Title = "Program";
 }
 
-<h2>Program</h2>
+<h2>Program pentru @ViewBag.NumeDoctor</h2>
 
 @*@using (Html.BeginForm())
     {
@@ -37,11 +37,7 @@
 
 @Html.React("Components.DoctorProgramTemplateCreateComponent", new
 {
-templates = ViewBag.Templates,
 doctorId = Model.IdDoctor,
+templates = ViewBag.Templates,
 usedDates = ViewBag.UsedDates
 })
-
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>

@@ -40,9 +40,11 @@ interface IProgramareDetails {
         Pret: number;
         Denumire: string
     }[]
+
+    isPacient: boolean;
 }
 
-const ProgramareDetails: React.FC<IProgramareDetails> = ({ programare, servicii }) => {
+const ProgramareDetails: React.FC<IProgramareDetails> = ({ programare, servicii, isPacient }) => {
     const { Data, TrimitereId, RetetaId, FacturaId, Id, Diagnostic: { Id: DiagnosticId, Denumire: DenumireDiagnostic }, Doctor, Clinica, TrimitereTId, Pacient } = programare
 
     const [facturaId, setFacturaId] = useState(FacturaId)
@@ -86,9 +88,10 @@ const ProgramareDetails: React.FC<IProgramareDetails> = ({ programare, servicii 
 
     return (
         <div>
+            <h3>Detalii</h3>
             <div >
                 <div>
-                    <b>Prezent</b>: <Input title="Prezent" type="checkbox" checked={prezent} onChange={e => onChangePrezent(e.target.checked)} />
+                    <b>Prezent</b>: <Input disabled={isPacient} title="Prezent" type="checkbox" checked={prezent} onChange={e => onChangePrezent(e.target.checked)} />
                 </div>
 
                 {prezent && (
@@ -96,20 +99,20 @@ const ProgramareDetails: React.FC<IProgramareDetails> = ({ programare, servicii 
                         <hr />
                         <div style={{ display: "flex", justifyContent: "space-around" }}>
                             <div>
-                                {TrimitereId !== -1 ? <Button type="primary" onClick={() => goToRoute(`/Trimitere/Details/${TrimitereId}`)}>Vezi trimitere</Button> : <Button type="primary" onClick={() => goToRoute(`/Trimitere/Create/${Id}`)}>Creeaza o trimitere</Button>}
+                                {TrimitereId !== -1 ? <Button type="primary" onClick={() => goToRoute(`/Trimitere/Details/${TrimitereId}`)}>Vezi trimitere</Button> : (!isPacient && <Button type="primary" onClick={() => goToRoute(`/Trimitere/Create/${Id}`)}>Creează o trimitere</Button>)}
                             </div>
 
                             <div>
-                                {facturaId === -1 ? <Button type="primary" onClick={onCreateFactura}>Genereaza factura</Button> : <Button type="primary" onClick={() => goToRoute(`/Factura/Details/${facturaId}`)}>Vezi factura</Button>}
+                                {facturaId === -1 ? (!isPacient && <Button type="primary" onClick={onCreateFactura}>Genereaza factura</Button>) : <Button type="primary" onClick={() => goToRoute(`/Factura/Details/${facturaId}`)}>Vezi factura</Button>}
                             </div>
 
                             <div>
-                                {DiagnosticId === -1 ? <Button type="primary" onClick={() => goToRoute(`/Pacient/AddDiagnostic/${programare.Id}`)}>Creeaza un diagnostic</Button> : null}
+                                {DiagnosticId === -1 ? !isPacient && (<Button type="primary" onClick={() => goToRoute(`/Pacient/AddDiagnostic/${programare.Id}`)}>Creează un diagnostic</Button>) : null}
                             </div>
 
                             {DiagnosticId === -1 ? null : (
                                 <div>
-                                    {RetetaId !== -1 ? <Button type="primary" onClick={() => goToRoute(`/Reteta/Details/${RetetaId}`)}>Vezi reteta</Button> : <Button type="primary" onClick={() => goToRoute(`/Reteta/Create/${Id}`)}>Creeaza reteta</Button>}
+                                    {RetetaId !== -1 ? <Button type="primary" onClick={() => goToRoute(`/Reteta/Details/${RetetaId}`)}>Vezi reteta</Button> : (!isPacient && <Button type="primary" onClick={() => goToRoute(`/Reteta/Create/${Id}`)}>Creează reteta</Button>)}
                                 </div>
                             )}
 
@@ -165,7 +168,7 @@ const ProgramareDetails: React.FC<IProgramareDetails> = ({ programare, servicii 
                     <div>
                         <hr />
 
-                        <Button onClick={() => goToRoute(`/Trimitere/Details/${TrimitereTId}`)}>Vezi trimiterea mama</Button>
+                        <Button onClick={() => goToRoute(`/Trimitere/Details/${TrimitereTId}`)}>Vezi trimiterea părinte</Button>
                     </div>
                 )}
             </div>

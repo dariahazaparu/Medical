@@ -401,7 +401,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdresaController.cs" />
-    <Compile Include="Controllers\AsigurareController.cs" />
+    <Compile Include="Controllers\AbonamentController.cs" />
     <Compile Include="Controllers\ClinicaController.cs" />
     <Compile Include="Controllers\DoctorController.cs" />
     <Compile Include="Controllers\FacturaController.cs" />
@@ -418,35 +418,36 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202206051840539_Initial.cs" />
-    <Compile Include="Migrations\202206051840539_Initial.designer.cs">
-      <DependentUpon>202206051840539_Initial.cs</DependentUpon>
+    <Compile Include="Migrations\202206112011078_Initial.cs" />
+    <Compile Include="Migrations\202206112011078_Initial.designer.cs">
+      <DependentUpon>202206112011078_Initial.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Adresa.cs" />
     <Compile Include="Models\Factura.cs" />
-    <Compile Include="Models\FormModels\AdresaForm.cs" />
-    <Compile Include="Models\Asigurare.cs" />
+    <Compile Include="Models\Input\AbonamentInput.cs" />
+    <Compile Include="Models\Input\AdresaForm.cs" />
+    <Compile Include="Models\Abonament.cs" />
     <Compile Include="Models\Clinica.cs" />
     <Compile Include="Models\Diagnostic.cs" />
     <Compile Include="Models\Doctor.cs" />
-    <Compile Include="Models\FormModels\DoctorProgramForm.cs" />
-    <Compile Include="Models\FormModels\ClinicaForm.cs" />
-    <Compile Include="Models\FormModels\FacturaForm.cs" />
-    <Compile Include="Models\FormModels\PacientAddDiagnosticForm.cs" />
-    <Compile Include="Models\FormModels\DoctorForm.cs" />
-    <Compile Include="Models\FormModels\PacientEditForm.cs" />
-    <Compile Include="Models\FormModels\PacientForm.cs" />
-    <Compile Include="Models\FormModels\ProgramareCreateForm.cs" />
-    <Compile Include="Models\FormModels\ProgramareForm.cs" />
-    <Compile Include="Models\FormModels\ProgramareFromForm.cs" />
-    <Compile Include="Models\FormModels\ProgramareUpdatePrezentForm.cs" />
-    <Compile Include="Models\FormModels\ProgramareViewCreateForm.cs" />
-    <Compile Include="Models\FormModels\ProgramForm.cs" />
-    <Compile Include="Models\FormModels\RetetaForm.cs" />
-    <Compile Include="Models\FormModels\ServiciuForm.cs" />
-    <Compile Include="Models\FormModels\TrimitereForm.cs" />
+    <Compile Include="Models\Input\DoctorProgramForm.cs" />
+    <Compile Include="Models\Input\ClinicaForm.cs" />
+    <Compile Include="Models\Input\FacturaForm.cs" />
+    <Compile Include="Models\Input\PacientAddDiagnosticForm.cs" />
+    <Compile Include="Models\Input\DoctorForm.cs" />
+    <Compile Include="Models\Input\PacientEditForm.cs" />
+    <Compile Include="Models\Input\PacientForm.cs" />
+    <Compile Include="Models\Input\ProgramareCreateForm.cs" />
+    <Compile Include="Models\Input\ProgramareForm.cs" />
+    <Compile Include="Models\Input\ProgramareFromForm.cs" />
+    <Compile Include="Models\Input\ProgramareUpdatePrezentForm.cs" />
+    <Compile Include="Models\Input\ProgramareViewCreateForm.cs" />
+    <Compile Include="Models\Input\ProgramForm.cs" />
+    <Compile Include="Models\Input\RetetaForm.cs" />
+    <Compile Include="Models\Input\ServiciuForm.cs" />
+    <Compile Include="Models\Input\TrimitereForm.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\JoiningModels\DoctorXProgramTemplate.cs" />
     <Compile Include="Models\Localitate.cs" />
@@ -459,7 +460,7 @@
     <Compile Include="Models\Reteta.cs" />
     <Compile Include="Models\JoiningModels\RetetaXMedicament.cs" />
     <Compile Include="Models\Serviciu.cs" />
-    <Compile Include="Models\JoiningModels\ServiciuXAsigurare.cs" />
+    <Compile Include="Models\JoiningModels\ServiciuXAbonament.cs" />
     <Compile Include="Models\Specializare.cs" />
     <Compile Include="Models\Trimitere.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -549,11 +550,11 @@
     <Content Include="Views\Localitate\Details.cshtml" />
     <Content Include="Views\Localitate\Edit.cshtml" />
     <Content Include="Views\Localitate\Index.cshtml" />
-    <Content Include="Views\Asigurare\Create.cshtml" />
-    <Content Include="Views\Asigurare\Delete.cshtml" />
-    <Content Include="Views\Asigurare\Details.cshtml" />
-    <Content Include="Views\Asigurare\Edit.cshtml" />
-    <Content Include="Views\Asigurare\Index.cshtml" />
+    <Content Include="Views\Abonament\Create.cshtml" />
+    <Content Include="Views\Abonament\Delete.cshtml" />
+    <Content Include="Views\Abonament\Details.cshtml" />
+    <Content Include="Views\Abonament\Edit.cshtml" />
+    <Content Include="Views\Abonament\Index.cshtml" />
     <Content Include="Views\Pacient\Create.cshtml" />
     <Content Include="Views\Pacient\Delete.cshtml" />
     <Content Include="Views\Pacient\Details.cshtml" />
@@ -575,7 +576,7 @@
     <Content Include="Views\Medicament\Edit.cshtml" />
     <Content Include="Views\Medicament\Index.cshtml" />
     <Content Include="Views\Pacient\AddDiagnostic.cshtml" />
-    <Content Include="Views\Asigurare\AddService.cshtml" />
+    <Content Include="Views\Abonament\AddService.cshtml" />
     <Content Include="Views\Doctor\Delete.cshtml" />
     <Content Include="Views\Doctor\Details.cshtml" />
     <Content Include="Views\Doctor\Edit.cshtml" />
@@ -601,6 +602,7 @@
     <Content Include="Views\ProgramTemplate\Edit.cshtml" />
     <Content Include="Views\ProgramTemplate\Index.cshtml" />
     <Content Include="Views\Doctor\Program.cshtml" />
+    <Content Include="Views\Shared\NonAccess.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
@@ -616,8 +618,11 @@
     <Content Include="Scripts\jquery-3.3.1.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\202206051840539_Initial.resx">
-      <DependentUpon>202206051840539_Initial.cs</DependentUpon>
+    <Folder Include="Models\View\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\202206112011078_Initial.resx">
+      <DependentUpon>202206112011078_Initial.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -41,7 +41,7 @@ const ButtonsComponent: React.FC<ITrimitereDetails> = ({ trimitere: { Pacient, I
     </div>
 
     <div style={{ marginTop: "2rem" }}>
-        {ProgramareTId === -1 ? <Button type="primary" onClick={() => goToRoute(`/Programare/Create/${Pacient.Id}/${Id}`)}>Creeaza programare pe baza trimiterii</Button> :
+        {ProgramareTId === -1 ? <Button type="primary" onClick={() => goToRoute(`/Programare/Create/${Pacient.Id}/${Id}`)}>Creează programare pe baza trimiterii</Button> :
             <Button type="primary" onClick={() => goToRoute(`/Programare/Details/${ProgramareTId}`)}>Vezi programarea pe baza trimiterii</Button>}
 
     </div>

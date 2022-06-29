@@ -1,0 +1,40 @@
+@model Licenta2022.Models.Pacient
+
+@{
+    ViewBag.Title = "Diagnostice";
+}
+
+
+<div style="display: flex; justify-content: space-around; margin-top: 2rem;">
+    <dl class="dl-horizontal">
+        <dt class="bigger-text">
+            @Html.DisplayNameFor(model => model.Nume)
+        </dt>
+
+        <dd class="bigger-text">
+            @Html.DisplayFor(model => model.Nume)
+        </dd>
+
+        <dt class="bigger-text">
+            @Html.DisplayNameFor(model => model.Prenume)
+        </dt>
+
+        <dd class="bigger-text">
+            @Html.DisplayFor(model => model.Prenume)
+        </dd>
+    </dl>
+
+    <div>
+        @foreach (var pxdxp in Model.PacientXDiagnosticXProgramare)
+        {
+            <div>
+                Diagnostic: @pxdxp.Diagnostic.Denumire
+                <span>@pxdxp.Diagnostic.Descriere</span>
+
+                Data: @pxdxp.Data
+
+                <button><a href="/Programare/Details/@pxdxp.Programare.Id">Vezi programarea</a></button>
+            </div>
+        }
+
+    </div>

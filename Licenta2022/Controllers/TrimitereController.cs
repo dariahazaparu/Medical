@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using Licenta2022.Models;
+using Microsoft.AspNet.Identity;
 
 namespace Licenta2022.Controllers
 
@@ -15,7 +16,7 @@ namespace Licenta2022.Controllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
-        // GET: Trimiteres
+        [Authorize(Roles = "Admin,Receptie,Doctor,Pacient")]
         public ActionResult Index(int? id)
         {
             var data = db.Trimiteri.Select(trimitere => new
@@ -26,7 +27,8 @@ namespace Licenta2022.Controllers
                 {
                     Id = trimitere.Programare.Pacient.Id,
                     Nume = trimitere.Programare.Pacient.Nume,
-                    Prenume = trimitere.Programare.Pacient.Prenume
+                    Prenume = trimitere.Programare.Pacient.Prenume,
+                    UserId = trimitere.Programare.Pacient.UserId
                 },
 
                 DataProgramare = trimitere.Programare.Data,
@@ -47,13 +49,19 @@ namespace Licenta2022.Controllers
                 data = data.Where(trimitere => trimitere.Pacient.Id == id);
             }
 
+            if (User.IsInRole("Pacient"))
+            {
+                var userId = User.Identity.GetUserId();
+                data = data.Where(trim => trim.Pacient.UserId == userId);
+            }
+
             ViewBag.HasId = id != null;
             ViewBag.Data = data;
 
             return View();
         }
 
-        // GET: Trimiteres/Details/5
+        [Authorize(Roles = "Admin,Receptie,Doctor,Pacient")]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -67,9 +75,12 @@ namespace Licenta2022.Controllers
             {
                 return HttpNotFound();
             }
-            
+            var userId = User.Identity.GetUserId();
+            if (User.IsInRole("Pacient") && userId != trimitere.FirstOrDefault().Programare.Pacient.UserId)
+                return View("NonAccess");
+
             ViewBag.HasId = id != null;
-            ViewBag.Data = trimitere.Select(trim => new
+            var data = trimitere.Select(trim => new
             {
                 Id = trim.Id,
 
@@ -89,10 +100,11 @@ namespace Licenta2022.Controllers
                 Specializare = trim.Specializare.Denumire
             }).FirstOrDefault();
 
+            ViewBag.Data = data;
             return View();
         }
 
-        // GET: Trimiteres/Create
+        [Authorize(Roles = "Admin,Doctor")]
         public ActionResult Create(int? id)
         {
             if (id == null)
@@ -126,14 +138,12 @@ namespace Licenta2022.Controllers
 
             ViewBag.IdPacient = programare.Pacient.Id;
             ViewBag.IdProgramare = programare.Id;
-   
+            ViewBag.NumePacient = programare.Pacient.Nume + " " + programare.Pacient.Prenume;
             return View();
         }
 
-        // POST: Trimiteres/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
+        [Authorize(Roles = "Admin,Doctor")]
         public ActionResult Create([Bind(Include = "Observatii,IdProgramare,IdPacient,IdSpecializare,IdServicii")] TrimitereForm trimitereForm)
         {
             if (ModelState.IsValid)
@@ -176,39 +186,9 @@ namespace Licenta2022.Controllers
 
             return View(trimitereForm);
         }
-
-        // GET: Trimiteres/Edit/5
-        public ActionResult Edit(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Trimitere trimitere = db.Trimiteri.Find(id);
-            if (trimitere == null)
-            {
-                return HttpNotFound();
-            }
-            return View(trimitere);
-        }
-
-        // POST: Trimiteres/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Observatii")] Trimitere trimitere)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Entry(trimitere).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            return View(trimitere);
-        }
-
-        // GET: Trimiteres/Delete/5
+        
+        
+        [Authorize(Roles = "Admin,Doctor")]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -223,9 +203,9 @@ namespace Licenta2022.Controllers
             return View(trimitere);
         }
 
-        // POST: Trimiteres/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,Doctor")]
         public ActionResult DeleteConfirmed(int id)
         {
             Trimitere trimitere = db.Trimiteri.Find(id);

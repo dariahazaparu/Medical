@@ -14,13 +14,13 @@ namespace Licenta2022.Controllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
-        // GET: Adresa
+        [Authorize(Roles = "Admin,Receptie,Doctor,Pacient")]
         public ActionResult Index()
         {
             return View(db.Adrese.Include("Localitate").ToList());
         }
 
-        // GET: Adresa/Details/5
+        [Authorize(Roles = "Admin,Receptie,Doctor,Pacient")]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -35,7 +35,7 @@ namespace Licenta2022.Controllers
             return View(adresa);
         }
 
-        // GET: Adresa/Create
+        [Authorize(Roles = "Admin")]
         public ActionResult Create()
         {
             ViewBag.Localitati = GetAllCities();
@@ -61,11 +61,9 @@ namespace Licenta2022.Controllers
             return selectList;
         }
 
-        // POST: Adresa/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public ActionResult Create([Bind(Include = "Id,Strada,Numar,IdLocalitate")] AdresaForm adresaForm)
         {
             if (ModelState.IsValid)
@@ -87,7 +85,7 @@ namespace Licenta2022.Controllers
             return View(adresaForm);
         }
 
-        // GET: Adresa/Edit/5
+        [Authorize(Roles = "Admin")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -102,11 +100,9 @@ namespace Licenta2022.Controllers
             return View(adresa);
         }
 
-        // POST: Adresa/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public ActionResult Edit([Bind(Include = "Id,Strada,Numar,IdLocalitate")] Adresa adresa)
         {
             if (ModelState.IsValid)
@@ -118,7 +114,7 @@ namespace Licenta2022.Controllers
             return View(adresa);
         }
 
-        // GET: Adresa/Delete/5
+        [Authorize(Roles = "Admin")]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -133,8 +129,8 @@ namespace Licenta2022.Controllers
             return View(adresa);
         }
 
-        // POST: Adresa/Delete/5
         [HttpPost, ActionName("Delete")]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {

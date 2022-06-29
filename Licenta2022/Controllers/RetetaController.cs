@@ -14,7 +14,7 @@ namespace Licenta2022.Controllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
-        // GET: Reteta
+        [Authorize(Roles = "Admin,Receptie,Doctor,Pacient")]
         public ActionResult Index(int? id)
         {
             var data = db.Retete.Select(x => x);
@@ -36,7 +36,7 @@ namespace Licenta2022.Controllers
             return View(data.ToList());
         }
 
-        // GET: Reteta/Details/5
+        [Authorize(Roles = "Admin,Receptie,Doctor,Pacient")]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -54,7 +54,7 @@ namespace Licenta2022.Controllers
             return View(reteta);
         }
 
-        // GET: Reteta/Create
+        [Authorize(Roles = "Admin,Doctor")]
         public ActionResult Create(int? id)
         {
             if (id == null)
@@ -77,10 +77,9 @@ namespace Licenta2022.Controllers
                 value = medicament.Id
             });
             ViewBag.IdProgramare = programare.Id;
-
+            ViewBag.NumePacient = programare.Pacient.Nume + " " + programare.Pacient.Prenume;
             return View();
         }
-
 
         [NonAction]
         private IEnumerable<SelectListItem> GetAllMedicine()
@@ -101,32 +100,11 @@ namespace Licenta2022.Controllers
             return selectList;
         }
 
-        // POST: Reteta/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Admin,Doctor")]
+
         [HttpPost]
         public ActionResult Create([Bind(Include = "IdProgramare,IdMedicamente,Doze")] RetetaForm retetaForm)
         {
-            //var programare = db.Programari.Where(x => x.Id == retetaForm.IdProgramare).Select(x => x).ToList().FirstOrDefault();
-            ////db.Programari.Attach(programare);
-            //var reteta = new Reteta()
-            //{
-            //    DataEmiterii = DateTime.Now,
-            //    RetetaXMedicament = new List<RetetaXMedicament>()
-            //};
-            ////programare.Reteta = reteta;
-            ////db.Entry(programare).State = EntityState.Modified;
-            ////db.Programari.Attach(programare);
-            ////db.Retete.Add(reteta);
-
-            //db.Retete.Add(reteta);
-            //db.SaveChanges();
-
-            ////reteta.Programare = programare;
-            ////db.Entry(reteta).State = EntityState.Modified;
-            ////db.SaveChanges();
-
-
             if (ModelState.IsValid)
             {
                 var reteta = new Reteta()
@@ -163,38 +141,7 @@ namespace Licenta2022.Controllers
             return View(retetaForm);
         }
 
-        // GET: Reteta/Edit/5
-        public ActionResult Edit(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Reteta reteta = db.Retete.Find(id);
-            if (reteta == null)
-            {
-                return HttpNotFound();
-            }
-            return View(reteta);
-        }
-
-        // POST: Reteta/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,DataEmiterii")] Reteta reteta)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Entry(reteta).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            return View(reteta);
-        }
-
-        // GET: Reteta/Delete/5
+        [Authorize(Roles = "Admin")]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -209,9 +156,9 @@ namespace Licenta2022.Controllers
             return View(reteta);
         }
 
-        // POST: Reteta/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public ActionResult DeleteConfirmed(int id)
         {
             Reteta reteta = db.Retete.Find(id);

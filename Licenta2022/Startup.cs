@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Builder;
 using Licenta2022.Models;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using Licenta2022.Migrations;
 
 [assembly: OwinStartupAttribute(typeof(Licenta2022.Startup))]
 namespace Licenta2022
@@ -19,7 +20,11 @@ namespace Licenta2022
     {
         public void Configuration(IAppBuilder app)
         {
-            ConfigureAuth(app);
+			//var migration = new Initial();
+
+			//migration.Down();
+
+			ConfigureAuth(app);
 			CreateAdminUserAndApplicationRoles();
 		}
 

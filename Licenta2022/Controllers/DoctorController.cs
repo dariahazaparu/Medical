@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using Licenta2022.Models;
+using Microsoft.AspNet.Identity;
 
 namespace Licenta2022.Controllers
 {
@@ -14,7 +15,6 @@ namespace Licenta2022.Controllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
-        // GET: Doctor
         public ActionResult Index()
         {
             var data = db.Doctori.Select(doctor => new
@@ -27,26 +27,43 @@ namespace Licenta2022.Controllers
             });
 
             ViewBag.Data = data;
+            ViewBag.OmitCreate = User.IsInRole("Pacient") || !User.Identity.IsAuthenticated || User.IsInRole("Doctor");
 
             return View();
         }
 
-        // GET: Doctor/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Doctor doctor = db.Doctori.Find(id);
-            if (doctor == null)
+
+            if (db.Doctori.Find(id) == null)
             {
                 return HttpNotFound();
             }
-            return View(doctor);
+
+            var data = db.Doctori.Where(d => d.Id == id).Select(doctor => new
+            {
+                Id = doctor.Id,
+                Nume = doctor.Nume,
+                Prenume = doctor.Prenume,
+                Specializare = doctor.Specializare.Denumire,
+                Clinica = doctor.Clinica.Nume,
+                Configuratii = doctor.DoctorXProgramTemplates.Select(dxpt => new
+                {
+                    Config = dxpt.Config,
+                    Data = dxpt.Data
+                }).Where(program => program.Data >= DateTime.Today).ToList()
+            }).FirstOrDefault();
+
+            ViewBag.Data = data;
+
+            return View();
         }
 
-        // GET: Doctor/Create
+        [Authorize(Roles = "Admin,Receptie,Doctor")]
         public ActionResult Create()
         {
             ViewBag.Specialitati = GetAllSpecialties();
@@ -54,11 +71,9 @@ namespace Licenta2022.Controllers
             return View();
         }
 
-        // POST: Doctor/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,Receptie,Doctor")]
         public ActionResult Create([Bind(Include = "Id,Nume,Prenume,DataAngajarii,IdSpecializare,IdClinica")] DoctorForm doctorForm)
         {
             if (ModelState.IsValid)
@@ -70,12 +85,15 @@ namespace Licenta2022.Controllers
                     DataAngajarii = doctorForm.DataAngajarii
                 };
 
-                var Specializare = db.Specialitati.Where(x => x.Id == doctorForm.IdSpecializare).Select(x => x).ToList();
+                var Specializare = db.Specialitati.Where(x => x.Id == doctorForm.IdSpecializare).Select(x => x);
                 doctor.Specializare = Specializare.FirstOrDefault();
 
                 var clinica = db.Clinici.Where(x => x.Id == doctorForm.IdClinica).Select(x => x).ToList();
                 doctor.Clinica = clinica.FirstOrDefault();
 
+                if (User.Identity.IsAuthenticated && User.IsInRole("Doctor"))
+                    doctor.UserId = User.Identity.GetUserId();
+                
                 db.Doctori.Add(doctor);
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -84,7 +102,7 @@ namespace Licenta2022.Controllers
             return View(doctorForm);
         }
 
-        // GET: Doctor/Edit/5
+        [Authorize(Roles = "Admin")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -99,11 +117,9 @@ namespace Licenta2022.Controllers
             return View(doctor);
         }
 
-        // POST: Doctor/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public ActionResult Edit([Bind(Include = "Id,Nume,Prenume,DataAngajarii,IdSpecializare,IdClinica")] Doctor doctor)
         {
             if (ModelState.IsValid)
@@ -115,7 +131,7 @@ namespace Licenta2022.Controllers
             return View(doctor);
         }
 
-        // GET: Doctor/Delete/5
+        [Authorize(Roles = "Admin,Receptie")]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -130,9 +146,9 @@ namespace Licenta2022.Controllers
             return View(doctor);
         }
 
-        // POST: Doctor/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,Receptie")]
         public ActionResult DeleteConfirmed(int id)
         {
             Doctor doctor = db.Doctori.Find(id);
@@ -149,7 +165,6 @@ namespace Licenta2022.Controllers
             }
             base.Dispose(disposing);
         }
-
 
         [NonAction]
         private IEnumerable<SelectListItem> GetAllSpecialties()
@@ -189,7 +204,7 @@ namespace Licenta2022.Controllers
             return selectList;
         }
 
-        // GET
+        [Authorize(Roles = "Admin,Doctor,Receptie")]
         public ActionResult Program(int? id)
         {
             if (id == null)
@@ -209,14 +224,18 @@ namespace Licenta2022.Controllers
                 IdDoctor = doctor.Id,
             };
 
-            ViewBag.Templates = db.ProgramTemplates.Select(x => x).ToList();
+            ViewBag.Templates = db.ProgramTemplates.Select(x => new
+            {
+                Id = x.Id,
+                Config = x.Config
+            }).ToList();
             ViewBag.UsedDates = doctor.DoctorXProgramTemplates.Select(dxt => dxt.Data);
-
+            ViewBag.NumeDoctor = doctor.Nume + " " + doctor.Prenume;
             return View(programForm);
         }
 
         [HttpPost]
-        //[ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,Receptie,Doctor")]
         public ActionResult Program([Bind(Include = "IdDoctor,Programe")] DoctorProgramForm programForm)
         {
             if (ModelState.IsValid)

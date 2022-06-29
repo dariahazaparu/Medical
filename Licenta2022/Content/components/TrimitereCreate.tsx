@@ -55,7 +55,7 @@ const TrimitereCreate: React.FC<ITrimitere> = ({ specialitati, servicii, idPacie
 
     return (
         <div>
-            <Form form={form} labelCol={{ span: 2 }} wrapperCol={{ span: 12 }} colon={false} onFinish={onSubmit}>
+            <Form form={form} labelCol={{ span: 4, style: { marginRight: "1rem" } }} wrapperCol={{ span: 12 }} colon={false} onFinish={onSubmit}>
                 <Form.Item label="Specializare" name="specializareId">
                     <Select onChange={updateSpecializareId} placeholder="Selecteaza o specializare" options={specialitati} />
                 </Form.Item>
@@ -70,7 +70,7 @@ const TrimitereCreate: React.FC<ITrimitere> = ({ specialitati, servicii, idPacie
                     <TextArea />
                 </Form.Item>
 
-                <Button disabled={serviciiId.length === 0} htmlType="submit" type="primary">Creeaza</Button>
+                <Button disabled={serviciiId.length === 0} htmlType="submit" type="primary">Creează</Button>
             </Form>
         </div>
     )

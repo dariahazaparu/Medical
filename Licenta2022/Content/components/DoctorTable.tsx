@@ -13,6 +13,7 @@ interface DataType extends Doctor {
 
 interface IDoctorTable {
     data: DataType[]
+    omitCreate: boolean
 }
 
 const columns = [
@@ -54,9 +55,12 @@ const columns = [
 
 ] as TableColumnsType<DataType>
 
-const DoctorTable: React.FC<IDoctorTable> = ({ data }) => {
+const DoctorTable: React.FC<IDoctorTable> = ({ data, omitCreate }) => {
+
+    console.log(omitCreate)
     return (<div>
-        <TableHeader title="Doctori" />
+
+        <TableHeader title="Doctori" {...{ omitCreate }} />
 
         <TableComponent columns={columns} data={data.map((item, idx) => ({
             ...item,

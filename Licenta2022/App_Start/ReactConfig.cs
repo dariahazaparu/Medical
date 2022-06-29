@@ -38,8 +38,6 @@ namespace Licenta2022
 
             JsEngineSwitcher.Current.DefaultEngineName = V8JsEngine.EngineName;
             JsEngineSwitcher.Current.EngineFactories.AddV8();
-
-
         }
     }
 }

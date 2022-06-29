@@ -141,7 +141,7 @@ const ProgramareCreateComponent: React.FC<IProgramareCreateComponent> = (props) 
                 </div>
             ) : null}
 
-            <Button disabled={!programIntervalIndex} style={{ marginTop: "2rem" }} onClick={onCreate}>Creeaza</Button>
+            <Button disabled={programIntervalIndex == null} style={{ marginTop: "2rem" }} onClick={onCreate}>Creează</Button>
         </div>
     )
 }

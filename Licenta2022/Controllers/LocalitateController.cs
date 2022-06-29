@@ -14,13 +14,13 @@ namespace Licenta2022.Controllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
-        // GET: Localitate
+        [Authorize(Roles = "Admin,Receptie,Doctor,Pacient")]
         public ActionResult Index()
         {
             return View(db.Localitati.ToList());
         }
 
-        // GET: Localitate/Details/5
+        [Authorize(Roles = "Admin,Receptie,Doctor,Pacient")]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -35,17 +35,15 @@ namespace Licenta2022.Controllers
             return View(localitate);
         }
 
-        // GET: Localitate/Create
+        [Authorize(Roles = "Admin")]
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: Localitate/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public ActionResult Create([Bind(Include = "Id,Nume")] Localitate localitate)
         {
             if (ModelState.IsValid)
@@ -58,7 +56,7 @@ namespace Licenta2022.Controllers
             return View(localitate);
         }
 
-        // GET: Localitate/Edit/5
+        [Authorize(Roles = "Admin")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -73,11 +71,9 @@ namespace Licenta2022.Controllers
             return View(localitate);
         }
 
-        // POST: Localitate/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public ActionResult Edit([Bind(Include = "Id,Nume")] Localitate localitate)
         {
             if (ModelState.IsValid)
@@ -89,7 +85,7 @@ namespace Licenta2022.Controllers
             return View(localitate);
         }
 
-        // GET: Localitate/Delete/5
+        [Authorize(Roles = "Admin")]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -104,9 +100,9 @@ namespace Licenta2022.Controllers
             return View(localitate);
         }
 
-        // POST: Localitate/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public ActionResult DeleteConfirmed(int id)
         {
             Localitate localitate = db.Localitati.Find(id);

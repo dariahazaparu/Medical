@@ -13,7 +13,7 @@ namespace Licenta2022.Migrations
         
         string IMigrationMetadata.Id
         {
-            get { return "202206051840539_Initial"; }
+            get { return "202206091939396_Initial"; }
         }
         
         string IMigrationMetadata.Source

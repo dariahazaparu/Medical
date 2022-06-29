@@ -14,7 +14,7 @@ namespace Licenta2022.Controllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
-        // GET: Factura
+        [Authorize(Roles = "Admin, Receptie, Doctor, Pacient")]
         public ActionResult Index(int? id)
         {
             var data = db.Facturi.Select(x => x);
@@ -35,8 +35,13 @@ namespace Licenta2022.Controllers
 
             return View(data.ToList());
         }
+        public class serv
+        {
+            public string nume { get; set; }
+            public float pret { get; set; }
+        };
 
-        // GET: Factura/Details/5
+        [Authorize(Roles = "Admin, Receptie, Doctor, Pacient")]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -48,10 +53,57 @@ namespace Licenta2022.Controllers
             {
                 return HttpNotFound();
             }
+
+            var servicii = new List<Serviciu>();
+
+            if (factura.Programare.TrimitereParinte != null)
+                servicii = factura.Programare.TrimitereParinte.Servicii.ToList();
+            if (factura.Programare.Serviciu != null)
+                servicii.Add(factura.Programare.Serviciu);
+            var abonament = factura.Programare.Pacient.Abonament;
+            ViewBag.Servicii = new List<serv>();
+
+            if (abonament != null)
+            {
+                foreach (var serviciu in servicii)
+                {
+                    var procent = 0;
+                    foreach (var sxa in abonament.ServiciuXAbonamente)
+                    {
+                        if (sxa.Serviciu == serviciu)
+                        {
+                            procent = sxa.ProcentReducere;
+                            break;
+                        }
+                    }
+                    ViewBag.Servicii.Add(new serv()
+                    {
+                        nume = serviciu.Denumire,
+                        pret = serviciu.Pret * (100 - procent) / 100
+                    }); 
+                }
+            }
+            else
+            {
+                foreach(var serviciu in servicii)
+                {
+                    ViewBag.Servicii.Add(new serv()
+                    {
+                        nume = serviciu.Denumire,
+                        pret = serviciu.Pret
+                    });
+                }
+
+            }
+            //todo : functie pt calcul pret serviciu din abonament
+          
+
+            ViewBag.NumePacient = factura.Programare.Pacient.Nume + " " + factura.Programare.Pacient.Prenume;
+            
             return View(factura);
         }
 
-        // GET: Factura/Create
+        [Authorize(Roles = "Admin, Doctor")]
         public ActionResult Create(int? id)
         {
             if (id == null)
@@ -71,10 +123,8 @@ namespace Licenta2022.Controllers
             return View(factura);
         }
 
-        // POST: Factura/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
+        [Authorize(Roles = "Admin, Doctor")]
         public ActionResult Create([Bind(Include = "IdProgramare")] FacturaForm facturaForm)
         {
             if (ModelState.IsValid)
@@ -88,8 +138,8 @@ namespace Licenta2022.Controllers
                 factura.Programare = programare;
 
                 var pacient = programare.Pacient;
-                var asigurare = pacient.Asigurare;
-                var sxa = asigurare.ServiciuXAsigurari;
+                var abonament = pacient.Abonament;
+                var sxa = abonament != null ? abonament.ServiciuXAbonamente.ToList() : new List<ServiciuXAbonament>();
 
                 factura.Total = 0;
 
@@ -140,38 +190,7 @@ namespace Licenta2022.Controllers
             return View(facturaForm);
         }
 
-        // GET: Factura/Edit/5
-        public ActionResult Edit(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Factura factura = db.Facturi.Find(id);
-            if (factura == null)
-            {
-                return HttpNotFound();
-            }
-            return View(factura);
-        }
-
-        // POST: Factura/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Total")] Factura factura)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Entry(factura).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            return View(factura);
-        }
-
-        // GET: Factura/Delete/5
+        [Authorize(Roles = "Admin")]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -186,9 +205,9 @@ namespace Licenta2022.Controllers
             return View(factura);
         }
 
-        // POST: Factura/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public ActionResult DeleteConfirmed(int id)
         {
             Factura factura = db.Facturi.Find(id);

@@ -13,6 +13,7 @@ interface DataType extends Clinica {
 
 interface IClinicaTable {
     data: DataType[]
+    omitCreate: boolean
 }
 
 const columns = [
@@ -36,14 +37,14 @@ const columns = [
 
 ] as TableColumnsType<DataType>
 
-const ClinicaTable: React.FC<IClinicaTable> = ({ data }) => {
+const ClinicaTable: React.FC<IClinicaTable> = ({ data, omitCreate }) => {
     return (<div>
-        <TableHeader title="Clinici" />
+        <TableHeader title="Clinici" {...{ omitCreate }} />
 
         <TableComponent columns={columns} data={data.map((item, idx) => ({
             ...item,
             key: idx.toString()
-        }))} />
+        }))} actions={{ omitEdit: omitCreate }} />
     </div>)
 }
 

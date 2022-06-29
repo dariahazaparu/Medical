@@ -4,18 +4,14 @@
     ViewBag.Title = "Edit Pacient";
 }
 
-<h2>Edit</h2>
+<h2>Editare</h2>
 
 @Html.React("Components.PacientEdit", new {
 data = ViewBag.Data,
 localitati = ViewBag.Localitati,
 adrese = ViewBag.Adrese,
-asigurari = ViewBag.Asigurari
+abonamente = ViewBag.Abonamente
 })
-
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
 
 @section Scripts {
 @Scripts.Render("~/bundles/jqueryval")

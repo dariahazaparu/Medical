@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using Licenta2022.Models;
+using Microsoft.AspNet.Identity;
 
 namespace Licenta2022.Controllers
 {
@@ -14,9 +15,7 @@ namespace Licenta2022.Controllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
-
-        // GET: Programare
-        [Authorize(Roles = "Doctor")]
+        [Authorize(Roles = "Admin,Receptie,Doctor,Pacient")]
         public ActionResult Index(int? id)
         {
             var data = db.Programari.Select(programare => new
@@ -37,7 +36,8 @@ namespace Licenta2022.Controllers
                 {
                     Id = programare.Pacient.Id,
                     Nume = programare.Pacient.Nume,
-                    Prenume = programare.Pacient.Prenume
+                    Prenume = programare.Pacient.Prenume,
+                    UserId = programare.Pacient.UserId
                 },
 
                 Prezent = programare.Prezent
@@ -55,6 +55,12 @@ namespace Licenta2022.Controllers
                 data = data.Where(programare => programare.Pacient.Id == id);
             }
 
+            if (User.IsInRole("Pacient"))
+            {
+                var userId = User.Identity.GetUserId();
+                data = data.Where(prog => prog.Pacient.UserId == userId);
+            }
+
             ViewBag.Data = data.ToList();
             ViewBag.data.Reverse();
             ViewBag.HasId = id != null;
@@ -62,7 +68,7 @@ namespace Licenta2022.Controllers
             return View();
         }
 
-        // GET: Programare/Details/5
+        [Authorize(Roles = "Admin,Receptie,Doctor,Pacient")]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -77,6 +83,9 @@ namespace Licenta2022.Controllers
             {
                 return HttpNotFound();
             }
+
+            if (User.Identity.GetUserId() != programareDb.Pacient.UserId && User.IsInRole("Pacient"))
+                return View("NonAccess");
 
             var diagnostic = db.PacientXDiagnosticXProgramares.Where(pxd => pxd.IdProgramare == id).FirstOrDefault();
 
@@ -99,7 +108,7 @@ namespace Licenta2022.Controllers
                 Pacient = new
                 {
                     Nume = programare.Pacient.Nume,
-                    Prenume = programare.Pacient.Prenume,
+                    Prenume = programare.Pacient.Prenume
                 },
 
                 Data = programare.Data,
@@ -109,7 +118,7 @@ namespace Licenta2022.Controllers
                 Doctor = new
                 {
                     Nume = programare.Doctor.Nume,
-                    Prenume = programare.Doctor.Prenume,
+                    Prenume = programare.Doctor.Prenume
                 },
 
                 Clinica = new
@@ -141,7 +150,8 @@ namespace Licenta2022.Controllers
 
             if (programareDb.Serviciu != null)
             {
-                 servicii = data.Servicii.Append(new {
+                servicii = data.Servicii.Append(new
+                {
                     Pret = programareDb.Serviciu.Pret,
                     Denumire = programareDb.Serviciu.Denumire
                 });
@@ -149,11 +159,11 @@ namespace Licenta2022.Controllers
 
             ViewBag.Data = data;
             ViewBag.Servicii = servicii;
-
+            ViewBag.IsPacient = User.IsInRole("Pacient");
             return View();
         }
 
-        // GET: Programare/Create
+        [Authorize(Roles = "Admin,Receptie,Doctor,Pacient")]
         public ActionResult Create(int? id, int? id2)
         {
             if (id == null)
@@ -166,6 +176,9 @@ namespace Licenta2022.Controllers
             {
                 return HttpNotFound();
             }
+
+            if (User.Identity.GetUserId() != pacient.UserId && User.IsInRole("Pacient"))
+                return View("NonAccess");
 
             if (id2 != null)
             {
@@ -233,6 +246,7 @@ namespace Licenta2022.Controllers
             ViewBag.IdPacient = id;
             ViewBag.IdTrimitere = id2 == null ? -1 : id2;
             ViewBag.IdSpecializare = id2 == null ? -1 : db.Trimiteri.Find(id2).Specializare.Id;
+            ViewBag.NumePacient = pacient.Nume + " " + pacient.Prenume;
 
             return View();
         }
@@ -257,6 +271,7 @@ namespace Licenta2022.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin,Receptie,Doctor")]
         public ActionResult SetPrezent([Bind(Include = "ProgramareId, Prezent")] ProgramareUpdatePrezentForm input)
         {
 
@@ -276,10 +291,8 @@ namespace Licenta2022.Controllers
             return new HttpStatusCodeResult(HttpStatusCode.OK);
         }
 
-        // POST: Programare/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
+        [Authorize(Roles = "Admin,Receptie,Doctor,Pacient")]
         public ActionResult Create([Bind(Include = "IdDoctor,IdProgram,ProgramIntervalIndex,IdPacient,IdTrimitere")] ProgramareCreateForm programareCreateForm)
         {
             if (ModelState.IsValid)
@@ -307,14 +320,15 @@ namespace Licenta2022.Controllers
                     Prezent = false,
                     Trimitere = null,
                     TrimitereParinte = trimitereT,
-                    Reteta = null, 
+                    Reteta = null,
                     Serviciu = null
                 };
 
                 if (trimitereT != null)
                 {
                     trimitereT.ProgramareParinte = programare;
-                } else
+                }
+                else
                 {
                     programare.Serviciu = db.Servicii
                         .Where(serv => serv.Specializare.Id == doctor.Specializare.Id)
@@ -330,38 +344,7 @@ namespace Licenta2022.Controllers
             return View(programareCreateForm);
         }
 
-        // GET: Programare/Edit/5
-        public ActionResult Edit(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Programare programare = db.Programari.Find(id);
-            if (programare == null)
-            {
-                return HttpNotFound();
-            }
-            return View(programare);
-        }
-
-        // POST: Programare/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Data")] Programare programare)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Entry(programare).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            return View(programare);
-        }
-
-        // GET: Programare/Delete/5
+        [Authorize(Roles = "Admin,Receptie,Pacient")]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -376,17 +359,29 @@ namespace Licenta2022.Controllers
             return View(programare);
         }
 
-        // POST: Programare/Delete/5
         [HttpPost, ActionName("Delete")]
+        [Authorize(Roles = "Admin,Receptie,Pacient")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
             Programare programare = db.Programari.Find(id);
+            Doctor doctor = programare.Doctor;
+            var dt = (int)programare.Data.TimeOfDay.TotalMinutes;
+            var config = doctor.DoctorXProgramTemplates.Where(prog => prog.Data.Date == programare.Data.Date).Select(prog => prog.Config).FirstOrDefault();
+            config = config.Substring(0, dt / 15) + '1' + config.Substring(dt / 15 + 1);
+
+            doctor.DoctorXProgramTemplates.Where(prog => prog.Data.Date == programare.Data.Date).FirstOrDefault().Config = config;
+
+            var trimitere = programare.TrimitereParinte;
+            if (trimitere != null)
+            {
+                trimitere.ProgramareParinte = null;
+            }
+
             db.Programari.Remove(programare);
             db.SaveChanges();
             return RedirectToAction("Index");
         }
-
         protected override void Dispose(bool disposing)
         {
             if (disposing)
@@ -394,65 +389,6 @@ namespace Licenta2022.Controllers
                 db.Dispose();
             }
             base.Dispose(disposing);
-        }
-
-        public ActionResult CreateFromTrimitere(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Trimitere trimitere = db.Trimiteri.Find(id);
-            if (trimitere == null)
-            {
-                return HttpNotFound();
-            }
-            Pacient pacient = db.Pacienti.Find(trimitere.Programare.Pacient.Id);
-            if (pacient == null)
-            {
-                return HttpNotFound();
-            }
-            ProgramareFromForm form = new ProgramareFromForm()
-            {
-                IdTrimitere = trimitere.Id,
-                IdPacient = pacient.Id
-            };
-            ViewBag.Doctori = GetAllDoctors();
-            return View(form);
-        }
-
-        // POST: Programare/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult CreateFromTrimitere([Bind(Include = "Id,Data,IdPacient,IdDoctor,IdTrimitere")] ProgramareFromForm form)
-        {
-            if (ModelState.IsValid)
-            {
-                var programare = new Programare()
-                {
-                    Data = form.Data
-                };
-
-                var doctor = db.Doctori.Where(x => x.Id == form.IdDoctor).Select(x => x).ToList();
-                programare.Doctor = doctor.FirstOrDefault();
-
-                var pacient = db.Pacienti.Where(x => x.Id == form.IdPacient).Select(x => x).ToList();
-                programare.Pacient = pacient.FirstOrDefault();
-
-                var trimitere = db.Trimiteri.Where(x => x.Id == form.IdTrimitere).Select(x => x).ToList().FirstOrDefault();
-                trimitere.ProgramareParinte = programare;
-                programare.TrimitereParinte = trimitere;
-
-                programare.Reteta = null;
-
-                db.Programari.Add(programare);
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-
-            return View(form);
         }
     }
 }

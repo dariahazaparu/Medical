@@ -14,7 +14,6 @@ namespace Licenta2022.Controllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
-        // GET: Clinica
         public ActionResult Index()
         {
             var data = db.Clinici.Select(clinica => new
@@ -25,11 +24,11 @@ namespace Licenta2022.Controllers
             });
 
             ViewBag.Data = data;
+            ViewBag.OmitCreate = User.Identity.IsAuthenticated && User.IsInRole("Pacient") || !User.Identity.IsAuthenticated;
 
             return View();
         }
 
-        // GET: Clinica/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -41,13 +40,19 @@ namespace Licenta2022.Controllers
             {
                 return HttpNotFound();
             }
+            ViewBag.Doctori = new List<string>();
+            foreach(var doc in clinica.Doctori)
+            {
+                ViewBag.Doctori.Add(doc.Nume + " " + doc.Prenume + ", " + doc.Specializare.Denumire);
+            }
             return View(clinica);
         }
 
-        // GET: Clinica/Create
+        [Authorize(Roles = "Admin")]
         public ActionResult Create()
         {
-            ViewBag.Adrese = GetAllAddresses(); 
+            ViewBag.Adrese = GetAllAddresses();
+            ViewBag.Localitati = GetAllCities();
             return View();
         }
 
@@ -63,18 +68,36 @@ namespace Licenta2022.Controllers
                 selectList.Add(new SelectListItem
                 {
                     Value = adresa.Id.ToString(),
-                    Text = adresa.Strada.ToString()
+                    Text = adresa.Strada.ToString() + ", " + adresa.Numar.ToString()
                 });
             }
 
             return selectList;
         }
 
-        // POST: Clinica/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+
+        [NonAction]
+        private IEnumerable<SelectListItem> GetAllCities()
+        {
+            var selectList = new List<SelectListItem>();
+
+            var localitati = db.Localitati.Select(x => x);
+
+            foreach (var localitate in localitati)
+            {
+                selectList.Add(new SelectListItem
+                {
+                    Value = localitate.Id.ToString(),
+                    Text = localitate.Nume.ToString()
+                });
+            }
+
+            return selectList;
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public ActionResult Create([Bind(Include = "Id,Nume,IdAdresa")] ClinicaForm clinicaForm)
         {
             if (ModelState.IsValid)
@@ -95,7 +118,7 @@ namespace Licenta2022.Controllers
             return View(clinicaForm);
         }
 
-        // GET: Clinica/Edit/5
+        [Authorize(Roles = "Admin")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -110,11 +133,9 @@ namespace Licenta2022.Controllers
             return View(clinica);
         }
 
-        // POST: Clinica/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public ActionResult Edit([Bind(Include = "Id,Nume")] Clinica clinica)
         {
             if (ModelState.IsValid)
@@ -126,7 +147,7 @@ namespace Licenta2022.Controllers
             return View(clinica);
         }
 
-        // GET: Clinica/Delete/5
+        [Authorize(Roles = "Admin")]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -141,9 +162,9 @@ namespace Licenta2022.Controllers
             return View(clinica);
         }
 
-        // POST: Clinica/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public ActionResult DeleteConfirmed(int id)
         {
             Clinica clinica = db.Clinici.Find(id);

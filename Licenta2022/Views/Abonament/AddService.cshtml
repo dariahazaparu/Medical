@@ -1,4 +1,4 @@
-﻿@model Licenta2022.Models.Asigurare
+﻿@model Licenta2022.Models.Abonament
 
 @{
     ViewBag.Title = "AddService";
@@ -30,26 +30,26 @@
             const randId = ++currentDivId;
 
             divMedicamente.append(`
-                <div class="element-serviciu" id="${randId}">
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.IdServicii, "Serviciu", htmlAttributes: new { @class = "control-label col-md-2" })
-                        <div class="col-md-10">
-                            @Html.DropDownListFor(model => model.IdServicii, new SelectList(ViewBag.Servicii, "Value", "Text"),
+                    <div class="element-serviciu" id="${randId}">
+                        <div class="form-group">
+        @Html.LabelFor(model => model.IdServicii, "Serviciu", htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+        @Html.DropDownListFor(model => model.IdServicii, new SelectList(ViewBag.Servicii, "Value", "Text"),
                                                     "Selecteaza un serviciu", new { @class = "form-control form-title" })
 
+                            </div>
                         </div>
-                    </div>
 
-                     <div class="form-group">
-                        @Html.LabelFor(model => model.ProcenteReducere, "Reducere", htmlAttributes: new { @class = "control-label col-md-2" })
-                        <div class="col-md-10">
-                            <input name="ProcenteReducere" type="number" value="" />
+                         <div class="form-group">
+        @Html.LabelFor(model => model.ProcenteReducere, "Reducere", htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                <input name="ProcenteReducere" type="number" value="" />
+                            </div>
                         </div>
-                    </div>
 
-                    <button style="text - align: right;" type="button" onclick="onDelete(${randId})">Delete</button>
-                </div>
-    `);
+                        <button style="text - align: right;" type="button" onclick="onDelete(${randId})">Delete</button>
+                    </div>
+        `);
         }
     </script>
 
@@ -67,7 +67,7 @@
 
         </div>
 
-        <button type="button" onclick="onCreate()">Adauga serviciu</button>
+        <button type="button" onclick="onCreate()">Adaugă serviciu</button>
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
@@ -81,5 +81,3 @@
 <div>
     @Html.ActionLink("Back to List", "Index")
 </div>
-
-
